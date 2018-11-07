@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/mnt/external/CCNY/2018 Semester 07 - Fall/CSC 322_ Software Engineering/MEEP/env"
+VIRTUAL_ENV="/mnt/external/CCNY/2018 Semester 07 - Fall/CSC 322_ Software Engineering/MEEP/backend/env"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

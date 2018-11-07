@@ -1,5 +1,5 @@
 #!/bin/sh
-'''exec' "/mnt/external/CCNY/2018 Semester 07 - Fall/CSC 322_ Software Engineering/MEEP/env/bin/python" "$0" "$@"
+'''exec' "/mnt/external/CCNY/2018 Semester 07 - Fall/CSC 322_ Software Engineering/MEEP/backend/env/bin/python" "$0" "$@"
 ' '''
 # -*- coding: utf-8 -*-
 import re
