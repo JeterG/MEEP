@@ -22,3 +22,10 @@ frontend which would probably be easier.
 Backend is a Python3 Flask project, configured in a virtual environment. On Linux/MacOS,
 go inside the `backend/` directory and execute `source env/bin/activate` to enable the
 Python environment.
+
+## Frontend
+Frontend is a React project. Install and configure NodeJS on your system, then in a terminal, navigate to the frontend folder.
+
+Perform `npm install` to install the dependencies, and then run `npm start` to run a local development server for the React app. It will be listening on `localhost:8090`, so navigate there in the browser.
+
+Webpack will take the contents of `app/index.jsx` and compile them to `public/bundle.js`. The webpack dev server is installed with a hot-reloading plugin. Every time you modify the "index.jsx" file, the webpage will automatically reload with your changes. 
