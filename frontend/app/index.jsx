@@ -1,17 +1,14 @@
-console.log("Hello World");
-
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-const title = 'My Minimal React Webpack Babel Setup LALALA DAAAda';
+import Editor from './Editor.jsx';
 
 ReactDOM.render(
-  <div>{title}</div>,
+  <Editor />,
   document.getElementById('app')
 );
 
-fetch("http://localhost:5000/helloWorld").then(res => {
-  return res.json();
-}).then(myjson => {
-  console.log(myjson);
-})
+// fetch("http://localhost:5000/helloWorld").then(res => {
+//   return res.json();
+// }).then(myjson => {
+//   console.log(myjson);
+// })
