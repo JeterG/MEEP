@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import EditorLine from './EditorLine';
 
 class Editor extends React.Component {
   state = {
@@ -88,15 +89,11 @@ class Editor extends React.Component {
     }
   }
 
-  clickLine = (e) => {
-    console.log(e.target.id);
-  }
-
   render() {
     var { title, owner, locked, words } = this.state;
 
     let wordList = words.map(word => {
-      return <div onClick={ this.clickLine } key={ word.lineNum } id={ word.lineNum } className="edit-line">{ word.content }<br/></div>
+      return <EditorLine key={ word.lineNum } lineNum={ word.lineNum } content={ word.content } />
     })
 
     return (
