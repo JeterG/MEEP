@@ -7,14 +7,22 @@ class Editor extends React.Component {
     owner: "alexmatson",
     locked: true,
     lockedBy: "alexmatson",
+    editingLine: 0,
     words: [
-      { lineNum: 0, content: ""}
+      { lineNum: 0, editing: true, content: ""}
     ]
   }
 
-  keyUpListen = (e) => {
-    console.log("The key is", e);
+  // Attach keyboard listener to the Editor
+  componentWillMount = () => {
+    document.addEventListener("keyup", this.keyUpListen )
+  }
 
+  componentWillUnMount = () => {
+    document.removeEventListener("keyup", this.keyUpListen );
+  }
+
+  keyUpListen = (e) => {
     var { words, locked } = this.state;
     var typingWord = "";
 
@@ -34,8 +42,15 @@ class Editor extends React.Component {
         if (words.length > 0)
           newID = words[words.length - 1].lineNum + 1;
 
-        currentWords.push({lineNum: newID, content: ""});
-        this.setState({ words: currentWords });
+        currentWords.map(word => {
+          return word.editing = false;
+        });
+
+        currentWords.push({lineNum: newID, editing: true, content: ""});
+        this.setState({
+          words: currentWords,
+          editingLine: newID
+        });
 
       } else if (e.key == "Backspace") {
         // If the user presses backspace, begin deleting characters.
@@ -45,8 +60,10 @@ class Editor extends React.Component {
         if (words.length > 0) {
           currentWords[words.length - 1].content = typingWord;
 
-          if (typingWord == "")
+          if (typingWord == "") {
             currentWords = words.slice(0, words.length - 1);
+            currentWords[currentWords.length - 1].editing = true;
+          }
         }
 
         this.setState({ words: currentWords });
@@ -64,15 +81,6 @@ class Editor extends React.Component {
         this.setState({ words: currentWords });
       }
     }
-  }
-
-  componentWillMount = () => {
-    console.log("Editor mounted");
-    document.addEventListener("keyup", this.keyUpListen )
-  }
-
-  componentWillUnMount = () => {
-    document.removeEventListener("keyup", this.keyUpListen );
   }
 
   handleUnlock = (e) => {
@@ -93,7 +101,7 @@ class Editor extends React.Component {
     var { title, owner, locked, words } = this.state;
 
     let wordList = words.map(word => {
-      return <EditorLine key={ word.lineNum } lineNum={ word.lineNum } content={ word.content } />
+      return <EditorLine key={ word.lineNum } lineNum={ word.lineNum } content={ word.content } editing={ word.editing }/>
     })
 
     return (
