@@ -101,7 +101,7 @@ class Editor extends React.Component {
     var { title, owner, locked, lockedBy, words } = this.state;
 
     let wordList = words.map(word => {
-      return <EditorLine key={ word.lineNum } lineNum={ word.lineNum } content={ word.content } editing={ word.editing }/>
+      return <EditorLine key={ word.lineNum } lineNum={ word.lineNum } content={ word.content } editing={ word.editing } locked={ locked }/>
     })
 
     return (
