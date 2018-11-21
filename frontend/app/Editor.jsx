@@ -4,9 +4,9 @@ import EditorLine from './EditorLine';
 class Editor extends React.Component {
   state = {
     title: "My Test Doc",
-    owner: "alexmatson",
-    locked: true,
-    lockedBy: "alexmatson",
+    owner: "myusername",
+    locked: false,
+    lockedBy: null,
     editingLine: 0,
     words: [
       { lineNum: 0, editing: true, content: ""}
@@ -23,15 +23,14 @@ class Editor extends React.Component {
   }
 
   keyUpListen = (e) => {
-    var { words, locked } = this.state;
+    var { words, locked, lockedBy } = this.state;
     var typingWord = "";
+    var currentUser = "myusername";
 
     if (words.length > 0)
       typingWord = words[words.length - 1].content;
 
-    console.log(!locked);
-
-    if ( !locked ) {
+    if ( locked && lockedBy == currentUser ) {
       // If the document is unlocked...
       let currentWords = words;
 
@@ -83,22 +82,23 @@ class Editor extends React.Component {
     }
   }
 
-  handleUnlock = (e) => {
+  handleLock = (e) => {
     var { words, locked } = this.state;
+    var currentUser = "myusername";
 
-    if (locked) {
-      // If the document is changing from locked to unlocked.
-      this.setState({locked: false});
-      document.getElementById("lock-btn").blur();
+    if (!locked) {
+      // The user locks (i.e. reserves) the document for editing.
+      this.setState({ locked: true, lockedBy: currentUser });
     } else {
       // Do this when the document is changing from unlocked to locked.
-      this.setState({ locked: true });
-      document.getElementById("lock-btn").blur();
+      this.setState({ locked: false, lockedBy: null });
     }
+
+    document.getElementById("lock-btn").blur();
   }
 
   render() {
-    var { title, owner, locked, words } = this.state;
+    var { title, owner, locked, lockedBy, words } = this.state;
 
     let wordList = words.map(word => {
       return <EditorLine key={ word.lineNum } lineNum={ word.lineNum } content={ word.content } editing={ word.editing }/>
@@ -109,7 +109,7 @@ class Editor extends React.Component {
         <div className="doc-header">
           <h1>{ title }</h1>
           <h2>{ owner }</h2>
-          <p>Status: { locked ? "Locked" : "Unlocked" }</p>
+          <p>Status: { locked ? "Locked by " + lockedBy : "Unlocked" }</p>
         </div>
 
         <div className="editor-composer" id="editor-composer">
@@ -118,7 +118,7 @@ class Editor extends React.Component {
 
         <div className="editor-buttons">
           <button>Save</button>
-          <button id="lock-btn" onClick={ this.handleUnlock }>
+          <button id="lock-btn" onClick={ this.handleLock }>
             { locked ? "Unlock" : "Lock" }
           </button>
           <button>Complain</button>
