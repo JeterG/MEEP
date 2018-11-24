@@ -27,114 +27,166 @@ class Editor extends React.Component {
     var typingWord = "";
     var currentUser = "myusername";
 
-    if (words.length > 0)
-      typingWord = words[editingLine].content;
+    // Set the typing word to the content that already exists on this line,
+    //    or to blank if the word array is empty.
+    typingWord = words.length ? words[editingLine].content : "";
 
+    // Editing should only occur if the document is locked
+    //  and the document is locked by the current user
+    // (OR if the document owner is editing -- TO BE IMPLEMENTED)
     if ( locked && lockedBy == currentUser ) {
-      // If the document is unlocked...
-      let currentWords = words;
+      // If the document is editable by the user...
 
-      if (e.key == "Enter" || e.key == " ") {
-        // If the user presses spacebar or enter, create a new empty line.
-        let newID = 0;
+      let currentWords = [...words]; // Create copy of the words list to avoid altering state directly.
+      console.log("TESTTTINNGG", currentWords, words, currentWords == words);
 
-        if (words.length > 0)
-          newID = words[editingLine].lineNum + 1;
+      // Test for key presses
+      switch(e.key) {
+        default:
+          this.insertChar(currentWords, editingLine, typingWord, e.key);
+          break;
 
-        currentWords.map(word => {
-          return word.editing = false;
-        });
+        case "Enter":
+        case " ":
+          this.insertLine(currentWords, editingLine);
+          break;
 
-        currentWords.splice(editingLine + 1, 0, {lineNum: newID, editing: true, content: ""});
+        case "Backspace":
+          if (typingWord) this.deleteChar(typingWord, currentWords, editingLine);
+          else this.deleteLine(currentWords, editingLine);
+          break;
 
-        // Reindex the next lines:
-        for (var i = editingLine + 2; i < currentWords.length; i++) {
-          currentWords[i].lineNum += 1;
-        }
+        case "ArrowDown":
+          this.moveCursorDown(currentWords, editingLine);
+          break;
 
-        this.setState({
-          words: currentWords,
-          editingLine: newID
-        });
-      } else if (e.key == "Backspace") {
-        // If the user presses backspace, begin deleting characters.
-        typingWord = typingWord.substr(0, typingWord.length - 1);
+        case "ArrowUp":
+          this.moveCursorUp(currentWords, editingLine);
+          break;
 
-        var currentLineNumber = editingLine;
+        case "ArrowLeft":
+          // Implement later if we have time
+          break;
 
-        currentWords[currentLineNumber].content = typingWord;
-
-        if (typingWord == "") {
-          if (currentWords.length > 1) {
-            // Delete the index of the currently edited line, and reindex.
-            // currentWords = words.slice(0, words.length - 1);
-            currentWords.splice(editingLine, 1);
-            currentLineNumber -= 1;
-
-            for (var i = currentLineNumber + 1; i < currentWords.length; i++) {
-              currentWords[i].lineNum -= 1;
-            }
-          }
-        }
-
-        currentWords[currentLineNumber].editing = true;
-
-        this.setState({
-          words: currentWords,
-          editingLine: currentLineNumber
-        });
-
-      } else if (e.key == "ArrowDown") {
-        console.log("move cursor down");
-        var currentLine = editingLine;
-        var newLine = (currentLine < words.length - 1) ? currentLine + 1 : words.length - 1;
-
-        var currentWords = words;
-        currentWords[newLine].editing = true;
-
-        if (newLine !== currentLine)
-          currentWords[currentLine].editing = false;
-
-        this.setState({
-          words: currentWords,
-          editingLine: newLine
-        })
-
-      } else if (e.key == "ArrowUp") {
-        console.log("move cursor up")
-        var currentLine = editingLine;
-        var newLine = currentLine > 0 ? currentLine - 1 : 0;
-
-        var currentWords = words;
-        currentWords[newLine].editing = true;
-
-        if (newLine !== currentLine)
-          currentWords[currentLine].editing = false;
-
-        this.setState({
-          words: currentWords,
-          editingLine: newLine
-        })
-
-      } else if (e.key == "ArrowLeft") {
-        console.log("move cursor left")
-        // Implement if we have time
-
-      } else if (e.key == "ArrowRight") {
-        console.log("move cursor right")
-        // Implement if we have time
-
-      } else {
-        console.log("The typing word", typingWord);
-        // Otherwise, append new characters to the EDITING line.
-        if (e.keyCode >= 33 && e.keyCode <= 126) // Only detect ASCII keyboard symbols a-z, A-Z, 0-9, and !,$,#, etc
-          typingWord += e.key;
-
-        currentWords[editingLine].content = typingWord;
-
-        this.setState({ words: currentWords });
+        case "ArrowRight":
+          // Implement later if we have time
+          break;
       }
     }
+  }
+
+  insertLine = (currentWords, editingLine) => {
+    console.log("INSERT LINE", currentWords, editingLine);
+
+    // Calculate the newID aka line number for the inserted line
+    let newID = currentWords.length ? currentWords[editingLine].lineNum + 1 : 0;
+
+    currentWords = currentWords.map(word => {
+      word.editing = false;
+      return word;
+    });
+
+    // Insert an empty new line at the next editing position.
+    currentWords.splice(
+      newID, 0, {lineNum: newID, editing: true, content: ""}
+    );
+
+    // If the inserted line is in the middle of the document, we need to renumber all
+    // the lines that follow it.
+
+    // NOTE: Not sure why + 2 is needed. But it is neccessary.
+    for (var i = editingLine + 2; i < currentWords.length; i++) {
+      currentWords[i].lineNum += 1;
+    }
+
+    this.setState({
+      words: currentWords,
+      editingLine: newID
+    });
+  }
+
+  insertChar = (currentWords, editingLine, typingWord, key) => {
+    console.log("The typing word",
+    typingWord);
+
+    // Only detect ASCII keyboard symbols a-z, A-Z, 0-9, and !,$,#, etc. Ignore keypresses like "Insert", etc.
+    if (key.length == 1) typingWord += key;
+
+    // Set the current editing line to the typing word.
+    currentWords[editingLine].content = typingWord;
+
+    this.setState({ words: currentWords });
+  }
+
+  deleteChar = (typingWord, currentWords, editingLine) => {
+    // If the user presses backspace, begin deleting characters.
+    typingWord = typingWord.substr(0, typingWord.length - 1);
+
+    var currentLineNumber = editingLine;
+    console.log("THE INFO", editingLine, currentLineNumber, currentWords);
+
+    currentWords[editingLine].content = typingWord;
+
+    this.setState({
+      words: currentWords
+    });
+  }
+
+  deleteLine = (currentWords, editingLine) => {
+    var currentLineNumber = editingLine;
+    var offset = editingLine ? 1 : 0;
+
+    currentLineNumber -= offset;
+
+    if (editingLine >= 0) {
+      // Delete the index of the currently edited line, and reindex.
+      // currentWords = words.slice(0, words.length - 1);
+      currentWords.splice(editingLine, 1);
+
+      console.log("CURRENTLN", currentLineNumber, editingLine)
+
+      for (var i = currentLineNumber + offset; i < currentWords.length; i++) {
+        currentWords[i].lineNum -= 1;
+      }
+    }
+
+    currentWords[currentLineNumber].editing = true;
+    this.setState({
+      words: currentWords,
+      editingLine: currentLineNumber
+    })
+  }
+
+  moveCursorUp = (currentWords, editingLine) => {
+    console.log("move cursor up")
+    var currentLine = editingLine;
+    var newLine = currentLine > 0 ? currentLine - 1 : 0;
+
+    currentWords[newLine].editing = true;
+
+    if (newLine !== currentLine)
+    currentWords[currentLine].editing = false;
+
+    this.setState({
+      words: currentWords,
+      editingLine: newLine
+    })
+  }
+
+  moveCursorDown = (currentWords, editingLine) => {
+    console.log("move cursor down");
+    var currentLine = editingLine;
+    var newLine = (currentLine < currentWords.length - 1) ? currentLine + 1 : currentWords.length - 1;
+
+    currentWords[newLine].editing = true;
+
+    if (newLine !== currentLine)
+    currentWords[currentLine].editing = false;
+
+    this.setState({
+      words: currentWords,
+      editingLine: newLine
+    })
   }
 
   handleLock = (e) => {
