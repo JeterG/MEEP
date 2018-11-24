@@ -35,13 +35,11 @@ class Editor extends React.Component {
     //  and the document is locked by the current user
     // (OR if the document owner is editing -- TO BE IMPLEMENTED)
     if ( locked && lockedBy == currentUser ) {
-      // If the document is editable by the user...
 
       let currentWords = [...words]; // Create copy of the words list to avoid altering state directly.
-      console.log("TESTTTINNGG", currentWords, words, currentWords == words);
 
       // Test for key presses
-      switch(e.key) {
+      switch (e.key) {
         default:
           this.insertChar(currentWords, editingLine, typingWord, e.key);
           break;
@@ -76,7 +74,6 @@ class Editor extends React.Component {
   }
 
   insertLine = (currentWords, editingLine) => {
-    console.log("INSERT LINE", currentWords, editingLine);
 
     // Calculate the newID aka line number for the inserted line
     let newID = currentWords.length ? currentWords[editingLine].lineNum + 1 : 0;
@@ -138,23 +135,20 @@ class Editor extends React.Component {
 
     currentLineNumber -= offset;
 
-    if (editingLine >= 0) {
-      // Delete the index of the currently edited line, and reindex.
-      // currentWords = words.slice(0, words.length - 1);
+    // Delete the index of the currently edited line, and reindex.
+    if (editingLine > 0 || currentWords.length > 1) {
       currentWords.splice(editingLine, 1);
-
-      console.log("CURRENTLN", currentLineNumber, editingLine)
-
       for (var i = currentLineNumber + offset; i < currentWords.length; i++) {
         currentWords[i].lineNum -= 1;
       }
-    }
 
-    currentWords[currentLineNumber].editing = true;
-    this.setState({
-      words: currentWords,
-      editingLine: currentLineNumber
-    })
+      currentWords[currentLineNumber].editing = true;
+
+      this.setState({
+        words: currentWords,
+        editingLine: currentLineNumber
+      });
+    }
   }
 
   moveCursorUp = (currentWords, editingLine) => {
@@ -213,23 +207,23 @@ class Editor extends React.Component {
 
     return (
       <div className="editor">
-        <div className="doc-header">
-          <h1>{ title }</h1>
-          <h2>{ owner }</h2>
-          <p>Status: { locked ? "Locked by " + lockedBy : "Unlocked" }</p>
-        </div>
+      <div className="doc-header">
+      <h1>{ title }</h1>
+      <h2>{ owner }</h2>
+      <p>Status: { locked ? "Locked by " + lockedBy : "Unlocked" }</p>
+      </div>
 
-        <div className="editor-composer" id="editor-composer">
-          { wordList }
-        </div>
+      <div className="editor-composer" id="editor-composer">
+      { wordList }
+      </div>
 
-        <div className="editor-buttons">
-          <button>Save</button>
-          <button id="lock-btn" onClick={ this.handleLock }>
-            { locked ? "Unlock" : "Lock" }
-          </button>
-          <button>Complain</button>
-        </div>
+      <div className="editor-buttons">
+      <button>Save</button>
+      <button id="lock-btn" onClick={ this.handleLock }>
+      { locked ? "Unlock" : "Lock" }
+      </button>
+      <button>Complain</button>
+      </div>
       </div>
     )
   }
