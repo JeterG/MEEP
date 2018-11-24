@@ -1,3 +1,8 @@
+.profile-pic {
+  width: 100px;
+  height: 100px;
+}
+
 .editor h1, h2 {
   display: inline-block;
   margin-right: 50px;

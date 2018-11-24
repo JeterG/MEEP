@@ -6,7 +6,12 @@ import Editor from './components/Editor/Editor';
 class App extends React.Component {
 
   state = {
-    username: null
+    user: {
+      id: 0,
+      name: "myusername",
+      type: "guest",
+      pic: "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
+    }
   }
 
   componentWillMount = () => {
@@ -14,9 +19,9 @@ class App extends React.Component {
   }
 
   render() {
-    var {username} = this.state;
+    var {user} = this.state;
     return (
-      username ? <Home /> : <LogIn />
+      user ? <Home user={user} /> : <LogIn />
     )
   }
 }
