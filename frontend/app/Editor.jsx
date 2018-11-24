@@ -23,12 +23,12 @@ class Editor extends React.Component {
   }
 
   keyUpListen = (e) => {
-    var { words, locked, lockedBy } = this.state;
+    var { words, locked, lockedBy, editingLine } = this.state;
     var typingWord = "";
     var currentUser = "myusername";
 
     if (words.length > 0)
-      typingWord = words[words.length - 1].content;
+      typingWord = words[editingLine].content;
 
     if ( locked && lockedBy == currentUser ) {
       // If the document is unlocked...
@@ -39,43 +39,98 @@ class Editor extends React.Component {
         let newID = 0;
 
         if (words.length > 0)
-          newID = words[words.length - 1].lineNum + 1;
+          newID = words[editingLine].lineNum + 1;
 
         currentWords.map(word => {
           return word.editing = false;
         });
 
-        currentWords.push({lineNum: newID, editing: true, content: ""});
+        currentWords.splice(editingLine + 1, 0, {lineNum: newID, editing: true, content: ""});
+
+        // Reindex the next lines:
+        for (var i = editingLine + 2; i < currentWords.length; i++) {
+          currentWords[i].lineNum += 1;
+        }
+
         this.setState({
           words: currentWords,
           editingLine: newID
         });
-
       } else if (e.key == "Backspace") {
         // If the user presses backspace, begin deleting characters.
-
         typingWord = typingWord.substr(0, typingWord.length - 1);
 
-        if (words.length > 0) {
-          currentWords[words.length - 1].content = typingWord;
+        var currentLineNumber = editingLine;
 
-          if (typingWord == "") {
-            currentWords = words.slice(0, words.length - 1);
-            currentWords[currentWords.length - 1].editing = true;
+        currentWords[currentLineNumber].content = typingWord;
+
+        if (typingWord == "") {
+          if (currentWords.length > 1) {
+            // Delete the index of the currently edited line, and reindex.
+            // currentWords = words.slice(0, words.length - 1);
+            currentWords.splice(editingLine, 1);
+            currentLineNumber -= 1;
+
+            for (var i = currentLineNumber + 1; i < currentWords.length; i++) {
+              currentWords[i].lineNum -= 1;
+            }
           }
         }
 
-        this.setState({ words: currentWords });
+        currentWords[currentLineNumber].editing = true;
+
+        this.setState({
+          words: currentWords,
+          editingLine: currentLineNumber
+        });
+
+      } else if (e.key == "ArrowDown") {
+        console.log("move cursor down");
+        var currentLine = editingLine;
+        var newLine = (currentLine < words.length - 1) ? currentLine + 1 : words.length - 1;
+
+        var currentWords = words;
+        currentWords[newLine].editing = true;
+
+        if (newLine !== currentLine)
+          currentWords[currentLine].editing = false;
+
+        this.setState({
+          words: currentWords,
+          editingLine: newLine
+        })
+
+      } else if (e.key == "ArrowUp") {
+        console.log("move cursor up")
+        var currentLine = editingLine;
+        var newLine = currentLine > 0 ? currentLine - 1 : 0;
+
+        var currentWords = words;
+        currentWords[newLine].editing = true;
+
+        if (newLine !== currentLine)
+          currentWords[currentLine].editing = false;
+
+        this.setState({
+          words: currentWords,
+          editingLine: newLine
+        })
+
+      } else if (e.key == "ArrowLeft") {
+        console.log("move cursor left")
+        // Implement if we have time
+
+      } else if (e.key == "ArrowRight") {
+        console.log("move cursor right")
+        // Implement if we have time
+
       } else {
         console.log("The typing word", typingWord);
-        // Otherwise, append new characters to the latest line.
+        // Otherwise, append new characters to the EDITING line.
         if (e.keyCode >= 33 && e.keyCode <= 126) // Only detect ASCII keyboard symbols a-z, A-Z, 0-9, and !,$,#, etc
           typingWord += e.key;
 
-        if (words.length > 0)
-          currentWords[words.length - 1].content = typingWord;
-        else
-          currentWords.push({lineNum: 0, content: typingWord});
+        currentWords[editingLine].content = typingWord;
 
         this.setState({ words: currentWords });
       }
