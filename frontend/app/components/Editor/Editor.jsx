@@ -78,6 +78,7 @@ class Editor extends React.Component {
     // Calculate the newID aka line number for the inserted line
     let newID = currentWords.length ? currentWords[editingLine].lineNum + 1 : 0;
 
+    // Set every word's 'editing' property to false
     currentWords = currentWords.map(word => {
       word.editing = false;
       return word;
