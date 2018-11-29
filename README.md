@@ -25,8 +25,10 @@ Python environment.
 
 Then, set up the Flask environment variables.
 
-`export FLASK_APP="meep"`
-`export FLASK_ENV="development"`
+```
+export FLASK_APP="meep"
+export FLASK_ENV="development"
+```
 
 Finally, start the Python server with `flask run`.
 ## Frontend
