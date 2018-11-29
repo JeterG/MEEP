@@ -1,5 +1,6 @@
 from flask import request, jsonify
 from meep import app
+from .core import *
 
 @app.route('/api/register', methods=["POST"])
 def register():
