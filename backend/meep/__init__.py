@@ -31,6 +31,14 @@ def create_app(test_config=None):
     def hello():
         return 'Hello, World!'
 
+    @app.route('/api/register', methods=["POST"])
+    def register():
+        return jsonify("Hallo");
+
+    @app.route('/api/login', methods=["POST"])
+    def login():
+        return jsonify("aayy");
+
     @app.route('/helloWorld')
     def helloWorld():
         test = [{
