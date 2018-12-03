@@ -122,26 +122,22 @@ class Document:
             return
 
 
-
-    # def denyInvitation():
-
-
-
-Jete=SuperUser("Jete","Minecraft,Algorithms,Pokemon")
-Doc1=Document("Doc1",Jete)
-print("locked by",Doc1._lockedBy,sep=",")
+def test_class():
+    Jete=SuperUser("Jete","Minecraft,Algorithms,Pokemon")
+    Doc1=Document("Doc1",Jete)
+    print("locked by",Doc1._lockedBy,sep=",")
 
 
-Mike=OrdinaryUser("Mike","Cheese")
-Doc1.lockDocument(Doc1,Mike)
-Doc1.unlockDocument(Doc1,Jete)
-print(Mike._membership)
+    Mike=OrdinaryUser("Mike","Cheese")
+    Doc1.lockDocument(Doc1,Mike)
+    Doc1.unlockDocument(Doc1,Jete)
+    print(Mike._membership)
 
-Jete.updateMembership(Mike)
-print(Mike._membership)
+    Jete.updateMembership(Mike)
+    print(Mike._membership)
 
-print(Doc1._lockedBy)
-print(Jete._interests)
-Doc1.requestPermission(Jete,Mike)
+    print(Doc1._lockedBy)
+    print(Jete._interests)
+    Doc1.requestPermission(Jete,Mike)
 
-Doc1.invite(Jete,Mike)
+    Doc1.invite(Jete,Mike)

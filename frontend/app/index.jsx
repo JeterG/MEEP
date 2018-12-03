@@ -3,13 +3,35 @@ import ReactDOM from 'react-dom';
 import App from './App.jsx';
 import Editor from './components/Editor/Editor';
 
+// Since our app will use HTML5 LocalStorage API, and not all browsers support it,
+// only load the app component if the localstorage object is available to us.
+let rootContainer = storageAvailable('localStorage') ? <App /> : <p>Local storage is unsupported</p>;
+
 ReactDOM.render(
-  <Editor />, //to see editor, change out Editor with App to see homepage
+  rootContainer,
   document.getElementById('app')
 );
 
-// fetch("http://localhost:5000/helloWorld").then(res => {
-//   return res.json();
-// }).then(myjson => {
-//   console.log(myjson);
-// })
+function storageAvailable(type) {
+  try {
+    var storage = window[type],
+    x = '__storage_test__';
+    storage.setItem(x, x);
+    storage.removeItem(x);
+    return true;
+  }
+  catch(e) {
+    return e instanceof DOMException && (
+      // everything except Firefox
+      e.code === 22 ||
+      // Firefox
+      e.code === 1014 ||
+      // test name field too, because code might not be present
+      // everything except Firefox
+      e.name === 'QuotaExceededError' ||
+      // Firefox
+      e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+      // acknowledge QuotaExceededError only if there's something already stored
+      storage.length !== 0;
+    }
+  }
