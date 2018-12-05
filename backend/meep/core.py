@@ -1,3 +1,4 @@
+tabooList = ["Evil", "Liar"]
 def blocked(User):#Global functions are functions that are handled or necessary for the system
     if(User._blocked==True):
         print("Update document before you continue")
@@ -41,10 +42,13 @@ class SuperUser:
             self.demote(User)
         else:
             return
-    def updateTaboo(self,word):
-        #Check if the word is already in taboo list
-        #If word already in list remove it in all files
-        #if it isnt add to taboo list and censor among all of the documents.
+    def updateTabooList(self, word):  # Check if hte word is already in the taboo list,
+    # otherwise add it to the list and remove it from all documents
+    temp = [word.upper() for words in tabooList]
+    if word in temp:
+        return
+    else:
+        tabooList.append(word)
         return
 
 class Complaint:
