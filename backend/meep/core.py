@@ -126,7 +126,6 @@ class Document:
             Document._lock = False
             Document._unlockeBy = SuperUser._username
             Document._lockedBy = ""
-            print(SuperUser._username, " Unlocked the Document")
         else:
             print(SuperUser._username, " can not unlock documents, not permitted")
 
@@ -159,6 +158,15 @@ class Document:
                 return
         else:
             return
+    def add(self,Word):
+        self._documentBody.append(Word)
+        Jete.applyTabooList()
+        return
+
+    def delete(self,Word):
+        if Word in self._documentBody:
+            self._documentBody.remove(Word)
+        return
 
     # def denyInvitation():
 
@@ -184,5 +192,7 @@ print(allDocuments[0]._documentName)
 print(Doc1._documentBody)
 Jete.applyTabooList()
 Jete.updateTabooList("bob")
+Doc1.add("Bob")
+Doc1.delete("UNK")
 
 print(Doc1._documentBody)
