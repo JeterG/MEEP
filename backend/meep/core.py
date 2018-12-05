@@ -183,12 +183,28 @@ Doc1.add("Bob")
 Doc1.delete("UNK")
 print(Doc1._documentBody)
 
-file_doc1=open('test.txt','wb')
-pickle.dump(Doc1,file_doc1)
+# file_doc1=open('test.txt','wb')
+# pickle.dump(Doc1,file_doc1)
 
 del Doc1
 print ("test")
-file_doc1=open("test.txt",'rb')
-Doc1=pickle.load(file_doc1)
-print (Doc1._documentBody)
+# file_doc1=open("test.txt",'rb')
+# Doc1=pickle.load(file_doc1)
+# print (Doc1._documentBody)
+print (False)
 
+file_doc1=open("documents.txt",'wb')
+pickle.dump(allDocuments,file_doc1)
+
+print(allDocuments[0]._documentBody)
+del allDocuments
+file_doc1=open("documents.txt",'rb')
+allDocuments=pickle.load(file_doc1)
+print(allDocuments[0]._documentName)
+# Doc1=allDocuments[0]
+# print(Doc1._documentBody)
+for document in allDocuments:
+    # setattr(document,document._documentName,document)
+    globals()[document._documentName]=document
+    print(document)
+print(Doc1._documentBody,"Is the document",sep="d")
