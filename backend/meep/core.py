@@ -1,6 +1,6 @@
+import pickle
 tabooList = ["EVIL", "LIAR"]
 allDocuments = []
-
 
 def blocked(User):  # Global functions are functions that are handled or necessary for the system
     if (User._blocked == True):
@@ -8,9 +8,7 @@ def blocked(User):  # Global functions are functions that are handled or necessa
     else:
         return
 
-
 class SuperUser:
-    TabooList = ["ugly", "loser"]
 
     def __init__(self, name, interests):
         self._membership = str.upper("Super")
@@ -73,14 +71,12 @@ class SuperUser:
                     document._documentBody[dc.index(word)]="UNK"
         return
 
-
 class Complaint:
     def __init__(self, Complain, Target, problem):  # Both Complain and target are User types SU,OU,GU
         self._resolved = False
         self._complaintBy = Complain._username
         self._complaintFor = Target._username
         self._problem = problem
-
 
 class GuestUser:
     def __init__(self):
@@ -97,7 +93,6 @@ class GuestUser:
         self._interests = str.upper(interests)
         return
 
-
 class OrdinaryUser:
     def __init__(self, name, interests):
         self._membership = str.upper("ORDINARY")
@@ -106,7 +101,6 @@ class OrdinaryUser:
         self._requestPromotion = 0
         self._userDocumentRequests = []
         return
-
 
 class Document:
     def __init__(self, documentName, User):
@@ -156,6 +150,7 @@ class Document:
                 return
         else:
             return
+
     def add(self,Word):
         self._documentBody.append(Word)
         Jete.applyTabooList()
@@ -167,24 +162,18 @@ class Document:
         return
 
     # def denyInvitation():
-
-
 Jete = SuperUser("Jete", "Minecraft,Algorithms,Pokemon")
 Doc1 = Document("Doc1", Jete)
 print("locked by", Doc1._lockedBy, sep=",")
-
 Mik = OrdinaryUser("Mik", "Cheese")
 Doc1.lockDocument(Doc1, Mik)
 Doc1.unlockDocument(Doc1, Jete)
 print(Mik._membership)
-
 Jete.updateMembership(Mik)
 print(Mik._membership)
-
 print(Doc1._lockedBy)
 print(Jete._interests)
 Doc1.requestPermission(Jete, Mik)
-
 Doc1.invite(Jete, Mik)
 print(allDocuments[0]._documentName)
 print(Doc1._documentBody)
@@ -192,5 +181,14 @@ Jete.applyTabooList()
 Jete.updateTabooList("bob")
 Doc1.add("Bob")
 Doc1.delete("UNK")
-
 print(Doc1._documentBody)
+
+file_doc1=open('test.txt','wb')
+pickle.dump(Doc1,file_doc1)
+
+del Doc1
+print ("test")
+file_doc1=open("test.txt",'rb')
+Doc1=pickle.load(file_doc1)
+print (Doc1._documentBody)
+
