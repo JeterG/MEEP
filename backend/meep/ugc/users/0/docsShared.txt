@@ -1,5 +1,0 @@
-# List of document IDs that the user has been invited to
-
-1
-8
-12

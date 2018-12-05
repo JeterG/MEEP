@@ -1,2 +1,0 @@
-# Simple list of doc ID and doc name pairs
-0 My Very Cool Document

@@ -1,3 +1,0 @@
-# Simple list of user id, and user name pairs
-
-0 alex
