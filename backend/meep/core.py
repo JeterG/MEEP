@@ -225,12 +225,12 @@ print("test")
 # print (Doc1._documentBody)
 print(False)
 
-file_doc1 = open("documents", 'wb')
+file_doc1 = open("meep/system/documents", 'wb')
 pickle.dump(allDocuments, file_doc1)
 
 print(allDocuments[0]._documentBody)
 del allDocuments
-file_doc1 = open("documents", 'rb')
+file_doc1 = open("meep/system/documents", 'rb')
 allDocuments = pickle.load(file_doc1)
 print(allDocuments[0]._documentName)
 # Doc1=allDocuments[0]

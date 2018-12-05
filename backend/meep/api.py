@@ -7,6 +7,8 @@ from .utils import *
 # def register():
 #     return jsonify("Hallo");
 
+# Pickle should store objects in meep/system/ directory
+
 @app.route('/api/login', methods=["POST"])
 def login():
     print(request.json);
