@@ -1,5 +1,7 @@
 env/
 
+ugc/*
+
 *.pyc
 __pycache__/
 
