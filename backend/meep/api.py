@@ -13,6 +13,7 @@ def login():
 
     username = request.json["username"]
 
-    if checkUserExists(username)
+    if checkUserExists(username):
+        
 
     return jsonify(checkUserExists(username));

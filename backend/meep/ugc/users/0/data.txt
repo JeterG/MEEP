@@ -1,0 +1,6 @@
+# username, password, membership, interests
+
+alex
+password123
+super
+Pokemon, Sushi, Whatever
