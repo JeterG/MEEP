@@ -1,5 +1,3 @@
-from typing import List, Any
-
 tabooList = ["EVIL", "LIAR"]
 allDocuments = []
 
