@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App.jsx';
+import Editor from './components/Editor/Editor';
 
 // Since our app will use HTML5 LocalStorage API, and not all browsers support it,
 // only load the app component if the localstorage object is available to us.
