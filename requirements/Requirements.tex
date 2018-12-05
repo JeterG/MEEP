@@ -1,70 +1,73 @@
 \documentclass{article}
 \usepackage{geometry}
+\usepackage{amssymb}
 \geometry{margin=0.5in}
+%$[\boxtimes$] 
+%[$\square$]
 \begin{document}
 	\begin{itemize}
-		\item Super Users can:
+		\item [$\square$] \textbf{Super Users can:}
 		\begin{itemize}
-			\item Update Memberships
-			\item Maintain a list of taboo words
-			\item unlock locked documents
-			\item process complaints about ou's
-			\item have all privileges reserved for ou's inside any group
+			\item [$\square$] Update Memberships
+			\item [$\square$] Maintain a list of taboo words
+			\item [$\square$] unlock locked documents
+			\item [$\square$] process complaints about ou's
+			\item [$\square$] have all privileges reserved for ou's inside any group
 		\end{itemize}
-		\item Ordinary Users can:
+		\item [$\square$] \textbf{Ordinary Users can:}
 		\begin{itemize}
-			\item Create New documents- They own the documents they create.
-			\item Invite other ou's to update documents they own.
-			\item Decide whether the document is:
+			\item [$\square$] Create New documents- They own the documents they create.
+			\item [$\square$] Invite other ou's to update documents they own.
+			\item [$\square$] Decide whether the document is:
 			\begin{itemize}
-				\item open to the public (can be seen by everyone)
-				\item restricted (can only be viewed as read-only by gu's and edited by ou's)
-				\item shared (viewed/ edited by ou's who are invited)
-				\item private
-			\end{itemize} 
-			\item accept/deny invitation(s) placed by other ou's for their specific documents
-			\item lock a shared document for updating (only one ou can lock a document successfully and system should indicate which ou is updating the document)
-			\item update a successfully locked document $\&$ assign a unique version sequence number $\&$ remember who made the update $\&$ when the update was made
-			\item unlock a shared document locked by him/herself
-			\item file complaints in two ways:
-			\begin{enumerate}
-				\item to the owner of a document about another ou's update
-				\item to the a SuperUser about the owner of the documents
-			\end{enumerate} 
-			\item if they own a document, they should deal with complaints filed by other ou's
-			\item remove ou's who were invited before.
-			\item unlock locked documents that s/he owns that is being updated by others (unlock documents locked by others as long as you are the owner)
-			\item search own files based on keyword
-			\item search information about other ou's based on name and/or interests.
-			\item have all privileges for gu's
-		\end{itemize}
-		\item Guest users can:
-		\begin{itemize}
-			\item read open documents
-			\item retrieve old versions of open documents
-			\item retrieve complaints about old versions of documents
-			\item send suggestions to Super Users about taboo words.
-			\item apply to be an ordinary user, that will be \underline{confirmed or rejected by su} (in application, name and technical interests are submitted)
-		\end{itemize}
-		\item Constraints
-		\begin{itemize}
-			\item \textbf{only one current version of any document exists as current}
-			\item for simplicity there is only one word for each line in all documents
-			\item only the editing commands are saved for older versions with three possible actions
-			\begin{itemize}
-				\item add
-				\item delete
-				\item update
-				\item \textbf{Example: For instance, if the file $doc_1$.txt contains one line "the", and $doc_2$.txt contains three lines "welcome \ n the \ n world \ n", then your system only saves $doc_2$.txt, $doc_1$.history saves the commands "delete 1; delete 3" which changes $doc_2$.txt into $doc_1$.txt. Your system generates the history command file based on the difference.}
+				\item [$\square$] open to the public (can be seen by everyone)
+				\item [$\square$] restricted (can only be viewed as read-only by gu's and edited by ou's)
+				\item [$\square$] shared (viewed/ edited by ou's who are invited)
+				\item [$\square$] private
 			\end{itemize}
-				\item retrieving old versions should be done by system based on current version and sequence of history files.
-				\item words on taboo list (maintained by SU) are replaced by UNK by the system
+			\item [$\square$] accept/deny invitation(s) placed by other ou's for their specific documents
+			\item [$\square$] lock a shared document for updating (only one ou can lock a document successfully and system should indicate which ou is updating the document)
+			\item [$\square$] update a successfully locked document $\&$ assign a unique version sequence number $\&$ remember who made the update $\&$ when the update was made
+			\item [$\square$] unlock a shared document locked by him/herself
+			\item [$\square$] file complaints in two ways:
+			\begin{enumerate}
+				\item [$\square$] to the owner of a document about another ou's update
+				\item [$\square$] to the a SuperUser about the owner of the documents
+			\end{enumerate}
+			\item [$\square$] if they own a document, they should deal with complaints filed by other ou's
+			\item [$\square$] remove ou's who were invited before.
+			\item [$\square$] unlock locked documents that s/he owns that is being updated by others (unlock documents locked by others as long as you are the owner)
+			\item [$\square$] search own files based on keyword
+			\item [$\square$] search information about other ou's based on name and/or interests.
+			\item [$\square$] have all privileges for gu's
+		\end{itemize}
+		\item [$\square$] \textbf{Guest users can:}
+		\begin{itemize}
+			\item [$\square$] read open documents
+			\item [$\square$] retrieve old versions of open documents
+			\item [$\square$] retrieve complaints about old versions of documents
+			\item [$\square$] send suggestions to Super Users about taboo words.
+			\item [$\square$] apply to be an ordinary user, that will be \underline{confirmed or rejected by su} (in application, name and technical interests are submitted)
+		\end{itemize}
+		\item [$\square$] \textbf{Constraints}
+		\begin{itemize}
+			\item [$\square$] \textbf{only one current version of any document exists as current}
+			\item [$\square$] for simplicity there is only one word for each line in all documents
+			\item [$\square$] only the editing commands are saved for older versions with three possible actions
+			\begin{itemize}
+				\item [$\square$] add
+				\item [$\square$] delete
+				\item [$\square$] update (replaces a word)
+				\item \textbf{Example: For instance, if the file $doc_1$.txt contains one line "the", and $doc_2$.txt contains three lines "welcome /\ n the /\ n world /\ n", then your system only saves $doc_2$.txt, $doc_1$.history saves the commands "delete 1; delete 3" which changes $doc_2$.txt into $doc_1$.txt. Your system generates the history command file based on the difference.}
+			\end{itemize}
+				\item [$\square$] retrieving old versions should be done by system based on current version and sequence of history files.
+				\item [$\square$] words on taboo list (maintained by SU) are replaced by UNK by the system
 				\begin{itemize}
-					\item users who use words on taboo list are automatically warned \textbf{``user update the document next time you log into the system''} 
-					\item until update is made by user all other activities are blocked for that user.
+					\item [$\square$] users who use words on taboo list are automatically warned \textbf{``user update the document next time you log into the system''}
+					\item [$\square$] until update is made by user all other activities are blocked for that user.
 				\end{itemize}
 		\end{itemize}
-	
-		
+
+
 	\end{itemize}
 \end{document}
