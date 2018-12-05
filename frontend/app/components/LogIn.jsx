@@ -5,17 +5,20 @@ import { API_BASE_URL } from '../Config';
 class LogIn extends React.Component {
 
   handleSubmit = (e) => {
+    // Prevents default behavior of refreshing the page
     e.preventDefault();
-    console.log(e.target);
 
+    // Data passed to the server.
     let submitData = {
       username: e.target[0].value,
       password: e.target[1].value
     }
 
-    axios.post(API_BASE_URL + '/login', submitData).then(response => {
+    axios.post(API_BASE_URL + '/login', submitData)
+    .then(response => {
       console.log(response.data);
-    }).catch(error => {
+    })
+    .catch(error => {
       // handle error
       console.log(error);
     });

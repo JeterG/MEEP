@@ -3,6 +3,7 @@ def blocked(User):#Global functions are functions that are handled or necessary 
         print("Update document before you continue")
     else:
         return
+
 class SuperUser:
     def __init__(self,name,interests):
         self._membership=str.upper("Super")
@@ -12,6 +13,7 @@ class SuperUser:
         self._requestPromotion=0
         self._userDocumentRequests=[]
         return
+
     def promote(self,user):
         if str.upper(user._membership)=="GUEST":
             user._membership="ORDINARY"
@@ -21,6 +23,7 @@ class SuperUser:
             return
         else:
             return
+
     def demote(self,User):
         if str.upper(User._membership)=="ORDINARY":
             User._membership="GUEST"
@@ -32,8 +35,10 @@ class SuperUser:
             return
         else:
             return
+
     def processComplaint(self,Complaint, OrdinaryUser):
         return
+
     def updateMembership(self,User):
         if (User._requestPromotion==1):
             self.promote(User)
@@ -41,6 +46,7 @@ class SuperUser:
             self.demote(User)
         else:
             return
+
     def updateTaboo(self,word):
         #Check if the word is already in taboo list
         #If word already in list remove it in all files
@@ -62,6 +68,7 @@ class GuestUser:
         self._requestPromotion=0
         self._userDocumentRequests=[]
         return
+
     def applyToOrdinary(self,name,interests):
         self._username=name
         self._requestPromotion=1
@@ -76,6 +83,7 @@ class OrdinaryUser:
         self._requestPromotion=0
         self._userDocumentRequests=[]
         return
+
 class Document:
     def __init__(self,documentName,User):
         self._lock=False
@@ -84,6 +92,7 @@ class Document:
         self._lockedBy=User._username
         self._unlockedBy=""
         self._users=[User._username]
+
     def unlockDocument(self,Document,SuperUser):#Unlock the document, only the super user can unlock the document
         if ((str.upper(SuperUser._membership)=="SUPER")& Document._lock==True):
             Document._lock=False
@@ -92,6 +101,7 @@ class Document:
             print (SuperUser._username, " Unlocked the Document")
         else:
             print(SuperUser._username, " can not unlock documents, not permitted")
+
     def lockDocument(self,Document,User):
         if (Document._lock==False):
             Document._lock=True
@@ -100,6 +110,7 @@ class Document:
             print(User._username," Locked the Document ")
         else:
             print("Document")
+            
     def invite(self,Owner,User):
         if (Owner._username==self._owner):
             if (self._documentName,User._username) in Owner._userDocumentRequests:
