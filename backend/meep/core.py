@@ -9,6 +9,7 @@ def blocked(User):  # Global functions are functions that are handled or necessa
         return
 
 class SuperUser:
+
     def __init__(self, name, interests):
         self._membership = str.upper("Super")
         self._username = name

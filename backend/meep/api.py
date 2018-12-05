@@ -11,9 +11,4 @@ from .utils import *
 def login():
     print(request.json);
 
-    username = request.json["username"]
-
-    if checkUserExists(username):
-        
-
-    return jsonify(checkUserExists(username));
+    return jsonify(Doc1._documentName);
