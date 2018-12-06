@@ -1,8 +1,11 @@
 import pickle
+from datetime import date
+from datetime import datetime
 
 tabooList = ["EVIL", "LIAR"]
 allDocuments = []
 allUsers = []
+uniqueId = -1
 
 def blocked(User):  # Global functions are functions that are handled or necessary for the system
     if (User._blocked == True):
@@ -10,10 +13,13 @@ def blocked(User):  # Global functions are functions that are handled or necessa
     else:
         return
 
-
+def timeStamp():
+    return (str(date.today())+ " " + str(datetime.now().strftime("%X")))
 class SuperUser:
 
     def __init__(self, name, interests):
+        global uniqueId
+        uniqueId+=1
         self._membership = str.upper("Super")
         self._username = name
         self._blocked = False
@@ -21,6 +27,7 @@ class SuperUser:
         self._requestPromotion = 0
         self._userDocumentRequests = []
         self._ownedDocuments = []
+        self._id = uniqueId
         allUsers.append(self)
         return
 
@@ -88,12 +95,15 @@ class Complaint:
 
 
 class GuestUser:
-    def __init__(self,name):
+    def __init__(self, name):
+        global uniqueId
+        uniqueId += 1
         self._membership = str.upper("GUEST")
         self._username = name
         self._blocked = False
         self._requestPromotion = 0
         self._userDocumentRequests = []
+        self._id = uniqueId
         allUsers.append(self)
         return
 
@@ -106,12 +116,15 @@ class GuestUser:
 
 class OrdinaryUser:
     def __init__(self, name, interests):
+        global uniqueId
+        uniqueId += 1
         self._membership = str.upper("ORDINARY")
         self._username = name
         self._blocked = False
         self._requestPromotion = 0
         self._userDocumentRequests = []
         self._ownedDocuments = []
+        self._id = uniqueId
         allUsers.append(self)
         return
 
@@ -190,7 +203,8 @@ class Document:
         if Word in self._documentBody:
             self._documentBody.remove(Word)
         return
-
+    def update(self,index):
+        return
     # def denyInvitation():
 
 
@@ -218,33 +232,36 @@ print(Doc1._documentBody)
 # file_doc1=open('test.txt','wb')
 # pickle.dump(Doc1,file_doc1)
 
-del Doc1
+# del Doc1
 print("test")
 # file_doc1=open("test.txt",'rb')
 # Doc1=pickle.load(file_doc1)
 # print (Doc1._documentBody)
 print(False)
 
-file_doc1 = open("meep/system/documents", 'wb')
-pickle.dump(allDocuments, file_doc1)
+# file_doc1 = open("documents", 'wb')
+# pickle.dump(allDocuments, file_doc1)
 
 print(allDocuments[0]._documentBody)
 del allDocuments
-file_doc1 = open("meep/system/documents", 'rb')
+file_doc1 = open("documents", 'rb')
 allDocuments = pickle.load(file_doc1)
 print(allDocuments[0]._documentName)
-# Doc1=allDocuments[0]
-# print(Doc1._documentBody)
+Doc1=allDocuments[0]
+print(Doc1._documentBody)
 for document in allDocuments:
-    globals()[document._documentName] = document
-    print(document)
+  globals()[document._documentName] = document
+  print(document)
 print(Doc1._documentBody, "Is the document", sep=" ")
-Doc1._documentBody=[]
-Doc3=Doc1
-print (Doc1)
+Doc1._documentBody = []
+Doc3 = Doc1
+print(Doc1)
 print(Doc3)
 print(Doc1._documentBody, "Is the document", sep=" ")
 print(allDocuments[0]._documentBody)
 print(Doc1.lockDocument(Jete))
 print(Doc1.lockDocument(Mik))
 print(Doc1.lockDocument(Jete))
+print(Jete._id)
+print(Mik._id)
+print(timeStamp())
