@@ -211,57 +211,57 @@ class Document:
 Jete = SuperUser("Jete", "Minecraft,Algorithms,Pokemon")
 Doc1 = Document("Doc1", Jete)
 print("locked by", Doc1._lockedBy, sep=",")
-Mik = OrdinaryUser("Mik", "Cheese")
-Doc1.lockDocument(Mik)
-Doc1.unlockDocument(Jete)
-print(Mik._membership)
-Jete.updateMembership(Mik)
-print(Mik._membership)
-print(Doc1._lockedBy)
-print(Jete._interests)
-Doc1.requestPermission(Jete, Mik)
-Doc1.invite(Jete, Mik)
-print(allDocuments[0]._documentName)
-print(Doc1._documentBody)
-Jete.applyTabooList()
-Jete.updateTabooList("bob")
-Doc1.add("Bob")
-Doc1.delete("UNK")
-print(Doc1._documentBody)
-
-# file_doc1=open('test.txt','wb')
-# pickle.dump(Doc1,file_doc1)
-
-# del Doc1
-print("test")
-# file_doc1=open("test.txt",'rb')
-# Doc1=pickle.load(file_doc1)
-# print (Doc1._documentBody)
-print(False)
-
-# file_doc1 = open("documents", 'wb')
-# pickle.dump(allDocuments, file_doc1)
-
-print(allDocuments[0]._documentBody)
-del allDocuments
-file_doc1 = open("documents", 'rb')
-allDocuments = pickle.load(file_doc1)
-print(allDocuments[0]._documentName)
-Doc1=allDocuments[0]
-print(Doc1._documentBody)
-for document in allDocuments:
-  globals()[document._documentName] = document
-  print(document)
-print(Doc1._documentBody, "Is the document", sep=" ")
-Doc1._documentBody = []
-Doc3 = Doc1
-print(Doc1)
-print(Doc3)
-print(Doc1._documentBody, "Is the document", sep=" ")
-print(allDocuments[0]._documentBody)
-print(Doc1.lockDocument(Jete))
-print(Doc1.lockDocument(Mik))
-print(Doc1.lockDocument(Jete))
-print(Jete._id)
-print(Mik._id)
-print(timeStamp())
+# Mik = OrdinaryUser("Mik", "Cheese")
+# Doc1.lockDocument(Mik)
+# Doc1.unlockDocument(Jete)
+# print(Mik._membership)
+# Jete.updateMembership(Mik)
+# print(Mik._membership)
+# print(Doc1._lockedBy)
+# print(Jete._interests)
+# Doc1.requestPermission(Jete, Mik)
+# Doc1.invite(Jete, Mik)
+# print(allDocuments[0]._documentName)
+# print(Doc1._documentBody)
+# Jete.applyTabooList()
+# Jete.updateTabooList("bob")
+# Doc1.add("Bob")
+# Doc1.delete("UNK")
+# print(Doc1._documentBody)
+#
+# # file_doc1=open('test.txt','wb')
+# # pickle.dump(Doc1,file_doc1)
+#
+# # del Doc1
+# print("test")
+# # file_doc1=open("test.txt",'rb')
+# # Doc1=pickle.load(file_doc1)
+# # print (Doc1._documentBody)
+# print(False)
+#
+# # file_doc1 = open("documents", 'wb')
+# # pickle.dump(allDocuments, file_doc1)
+#
+# print(allDocuments[0]._documentBody)
+# del allDocuments
+# file_doc1 = open("documents", 'rb')
+# allDocuments = pickle.load(file_doc1)
+# print(allDocuments[0]._documentName)
+# Doc1=allDocuments[0]
+# print(Doc1._documentBody)
+# for document in allDocuments:
+#   globals()[document._documentName] = document
+#   print(document)
+# #print(Doc1._documentBody, "Is the document", sep=" ")
+# Doc1._documentBody = []
+# Doc3 = Doc1
+# print(Doc1)
+# print(Doc3)
+# #print(Doc1._documentBody, "Is the document", sep=" ")
+# print(allDocuments[0]._documentBody)
+# print(Doc1.lockDocument(Jete))
+# print(Doc1.lockDocument(Mik))
+# print(Doc1.lockDocument(Jete))
+# print(Jete._id)
+# print(Mik._id)
+# print(timeStamp())
