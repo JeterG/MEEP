@@ -1,5 +1,4 @@
 import os
-# import pickle
 from .core import *
 
 def checkUserExists(username):

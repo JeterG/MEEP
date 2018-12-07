@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Header = (props) => {
   return (
@@ -16,10 +17,10 @@ const Header = (props) => {
       <div style={{display: "inline-block"}}>
         <nav>
         <ul>
-        <li>New Document</li>
-        <li>All Documents</li>
-        <li>Taboo List</li>
-        <li>Apply for OU</li>
+          <li><Link to="/editor">New Document</Link></li>
+          <li><Link to="/documents">All Documents</Link></li>
+          <li><Link to="/taboos">Taboo List</Link></li>
+          <li><Link to="/apply">Apply for OU</Link></li>
         </ul>
         </nav>
       </div>

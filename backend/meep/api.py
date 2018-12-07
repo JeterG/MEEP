@@ -3,8 +3,6 @@ from meep import app
 from .core import *
 from .utils import *
 
-# Pickle should store objects in meep/system/ directory
-
 @app.route('/api/login', methods=["POST"])
 def login():
     submitData = request.json;
