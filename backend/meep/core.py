@@ -219,10 +219,10 @@ class Document:
     # def denyInvitation():
 
 
-Jete = SuperUser("Jete", "Minecraft,Algorithms,Pokemon")
+Jete = SuperUser("Jete", "password" ,"Minecraft,Algorithms,Pokemon")
 Doc1 = Document("Doc1", Jete)
 print("locked by", Doc1._lockedBy, sep=",")
-Mik = OrdinaryUser("Mik", "Cheese")
+Mik = OrdinaryUser("Mik", "password","Cheese")
 Doc1.lockDocument(Mik)
 Doc1.unlockDocument(Jete)
 print(Mik._membership)
