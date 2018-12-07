@@ -295,5 +295,5 @@ Doc1.delete(2,Jete)
 print("Version",len(Doc1._versionHistory)-1," is ", Doc1._versionHistory[len(Doc1._versionHistory)-1])
 
 Bob=GuestUser("Bob")
-# Bob.applyToOrdinary("password","Minecraft")
-# Jete.updateMembership(Bob)
+Bob.applyToOrdinary("password","Minecraft")
+Jete.updateMembership(Bob)
