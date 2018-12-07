@@ -1,7 +1,9 @@
 import pickle
 from datetime import date
 from datetime import datetime
+import os
 
+cwd=os.getcwd()
 tabooList = ["EVIL", "LIAR", "FAKE", "hello"]
 pending = []  # words that are going to be added to the taboo list through user requests.
 allDocuments = []
@@ -12,7 +14,8 @@ uniqueIdDocuments = -1
 
 def saveUsers():
     global allUsers
-    file_users = open("system/users", 'wb')
+    directory= cwd + "/meep/system/users"
+    file_users = open(directory, 'wb')
     pickle.dump(allUsers, file_users)
     file_users.close()
     return
@@ -20,7 +23,8 @@ def saveUsers():
 
 def saveDocuments():
     global allDocuments
-    file_doc = open("system/documents", 'wb')
+    directory= cwd + "/meep/system/documents"
+    file_doc = open(directory, 'wb')
     pickle.dump(allDocuments, file_doc)
     file_doc.close()
     return
@@ -28,7 +32,8 @@ def saveDocuments():
 
 def saveTabooList():
     global tabooList
-    file_taboo_list = open("system/taboo", 'wb')
+    directory= cwd + "/meep/system/taboo"
+    file_taboo_list = open(directory, 'wb')
     pickle.dump(tabooList, file_taboo_list)
     file_taboo_list.close()
     return
@@ -36,16 +41,19 @@ def saveTabooList():
 
 def loadUsers():
     global allUsers
-    file_users = open("system/users", 'rb')
+    directory= cwd + "/meep/system/users"
+    file_users = open(directory, 'rb')
     allUsers = pickle.load(file_users)
     for user in allUsers:
         globals()[user._username] = user
     file_users.close()
     return
 
+
 def loadDocuments():
     global allDocuments
-    file_doc = open("system/documents", 'rb')
+    directory= cwd + "/meep/system/documents"
+    file_doc = open(directory, 'rb')
     allDocuments = pickle.load(file_doc)
     for document in allDocuments:
         globals()[document._documentName] = document
@@ -55,7 +63,8 @@ def loadDocuments():
 
 def loadTabooList():
     global tabooList
-    file_taboo_list = open("system/taboo", 'rb')
+    directory= cwd + "/meep/system/words"
+    file_taboo_list = open(directory, 'rb')
     tabooList = pickle.load(file_taboo_list)
     file_taboo_list.close()
     return
@@ -63,7 +72,8 @@ def loadTabooList():
 
 def savePending():
     global pending
-    file_pending = open("system/pending", 'wb')
+    directory= cwd + "/meep/system/pending"
+    file_pending = open(directory, 'wb')
     pickle.dump(pending, file_pending)
     file_pending.close()
     return
@@ -71,7 +81,8 @@ def savePending():
 
 def loadPending():
     global pending
-    file_pending = open("system/pending", "rb")
+    directory= cwd + "/meep/system/pending"
+    file_pending = open(directory, "rb")
     pending = pickle.load(file_pending)
 
 
@@ -271,7 +282,7 @@ class Document:
         self._users = [User._username]
         self._documentBody = []  # DocumentBody will always be the current version
         self._id = uniqueIdDocuments
-        self._versionHistory = [(0, self._documentBody.copy(), self._owner, timeStamp())]
+        self._versionHistory = [(0,"CREATE",self._documentBody.copy(), self._owner, timeStamp())]
         # self._versionHistory[-1] is also the current versoin/latest
         User._ownedDocuments.append(self)
         allDocuments.append(self)
@@ -330,14 +341,14 @@ class Document:
     def add(self, Word, User):
         self._documentBody.append(Word)
         su.applyTabooList()
-        self._versionHistory.append((len(self._versionHistory), self._documentBody.copy(), User._username, timeStamp()))
+        self._versionHistory.append((len(self._versionHistory),"ADD", self._documentBody.copy(), User._username, timeStamp()))
         return
 
     def delete(self, index, User):
         if len(self._documentBody) >= index:
             del self._documentBody[index]
             self._versionHistory.append(
-                (len(self._versionHistory), self._documentBody.copy(), User._username, timeStamp()))
+                (len(self._versionHistory),"DELETE", self._documentBody.copy(), User._username, timeStamp()))
         else:
             return
 
@@ -346,7 +357,7 @@ class Document:
             self._documentBody[index] = word
             su.applyTabooList()
             self._versionHistory.append(
-                (len(self._versionHistory), self._documentBody.copy(), User._username, timeStamp()))
+                (len(self._versionHistory), "UPDATE" ,self._documentBody.copy(), User._username, timeStamp()))
         return
 
     def denyInvitation(self, Owner, User):
