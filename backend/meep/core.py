@@ -2,7 +2,7 @@ import pickle
 from datetime import date
 from datetime import datetime
 
-tabooList = ["EVIL", "LIAR", "HELLO"]
+tabooList = ["EVIL", "LIAR", "FAKE"]
 allDocuments = []
 allUsers = []
 uniqueIdUsers = -1
@@ -39,9 +39,9 @@ def loadUsers():
     allUsers = pickle.load(file_users)
     for user in allUsers:
         globals()[user._username] = user
-        print("hello", user)
     file_users.close()
     return
+
 
 def loadDocuments():
     global allDocuments
@@ -49,9 +49,9 @@ def loadDocuments():
     allDocuments = pickle.load(file_doc)
     for document in allDocuments:
         globals()[document._documentName] = document
-        print("hello", document)
     file_doc.close()
     return
+
 
 def loadTabooList():
     global tabooList
@@ -142,9 +142,11 @@ class SuperUser:
 
     def updateTabooList(self, word):  # Check if the word is already in the taboo list,
         # otherwise add it to the list and remove it from all documents
-        temp = [words.upper() for words in tabooList]
-        if word.upper() in temp:
-            print(word)
+        global tabooList
+        temp=[x.upper()for x in tabooList]
+        # tabooList=[x.upper() for x in tabooList]
+        if word.upper() in [x.upper()for x in tabooList]:
+            return
         else:
             tabooList.append(word.upper())
         self.applyTabooList()
@@ -155,9 +157,9 @@ class SuperUser:
         for document in allDocuments:
             dc = [word.upper() for word in document._documentBody]
             for word in dc:
-                if word in tabooList:
+                if word.upper() in [x.upper() for x in tabooList]:
                     document._documentBody[dc.index(word)] = "UNK"
-        return
+
 
 
 class Complaint:
@@ -239,8 +241,7 @@ class Document:
                         self._lockedBy = ""
                     else:
                         return
-            else:
-                print(self._documentName, " is not Locked")
+            else:#Document isn't locked
                 return
 
     def lockDocument(self, User):  # lock the document that can be done by anyone
@@ -248,9 +249,8 @@ class Document:
             self._lock = True
             self._lockedBy = User._username
             self._unlockedBy = ""
-            print(User._username, " Locked the Document ")
         else:
-            return -1
+            return
 
     def invite(self, Owner, User):
         if (Owner._username == self._owner):
@@ -267,7 +267,6 @@ class Document:
         if (Owner._username == self._owner):
             if User._username not in self._users:
                 Owner._userDocumentRequests.append((self._documentName, User._username))
-                print(Owner._userDocumentRequests)
             else:
                 return
         else:
