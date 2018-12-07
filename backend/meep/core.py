@@ -63,7 +63,7 @@ def loadDocuments():
 
 def loadTabooList():
     global tabooList
-    directory= cwd + "/meep/system/words"
+    directory= cwd + "/meep/system/taboo"
     file_taboo_list = open(directory, 'rb')
     tabooList = pickle.load(file_taboo_list)
     file_taboo_list.close()
@@ -121,6 +121,8 @@ def blocked(User):  # Blocked function to check whether a user can do anything o
 def timeStamp():
     return (str(date.today()) + " " + str(datetime.now().strftime("%X")))
 
+def searchUsers():
+    return
 
 def suggestTaboo(word,su):
     if word in [x.upper() for x in tabooList]:
@@ -157,9 +159,11 @@ class SuperUser:
 
     def promote(self, user):
         if str.upper(user._membership) == "GUEST":
+            user._firstName=user._application[0][0]
+            user._lastName=user._application[0][1]
             user._membership = "ORDINARY"
-            user._password = user._application[0]
-            user._interests = str.upper(user._application[1])
+            user._password = user._application[1]
+            user._interests = [x.upper() for x in user._application[2]]
             del user._application
             user._ownedDocuments = []
             return
@@ -233,20 +237,22 @@ class Complaint:
 
 
 class GuestUser:
-    def __init__(self, name):
+    def __init__(self, name,password):
         global uniqueIdUsers
         uniqueIdUsers += 1
         self._membership = str.upper("GUEST")
         self._username = name
+        self._password=password
         self._blocked = False
         self._requestPromotion = 0
         self._userDocumentRequests = []
         self._id = uniqueIdUsers
+        self._application=[]
         allUsers.append(self)
         return
 
-    def applyToOrdinary(self, password, interests):
-        self._application = [password, interests]
+    def applyToOrdinary(self, name, password, interests):
+        self._application = [name,password, interests]
         self._requestPromotion = 1
         return
 
@@ -372,6 +378,5 @@ class Document:
             self._privacy=self.privacies[2]
         return
 
-loadUsers()
-# su = SuperUser("su", "root", ["Algorithms", "Minecraft", "Pokemon"]) 
-# saveUsers()
+
+su = SuperUser("su", "root", ["Algorithms", "Minecraft", "Pokemon"])
