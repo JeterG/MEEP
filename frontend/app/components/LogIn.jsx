@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { API_BASE_URL } from '../Config';
 
 class LogIn extends React.Component {
@@ -37,7 +38,7 @@ class LogIn extends React.Component {
           <input type="password" name="password" /><br />
           <button type="submit">Submit</button>
         </form>
-        <a href="./register">Create An Account</a>
+        <Link to="/register">Create An Account</Link>
       </div>
     )
   }

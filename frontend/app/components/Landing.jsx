@@ -1,26 +1,33 @@
 import React, { Component } from 'react';
+import LogIn from './LogIn';
+import Home from './Home';
 
 class Landing extends React.Component {
   state = {
-    documents: [
-      {doc_id: 0, doc_title: "How to Cook", doc_owner: "James"},
-      {doc_id: 1, doc_title: "Hiking for Beginners", doc_owner: "Annie"},
-      {doc_id: 2, doc_title: "Analytical Algebra for Ph.D Students", doc_owner: "Lizzy"}
-    ]
+    user: null
+    // user: {
+    //   id: 0,
+    //   name: "myusername",
+    //   type: "guest",
+    //   pic: "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
+    // }
+  }
+
+  componentDidMount = () => {
+    // Get user log in status.
+    var currentUser = localStorage.user ? JSON.parse(localStorage.user) : null;
+    this.setState({user: currentUser});
   }
 
   render() {
-    var {name, type, pic} = this.props.user;
-    var docList = this.state.documents.map(doc => {
-      return <DocumentCard key={doc.doc_id} doc={doc} />
-    });
+    var { user } = this.state;
+    var display = user ?
+      <Home user={user} />
+    : <LogIn />
 
     return (
-      <div className="home-page">
-        <Header name={name} type={type} pic={pic} />
-
-        <h2>Recently Edited</h2>
-        <div>{ docList }</div>
+      <div>
+        { display }
       </div>
     )
   }

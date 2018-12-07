@@ -21,10 +21,24 @@ def post():
 
     return validateRegistration(username, password, interests) #hmm...
 
+@app.route('/api/users', methods=["GET"])
+def users():
+    returnUsers = []
+
+    for user in allUsers:
+        userData = {
+            "id" : user._id,
+            "name": user._username,
+            "type": user._membership
+        }
+        returnUsers.append(userData)
+
+    return jsonify(returnUsers)
+
 @app.route('/api/documents', methods=["GET"])
 def documents():
     # Return list of all public documents
-    allPublicDocuments = []
+    returnDocs = []
 
     for doc in allDocuments:
         # Map object properties to a Python dictionary for JSON conversion
@@ -33,9 +47,9 @@ def documents():
             "doc_title" : doc._documentName,
             "doc_owner" : doc._owner
         }
-        allPublicDocuments.append(docData)
+        returnDocs.append(docData)
 
-    return jsonify(allPublicDocuments);
+    return jsonify(returnDocs);
 
 @app.route('/api/doc/:doc_id', methods=["GET"])
 def get_doc():

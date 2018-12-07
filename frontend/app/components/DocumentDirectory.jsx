@@ -24,7 +24,7 @@ class DocumentDirectory extends React.Component {
         </li>
       );
     })
-    : null;
+    : "No documents found";
 
     return (
       <div>
