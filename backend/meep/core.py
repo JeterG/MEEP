@@ -373,4 +373,4 @@ class Document:
         return
 
 
-su = SuperUser("su", "root", ["Algorithms", "Minecraft", "Pokemon"])
+su = SuperUser("su", "root", ["Algorithms", "Minecraft", "Pokemon"]) 
