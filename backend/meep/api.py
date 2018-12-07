@@ -11,9 +11,8 @@ def login():
     username = submitData.get("username")
     password = submitData.get("password")
 
-    return validateUserLogin(username, password) # return either true or false
+    return jsonify({"message" : validateUserLogin(username, password)}) # return either true or false
                                           # if false... try again + give option of creating account as a guest user?
-    # return jsonify(Doc1._documentName);
 
 @app.route('/api/register', methods=["post"])
 def post():
@@ -22,7 +21,7 @@ def post():
     password = submitData.get("password")
     interests = submitData.get("interests")
 
-    return validateRegistration(username, password, interests) #hmm...
+    return jsonify({"message" : validateRegistration(username, password, interests)}) #hmm...
 
 @app.route('/api/documents', methods=["GET"])
 def documents():
