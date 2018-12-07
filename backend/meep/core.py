@@ -372,5 +372,6 @@ class Document:
             self._privacy=self.privacies[2]
         return
 
-
-su = SuperUser("su", "root", ["Algorithms", "Minecraft", "Pokemon"])
+loadUsers()
+# su = SuperUser("su", "root", ["Algorithms", "Minecraft", "Pokemon"])
+# saveUsers()

@@ -29,9 +29,12 @@ def validateUserLogin(username, password):
     #         else:
     #             return False
     # return False
-    if allUsers[allUsers.index(globals()[username])]._password == password:
-        return "OK"
-    return "NO"
+    if checkUserExists(username) == True:
+        if allUsers[allUsers.index(globals()[username])]._password == password:
+            return "OK"
+        return "Incorrect password"
+    else:
+        return "NO"
 
 def validateRegistration(username, password, interests):
     # confirm username doesn't already exist
