@@ -43,7 +43,6 @@ def loadUsers():
     file_users.close()
     return
 
-
 def loadDocuments():
     global allDocuments
     file_doc = open("system/documents", 'rb')
