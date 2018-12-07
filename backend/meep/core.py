@@ -141,11 +141,13 @@ def readOpenDocuments():#returns a list of documents that have open as their pri
 
 class SuperUser:
 
-    def __init__(self, name, password, interests):
+    def __init__(self, username,name, password, interests):
         global uniqueIdUsers
         uniqueIdUsers += 1
         self._membership = str.upper("Super")
-        self._username = name
+        self._username = username
+        self._firstName=name[0]
+        self._Lastname=name[1]
         self._blocked = False
         self._interests = [interest.upper() for interest in interests]
         self._requestPromotion = 0
@@ -162,8 +164,7 @@ class SuperUser:
             user._firstName=user._application[0][0]
             user._lastName=user._application[0][1]
             user._membership = "ORDINARY"
-            user._password = user._application[1]
-            user._interests = [x.upper() for x in user._application[2]]
+            user._interests = [x.upper() for x in user._application[1]]
             del user._application
             user._ownedDocuments = []
             return
@@ -237,11 +238,11 @@ class Complaint:
 
 
 class GuestUser:
-    def __init__(self, name,password):
+    def __init__(self, username,password):
         global uniqueIdUsers
         uniqueIdUsers += 1
         self._membership = str.upper("GUEST")
-        self._username = name
+        self._username = username
         self._password=password
         self._blocked = False
         self._requestPromotion = 0
@@ -251,20 +252,22 @@ class GuestUser:
         allUsers.append(self)
         return
 
-    def applyToOrdinary(self, name, password, interests):
-        self._application = [name,password, interests]
+    def applyToOrdinary(self, name, interests):
+        self._application = [name, interests]
         self._requestPromotion = 1
         return
 
 
 class OrdinaryUser:
-    def __init__(self, name, password, interests):
+    def __init__(self, username,name,password, interests):
         global uniqueIdUsers
         uniqueIdUsers += 1
         self._membership = str.upper("ORDINARY")
-        self._username = name
+        self._username = username
         self._blocked = False
         self._requestPromotion = 0
+        self._firstName=name[0]
+        self._Lastname=name[1]
         self._userDocumentRequests = []
         self._interests = [interest.upper() for interest in interests]
         self._ownedDocuments = []
@@ -379,4 +382,5 @@ class Document:
         return
 
 
-su = SuperUser("su", "root", ["Algorithms", "Minecraft", "Pokemon"])
+su = SuperUser("su", ["Super","User"], "root",["Algorithms", "Minecraft", "Pokemon"])
+loadUsers()
