@@ -39,8 +39,9 @@ class SuperUser:
     def promote(self, user):
         if str.upper(user._membership) == "GUEST":
             user._membership = "ORDINARY"
+            user._password=user._application[0]
+            user._interests=str.upper(user.application[1])
             user._ownedDocuments = []
-            allUsers.append(user)
             return
         elif str.upper(user._membership) == "ORDINARY":
             user._membership = "SUPER"
@@ -112,10 +113,9 @@ class GuestUser:
         allUsers.append(self)
         return
 
-    def applyToOrdinary(self, name, interests):
-        self._username = name
+    def applyToOrdinary(self,password,interests):
+        self._application=[password,interests]
         self._requestPromotion = 1
-        self._interests = str.upper(interests)
         return
 
 
@@ -293,3 +293,7 @@ if globals()["Jete"] in allUsers:
 print (len(allUsers))
 Doc1.delete(2,Jete)
 print("Version",len(Doc1._versionHistory)-1," is ", Doc1._versionHistory[len(Doc1._versionHistory)-1])
+
+Bob=GuestUser("Bob")
+Bob.applyToOrdinary("password","Minecraft")
+Jete.updateMembership(Bob)
