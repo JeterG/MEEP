@@ -30,8 +30,8 @@ def validateUserLogin(username, password):
     #             return False
     # return False
     if allUsers[allUsers.index(globals()[username])]._password == password:
-        return True
-    return False
+        return "OK"
+    return "NO"
 
 def validateRegistration(username, password, interests):
     # confirm username doesn't already exist
@@ -41,8 +41,8 @@ def validateRegistration(username, password, interests):
             print("You are a Guest User. Apply for membership.")
         else:
             print("Username taken.")
-        return False
+        return "NO"
     else:                                   # username does not exist
         username = OrdinaryUser(username, password, interests)
         print("Successful Registration")
-        return True
+        return "OK"
