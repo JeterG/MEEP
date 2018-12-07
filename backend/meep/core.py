@@ -2,7 +2,7 @@ import pickle
 from datetime import date
 from datetime import datetime
 
-tabooList = ["EVIL", "LIAR", "FAKE","hello"]
+tabooList = ["EVIL", "LIAR", "FAKE", "hello"]
 allDocuments = []
 allUsers = []
 uniqueIdUsers = -1
@@ -144,9 +144,9 @@ class SuperUser:
     def updateTabooList(self, word):  # Check if the word is already in the taboo list,
         # otherwise add it to the list and remove it from all documents
         global tabooList
-        temp=[x.upper()for x in tabooList]
+        temp = [x.upper() for x in tabooList]
         # tabooList=[x.upper() for x in tabooList]
-        if word.upper() in [x.upper()for x in tabooList]:
+        if word.upper() in [x.upper() for x in tabooList]:
             return
         else:
             tabooList.append(word.upper())
@@ -160,7 +160,6 @@ class SuperUser:
             for word in dc:
                 if word.upper() in [x.upper() for x in tabooList]:
                     document._documentBody[dc.index(word)] = "UNK"
-
 
 
 class Complaint:
@@ -242,7 +241,7 @@ class Document:
                         self._lockedBy = ""
                     else:
                         return
-            else:#Document isn't locked
+            else:  # Document isn't locked
                 return
 
     def lockDocument(self, User):  # lock the document that can be done by anyone
@@ -287,18 +286,24 @@ class Document:
         else:
             return
 
-    def update(self, index, word):
+    def update(self, User, index, word):
         if len(self._documentBody) >= index:
-            self._documentBody[index]=word
+            self._documentBody[index] = word
             su.applyTabooList()
-            self._versionHistory.append((len(self._versionHistory), self._documentBody.copy(), User._username, timeStamp()))
+            self._versionHistory.append(
+                (len(self._versionHistory), self._documentBody.copy(), User._username, timeStamp()))
         return
 
+    def denyInvitation(self, Owner, User):
+        if (self._documentName,User._username) in Owner._userDocumentRequests:
+            del Owner._userDocumentRequests[(Owner._userDocumentRequests.index((self._documentName,User._username)))]
+        return
 
-    def denyInvitation(self,Owner):
-        print(Owner._userDocumentRequests)
+    def acceptInvitation(self, Owner, User):
+        if (self._documentName,User._username) in Owner._userDocumentRequests:
+            del Owner._userDocumentRequests[(Owner._userDocumentRequests.index((self._documentName,User._username)))]
+            self._users.append(User._username)
         return
-    def acceptIvitation(self):
-        return
+
 
 su = SuperUser("su", "root", "Minecraft,Algorithms,Pokemon")
