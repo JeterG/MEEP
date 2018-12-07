@@ -2,14 +2,80 @@ import pickle
 from datetime import date
 from datetime import datetime
 
-tabooList = ["EVIL", "LIAR"]
+tabooList = ["EVIL", "LIAR", "HELLO"]
 allDocuments = []
 allUsers = []
 uniqueIdUsers = -1
 uniqueIdDocuments = -1
 
 
-def blocked(User):  # Blocked function to check wheter a user can do anything or if they have to fix a document
+def saveUsers():
+    global allUsers
+    file_users = open("system/users", 'wb')
+    pickle.dump(allUsers, file_users)
+    file_users.close()
+    return
+
+
+def saveDocuments():
+    global allDocuments
+    file_doc = open("system/documents", 'wb')
+    pickle.dump(allDocuments, file_doc)
+    file_doc.close()
+    return
+
+
+def saveTabooList():
+    global tabooList
+    file_taboo_list = open("system/taboo", 'wb')
+    pickle.dump(tabooList, file_taboo_list)
+    file_taboo_list.close()
+    return
+
+
+def loadUsers():
+    global allUsers
+    file_users = open("system/users", 'rb')
+    allUsers = pickle.load(file_users)
+    for user in allUsers:
+        globals()[user._username] = user
+        print("hello", user)
+    file_users.close()
+    return
+
+def loadDocuments():
+    global allDocuments
+    file_doc = open("system/documents", 'rb')
+    allDocuments = pickle.load(file_doc)
+    for document in allDocuments:
+        globals()[document._documentName] = document
+        print("hello", document)
+    file_doc.close()
+    return
+
+def loadTabooList():
+    global tabooList
+    file_taboo_list = open("system/taboo", 'rb')
+    tabooList = pickle.load(file_taboo_list)
+    file_taboo_list.close()
+    return
+
+
+def loadInformation():
+    loadTabooList()
+    loadUsers()
+    loadDocuments()
+    return
+
+
+def saveInformation():
+    saveUsers()
+    saveDocuments()
+    saveTabooList()
+    return
+
+
+def blocked(User):  # Blocked function to check whether a user can do anything or if they have to fix a document
     if (User._blocked == True):
         print("Update document before you continue")
     else:
@@ -84,8 +150,8 @@ class SuperUser:
         self.applyTabooList()
         return
 
-    def applyTabooList(self):  # update all the taboo words from all existing documents
-        print(tabooList)
+    def applyTabooList(
+            self):  # update all the taboo words from all existing documents and block users who added the word
         for document in allDocuments:
             dc = [word.upper() for word in document._documentBody]
             for word in dc:
@@ -147,26 +213,27 @@ class Document:
         self._lockedBy = User._username
         self._unlockedBy = ""
         self._users = [User._username]
-        self._documentBody = []
+        self._documentBody = []  # DocumentBody will always be the current version
         self._id = uniqueIdDocuments
         self._versionHistory = [(0, self._documentBody.copy(), self._owner, timeStamp())]
+        # self._versionHistory[-1] is also the current versoin/latest
         allDocuments.append(self)
 
     def unlockDocument(self,
                        User):  # Unlock the document, only the super user can unlock the document regardless of who locked it
         # otherwise document can be unlocked by whoever locked it or the owner
-        if ((str.upper(User._membership) == "SUPER") & self._lock == True):#unlock the document if you are super user
+        if ((str.upper(User._membership) == "SUPER") & self._lock == True):  # unlock the document if you are super user
             self._lock = False
             self._unlockedBy = User._username
             self._lockedBy = ""
         else:
-            if self._lock == True:#unlock the document if you are the owner
+            if self._lock == True:  # unlock the document if you are the owner
                 if self._owner == User._username:
                     self._lock = False
                     self._unlockedBy = User._username
                     self._lockedBy = ""
                 else:
-                    if self._lockedBy == User._username:#if you are not the owner then unlock the document if you locked it initially
+                    if self._lockedBy == User._username:  # if you are not the owner then unlock the document if you locked it initially
                         self._lock = False
                         self._unlockedBy = User._username
                         self._lockedBy = ""
@@ -176,7 +243,7 @@ class Document:
                 print(self._documentName, " is not Locked")
                 return
 
-    def lockDocument(self, User):#lock the document that can be done by anyone
+    def lockDocument(self, User):  # lock the document that can be done by anyone
         if (self._lock == False):
             self._lock = True
             self._lockedBy = User._username
