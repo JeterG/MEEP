@@ -95,7 +95,7 @@ class SuperUser:
         self._membership = str.upper("Super")
         self._username = name
         self._blocked = False
-        self._interests = str.upper(interests)
+        self._interests = [interest.upper() for interest in interests]
         self._requestPromotion = 0
         self._userDocumentRequests = []
         self._ownedDocuments = []
@@ -198,6 +198,7 @@ class OrdinaryUser:
         self._blocked = False
         self._requestPromotion = 0
         self._userDocumentRequests = []
+        self._interests = [interest.upper() for interest in interests]
         self._ownedDocuments = []
         self._id = uniqueIdUsers
         self._password = password
@@ -306,4 +307,4 @@ class Document:
         return
 
 
-su = SuperUser("su", "root", "Minecraft,Algorithms,Pokemon")
+su = SuperUser("su", "root", ["Algorithms","Minecraft","Pokemon"])
