@@ -15,6 +15,6 @@ def login():
     username = submitData.get("username");
     password = submitData.get("password");
 
-    validateUserLogin(username, password) # return either true or false
+    # validateUserLogin(username, password) # return either true or false
                                           # if false... try again + give option of creating account as a guest user?
     return jsonify(Doc1._documentName);
