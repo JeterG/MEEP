@@ -18,10 +18,10 @@ class DocumentDirectory extends React.Component {
     var { docs } = this.state;
     var items = docs ? docs.map(doc => {
       return (
-        <div key={doc.doc_id}>
+        <li key={doc.doc_id}>
           <b>{doc.doc_title}</b><br />
           <em>{doc.doc_owner}</em>
-        </div>
+        </li>
       );
     })
     : null;
@@ -29,7 +29,9 @@ class DocumentDirectory extends React.Component {
     return (
       <div>
         <h1>Doc Directory</h1>
+        <ul>
         { items }
+        </ul>
       </div>
     )
   }
