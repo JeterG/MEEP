@@ -1,1 +1,1 @@
-cp public/* /var/www/html/
+cp frontend/public/* /var/www/html/
