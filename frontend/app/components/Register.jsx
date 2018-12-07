@@ -11,7 +11,7 @@ class Register extends React.Component {
     // Data passed to the server.
     let submitData = {
       username: e.target[0].value,
-      password: e.target[1].value
+      password: e.target[1].value,
       interests: e.target[2].value
     }
 
