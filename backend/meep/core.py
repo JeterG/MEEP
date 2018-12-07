@@ -2,7 +2,7 @@ import pickle
 from datetime import date
 from datetime import datetime
 
-tabooList = ["EVIL", "LIAR", "FAKE"]
+tabooList = ["EVIL", "LIAR", "FAKE","hello"]
 allDocuments = []
 allUsers = []
 uniqueIdUsers = -1
@@ -78,8 +78,9 @@ def saveInformation():
 def blocked(User):  # Blocked function to check whether a user can do anything or if they have to fix a document
     if (User._blocked == True):
         print("Update document before you continue")
+        return True
     else:
-        return
+        return False
 
 
 def timeStamp():
@@ -286,9 +287,18 @@ class Document:
         else:
             return
 
-    def update(self, index):
+    def update(self, index, word):
+        if len(self._documentBody) >= index:
+            self._documentBody[index]=word
+            su.applyTabooList()
+            self._versionHistory.append((len(self._versionHistory), self._documentBody.copy(), User._username, timeStamp()))
         return
-    # def denyInvitation():
 
+
+    def denyInvitation(self,Owner):
+        print(Owner._userDocumentRequests)
+        return
+    def acceptIvitation(self):
+        return
 
 su = SuperUser("su", "root", "Minecraft,Algorithms,Pokemon")
