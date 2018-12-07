@@ -5,7 +5,7 @@ from datetime import datetime
 tabooList = ["EVIL", "LIAR"]
 allDocuments = []
 allUsers = []
-uniqueId = -1
+uniqueIdUsers = -1
 
 
 def blocked(User):  # Global functions are functions that are handled or necessary for the system
@@ -22,8 +22,8 @@ def timeStamp():
 class SuperUser:
 
     def __init__(self, name,password, interests):
-        global uniqueId
-        uniqueId += 1
+        global uniqueIdUsers
+        uniqueIdUsers += 1
         self._membership = str.upper("Super")
         self._username = name
         self._blocked = False
@@ -31,7 +31,7 @@ class SuperUser:
         self._requestPromotion = 0
         self._userDocumentRequests = []
         self._ownedDocuments = []
-        self._id = uniqueId
+        self._id = uniqueIdUsers
         self._password = password
         allUsers.append(self)
         return
@@ -40,7 +40,8 @@ class SuperUser:
         if str.upper(user._membership) == "GUEST":
             user._membership = "ORDINARY"
             user._password=user._application[0]
-            user._interests=str.upper(user.application[1])
+            user._interests=str.upper(user._application[1])
+            del user._application
             user._ownedDocuments = []
             return
         elif str.upper(user._membership) == "ORDINARY":
@@ -102,14 +103,14 @@ class Complaint:
 
 class GuestUser:
     def __init__(self, name):
-        global uniqueId
-        uniqueId += 1
+        global uniqueIdUsers
+        uniqueIdUsers += 1
         self._membership = str.upper("GUEST")
         self._username = name
         self._blocked = False
         self._requestPromotion = 0
         self._userDocumentRequests = []
-        self._id = uniqueId
+        self._id = uniqueIdUsers
         allUsers.append(self)
         return
 
@@ -121,15 +122,15 @@ class GuestUser:
 
 class OrdinaryUser:
     def __init__(self, name,password,interests):
-        global uniqueId
-        uniqueId += 1
+        global uniqueIdUsers
+        uniqueIdUsers += 1
         self._membership = str.upper("ORDINARY")
         self._username = name
         self._blocked = False
         self._requestPromotion = 0
         self._userDocumentRequests = []
         self._ownedDocuments = []
-        self._id = uniqueId
+        self._id = uniqueIdUsers
         self._password = password
         allUsers.append(self)
         return
@@ -203,7 +204,7 @@ class Document:
 
     def add(self, Word,User):
         self._documentBody.append(Word)
-        Jete.applyTabooList()
+        su.applyTabooList()
         self._versionHistory.append((len(self._versionHistory),self._documentBody.copy(),User._username,timeStamp()))
         return
 
@@ -219,30 +220,30 @@ class Document:
     # def denyInvitation():
 
 
-Jete = SuperUser("Jete", "password" ,"Minecraft,Algorithms,Pokemon")
-Doc1 = Document("Doc1", Jete)
+su = SuperUser("su", "root" ,"Minecraft,Algorithms,Pokemon")
+Doc1 = Document("Doc1", su)
 print("locked by", Doc1._lockedBy, sep=",")
 Mik = OrdinaryUser("Mik", "password","Cheese")
 Doc1.lockDocument(Mik)
-Doc1.unlockDocument(Jete)
+Doc1.unlockDocument(su)
 print(Mik._membership)
-Jete.updateMembership(Mik)
+su.updateMembership(Mik)
 print(Mik._membership)
 print(Doc1._lockedBy)
-print(Jete._interests)
-Doc1.requestPermission(Jete, Mik)
-Doc1.invite(Jete, Mik)
+print(su._interests)
+Doc1.requestPermission(su, Mik)
+Doc1.invite(su, Mik)
 print(allDocuments[0]._documentName)
 print(Doc1._documentBody)
-Jete.applyTabooList()
-Jete.updateTabooList("bob")
-Doc1.lockDocument(Jete)
-Doc1.add("Bob",Jete)
-Doc1.add("LIAR",Jete)
-Doc1.add("test",Jete)
-Doc1.add("case",Jete)
-Doc1.add("trial",Jete)
-Doc1.add("fail",Jete)
+su.applyTabooList()
+su.updateTabooList("bob")
+Doc1.lockDocument(su)
+Doc1.add("Bob",su)
+Doc1.add("LIAR",su)
+Doc1.add("test",su)
+Doc1.add("case",su)
+Doc1.add("trial",su)
+Doc1.add("fail",su)
 
 # Doc1.delete("UNK")
 print(Doc1._documentBody)
@@ -277,23 +278,24 @@ print(Doc1)
 print(Doc3)
 print(Doc1._documentBody, "Is the document", sep=" ")
 print(allDocuments[0]._documentBody)
-print(Doc1.lockDocument(Jete))
+print(Doc1.lockDocument(su))
 print(Doc1.lockDocument(Mik))
-print(Doc1.lockDocument(Jete))
-print(Jete._id)
+print(Doc1.lockDocument(su))
+print(su._id)
 print(Mik._id)
 print(timeStamp())
 print(Doc1._documentBody)
-Doc1.add("Hello",Jete)
+Doc1.add("Hello",su)
 for version in Doc1._versionHistory:
     print("Version",Doc1._versionHistory.index(version), " is ",version)
 # print(Doc1._versionHistory.length())
-if globals()["Jete"] in allUsers:
+if globals()["su"] in allUsers:
     print ("hello")
 print (len(allUsers))
-Doc1.delete(2,Jete)
+Doc1.delete(2,su)
 print("Version",len(Doc1._versionHistory)-1," is ", Doc1._versionHistory[len(Doc1._versionHistory)-1])
 
 Bob=GuestUser("Bob")
 Bob.applyToOrdinary("password","Minecraft")
-Jete.updateMembership(Bob)
+print(Bob._application)
+su.updateMembership(Bob)
