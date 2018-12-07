@@ -373,5 +373,5 @@ class Document:
         return
 
 loadUsers()
-# su = SuperUser("su", "root", ["Algorithms", "Minecraft", "Pokemon"])
+# su = SuperUser("su", "root", ["Algorithms", "Minecraft", "Pokemon"]) 
 # saveUsers()
