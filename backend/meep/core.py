@@ -3,6 +3,7 @@ from datetime import date
 from datetime import datetime
 
 tabooList = ["EVIL", "LIAR", "FAKE", "hello"]
+pending = []  # words that are going to be added to the taboo list through user requests.
 allDocuments = []
 allUsers = []
 uniqueIdUsers = -1
@@ -61,10 +62,25 @@ def loadTabooList():
     return
 
 
+def savePending():
+    global pending
+    file_pending = open("system/pending", 'wb')
+    pickle.dump(pending, file_pending)
+    file_pending.close()
+    return
+
+
+def loadPending():
+    global pending
+    file_pending = open("system/pending", "rb")
+    pending = pickle.load(file_pending)
+
+
 def loadInformation():
     loadTabooList()
     loadUsers()
     loadDocuments()
+    loadPending()
     return
 
 
@@ -72,6 +88,7 @@ def saveInformation():
     saveUsers()
     saveDocuments()
     saveTabooList()
+    savePending()
     return
 
 
@@ -85,6 +102,16 @@ def blocked(User):  # Blocked function to check whether a user can do anything o
 
 def timeStamp():
     return (str(date.today()) + " " + str(datetime.now().strftime("%X")))
+
+
+def suggestTaboo(word,su):
+    if word in [x.upper() for x in tabooList]:
+        return
+    else:
+        su._suggestions=0
+        pending.append(word)
+        #    Add the possible taboo word to a place where the super user add it
+        # return
 
 
 class SuperUser:
@@ -101,6 +128,7 @@ class SuperUser:
         self._ownedDocuments = []
         self._id = uniqueIdUsers
         self._password = password
+        self._suggestions = -1
         allUsers.append(self)
         return
 
@@ -143,7 +171,6 @@ class SuperUser:
 
     def updateTabooList(self, word):  # Check if the word is already in the taboo list,
         # otherwise add it to the list and remove it from all documents
-        global tabooList
         temp = [x.upper() for x in tabooList]
         # tabooList=[x.upper() for x in tabooList]
         if word.upper() in [x.upper() for x in tabooList]:
@@ -151,7 +178,18 @@ class SuperUser:
         else:
             tabooList.append(word.upper())
         self.applyTabooList()
-        return
+
+
+    def resolveSuggestions(self):  # add suggested taboo words to the taboo list
+        global pending
+        if self._suggestions is -1:
+            return
+        else:
+            for word in pending:
+                print(word)
+                self.updateTabooList(word)
+            del pending[:]
+            self._suggestions = -1
 
     def applyTabooList(
             self):  # update all the taboo words from all existing documents and block users who added the word
@@ -160,6 +198,7 @@ class SuperUser:
             for word in dc:
                 if word.upper() in [x.upper() for x in tabooList]:
                     document._documentBody[dc.index(word)] = "UNK"
+        return
 
 
 class Complaint:
@@ -296,15 +335,15 @@ class Document:
         return
 
     def denyInvitation(self, Owner, User):
-        if (self._documentName,User._username) in Owner._userDocumentRequests:
-            del Owner._userDocumentRequests[(Owner._userDocumentRequests.index((self._documentName,User._username)))]
+        if (self._documentName, User._username) in Owner._userDocumentRequests:
+            del Owner._userDocumentRequests[(Owner._userDocumentRequests.index((self._documentName, User._username)))]
         return
 
     def acceptInvitation(self, Owner, User):
-        if (self._documentName,User._username) in Owner._userDocumentRequests:
-            del Owner._userDocumentRequests[(Owner._userDocumentRequests.index((self._documentName,User._username)))]
+        if (self._documentName, User._username) in Owner._userDocumentRequests:
+            del Owner._userDocumentRequests[(Owner._userDocumentRequests.index((self._documentName, User._username)))]
             self._users.append(User._username)
         return
 
 
-su = SuperUser("su", "root", ["Algorithms","Minecraft","Pokemon"])
+su = SuperUser("su", "root", ["Algorithms", "Minecraft", "Pokemon"])
