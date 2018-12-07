@@ -203,6 +203,7 @@ class Document:
         if Word in self._documentBody:
             self._documentBody.remove(Word)
         return
+        
     def update(self,index):
         return
     # def denyInvitation():

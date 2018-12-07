@@ -25,6 +25,7 @@ var config = {
   },
 
   devServer: {
+    historyApiFallback: true,
     inline: true,
     contentBase: './public',
     port: 8090
