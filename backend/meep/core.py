@@ -92,6 +92,14 @@ def saveInformation():
     return
 
 
+def searchOwnedDocuments(User,word):
+    available=[]
+    for document in User._ownedDocuments:
+        if word.upper() in [c.upper() for c in document._documentBody]:
+            # print("Here",document._documentBody)
+            available.append(document)
+    return available
+
 def blocked(User):  # Blocked function to check whether a user can do anything or if they have to fix a document
     if (User._blocked == True):
         print("Update document before you continue")
@@ -111,8 +119,13 @@ def suggestTaboo(word,su):
         su._suggestions=0
         pending.append(word)
         #    Add the possible taboo word to a place where the super user add it
-        # return
 
+def readOpenDocuments():#returns a list of documents that have open as their privacy
+    available=[]
+    for document in allDocuments:
+        if document._privacy is document.privacies[0]:
+            available.append(document)
+    return available
 
 class SuperUser:
 
@@ -246,9 +259,11 @@ class OrdinaryUser:
 
 
 class Document:
+    privacies={0:"OPEN",1:"RESTRICTED",2:"SHARED",3:"PRIVATE"}
     def __init__(self, documentName, User):
         global uniqueIdDocuments
         uniqueIdDocuments += 1
+        self._privacy= self.privacies[3]
         self._lock = False
         self._documentName = documentName
         self._owner = User._username
@@ -259,6 +274,7 @@ class Document:
         self._id = uniqueIdDocuments
         self._versionHistory = [(0, self._documentBody.copy(), self._owner, timeStamp())]
         # self._versionHistory[-1] is also the current versoin/latest
+        User._ownedDocuments.append(self)
         allDocuments.append(self)
 
     def unlockDocument(self,
@@ -343,6 +359,7 @@ class Document:
         if (self._documentName, User._username) in Owner._userDocumentRequests:
             del Owner._userDocumentRequests[(Owner._userDocumentRequests.index((self._documentName, User._username)))]
             self._users.append(User._username)
+            self._privacy=self.privacies[2]
         return
 
 
