@@ -37,6 +37,7 @@ class LogIn extends React.Component {
           <input type="password" name="password" /><br />
           <button type="submit">Submit</button>
         </form>
+        <a href="./register">Create An Account</a>
       </div>
     )
   }

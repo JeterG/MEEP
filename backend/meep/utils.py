@@ -7,9 +7,12 @@ def checkUserExists(username):
     return False
 
 def validateUserLogin(username, password):
-    if allUsers[allUsers.index(globals()[username])]._password == password:
-        return "OK"
-    return "NO"
+    if checkUserExists(username) == True:
+        if allUsers[allUsers.index(globals()[username])]._password == password:
+            return "OK"
+        return "Incorrect password"
+    else:
+        return "NO"
 
 def validateRegistration(username, password, interests):
     # confirm username doesn't already exist
