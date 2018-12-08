@@ -40,6 +40,10 @@ def validateRegistration(username, password):
 
     return globals()[username]
 
-def requestpromotion(username, name, interests):
-    globals()[username].applyToOrdinary(name, interests)
-    return "Request Submitted"
+def requestpromotion(username, firstName, lastName, interests):
+    # check if form is completed
+    if (not interests) or (not firstName) or (not lastName) :
+        return False
+    else:
+        globals()[username].applyToOrdinary([firstName, lastName], interests)
+    return True

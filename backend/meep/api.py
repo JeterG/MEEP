@@ -73,6 +73,10 @@ def OUapp():
     lastName = submitData.get("lastName")
     interests = submitData.get("interests")
     username = submitData.get("username")
-    # print(username)
-    result = requestpromotion(username, [firstName, lastName], interests)
-    return jsonify({"message": result})
+    result = requestpromotion(username, firstName, lastName, interests)
+    if result:
+        data = {'message' : 'Request Submitted'}
+        return jsonify(data), 200
+    else:
+        data = {'message' : 'Complete the Form'}
+        return jsonify(data), 403
