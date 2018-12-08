@@ -19,7 +19,7 @@ class OUapp extends React.Component {
       type: this.props.type
     }
 
-    axios.post(API_BASE_URL + '/OUapp', submitData)
+    axios.post(API_BASE_URL + '/apply', submitData)
     .then(response => {
       console.log(response.data);
       this.setState(response.data);

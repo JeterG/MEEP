@@ -26,7 +26,7 @@ def post():
 
     userObject = validateRegistration(username, password)
     print("the userObj is", userObject)
-    
+
     if userObject:
         data = createUserFromObj(userObject)
         return jsonify(data), 200
@@ -66,7 +66,7 @@ def post_doc():
     # Save a specific document to the server
     return jsonify("placeholder")
 
-@app.route('/api/OU_application', methods=['POST'])
+@app.route('/api/apply', methods=['POST'])
 def OUapp():
     submitData = request.json;
     firstName = submitData.get("firstName")
