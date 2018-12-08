@@ -2,6 +2,7 @@ from flask import request, jsonify
 from meep import app
 from .utils import *
 
+
 @app.route('/api/login', methods=["POST"])
 def login():
     submitData = request.json;
@@ -72,6 +73,6 @@ def OUapp():
     lastName = submitData.get("lastName")
     interests = submitData.get("interests")
     username = submitData.get("username")
-    print(username)
+    # print(username)
     result = requestpromotion(username, [firstName, lastName], interests)
-    return jsonify({"message": result})#"Request Submitted"})
+    return jsonify({"message": result})

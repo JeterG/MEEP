@@ -465,8 +465,8 @@ class Document:
         return
 
 
-su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
-# loadUsers()
+# su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
+loadUsers()
 
 # print(uniqueIdUsers)
 # uniqueIdUsers+=1
