@@ -15,13 +15,13 @@ class App extends React.Component {
     return (
       <BrowserRouter>
         <div className="meep-app">
-          <Route exact path="/" component={Landing} />                   {/* Home page*/}
+          <Route exact path="/" component={Landing} />                 {/* Home page*/}
           <Route path="/register" component={Register} />              {/* Allow new users to register guest accounts */}
           <Route path="/apply" component={OUapply} />                  {/* Allow guest users to apply to be an ordinary user */}
-          <Route path="/documents" component={DocumentDirectory} />    {/* Return directory of all public documents */}
-          <Route path="/doc/:doc_id" component={Document} />           {/* Display the editor for a given document */}
-          <Route path="/users" component={UserDirectory} />        {/* Return directory of all public users */}
-          <Route path="/user/:u_id" component={DocumentDirectory} />   {/* Display the profile for a given user */}
+          <Route exact path="/docs" component={DocumentDirectory} />   {/* Return directory of all public documents */}
+          <Route path="/docs/:doc_id" component={Editor} />            {/* Display the editor for a given document */}
+          <Route path="/users" component={UserDirectory} />            {/* Return directory of all public users */}
+          <Route path="/users/:u_id" component={DocumentDirectory} />  {/* Display the profile for a given user */}
           <Route path="/taboos" component={DocumentDirectory} />       {/* Display the taboo list + suggestion form */}
         </div>
       </BrowserRouter>

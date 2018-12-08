@@ -25,7 +25,7 @@ const Header = (props) => {
         <nav>
         <ul>
           <li><Link to="/editor">New Document</Link></li>
-          <li><Link to="/documents">All Documents</Link></li>
+          <li><Link to="/docs">All Documents</Link></li>
           <li><Link to="/taboos">Taboo List</Link></li>
           {displayOUapply}
         </ul>

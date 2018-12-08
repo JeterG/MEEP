@@ -10,12 +10,14 @@ class OUapply extends React.Component {
     // Prevents default behavior of refreshing the page
     e.preventDefault();
 
+    var userData = JSON.parse(localStorage.user);
+
     // Data passed to the server.
     let submitData = {
       firstName: e.target[0].value,
       lastName: e.target[1].value,
       interests: e.target[2].value,
-      username: this.props,  // FIX PROBLEM
+      username: userData.name
     }
 
     axios.post(API_BASE_URL + '/apply', submitData)
