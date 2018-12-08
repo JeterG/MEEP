@@ -2,28 +2,33 @@ import os
 from .core import *
 
 def checkUserExists(username):
-    if globals()[username] in allUsers:
-        return True
-    return False
+    # cwd = os.getcwd()
+    # userfile = cwd + "/meep/system/users" # assuming "users" is going to be the name of the object file containing user objects
+    try:
+        if globals()[username] in allUsers:
+            return True
+    except:
+        return False
+    # for users in allUsers:
+    #     if users._username == username:
+    #         return True
+    # return False
+
 
 def validateUserLogin(username, password):
-    if checkUserExists(username) == True:
+    # cwd = os.getcwd()
+    # userfile = cwd + "/meep/system/users" # assuming "users" is going to be the name of the object file containing user objects
+    if checkUserExists(username):
         if allUsers[allUsers.index(globals()[username])]._password == password:
-            return "OK"
-        return "Incorrect password"
+            return "Logged In"
     else:
-        return "NO"
+        return "Login Failed"
 
 def validateRegistration(username, password, interests):
     # confirm username doesn't already exist
     if checkUserExists(username) == True:  # username exists
-        print("Failed Registration")
-        if allUsers[allUsers.index(globals()[username])]._membership == "GUEST": # username of guest user
-            print("You are a Guest User. Apply for membership.")
-        else:
-            print("Username taken.")
-        return "NO"
-    else:                                   # username does not exist
-        username = OrdinaryUser(username, password, interests)
-        print("Successful Registration")
-        return "OK"
+        return "Username taken"
+                                  # username does not exist
+    globals()[username] = OrdinaryUser(username, password, interests)
+    saveUsers()
+    return "Successful Registration"

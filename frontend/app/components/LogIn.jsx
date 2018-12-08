@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { API_BASE_URL } from '../Config';
 
 class LogIn extends React.Component {
+  state = { "message" : null }
 
   handleSubmit = (e) => {
     // Prevents default behavior of refreshing the page
@@ -18,6 +19,7 @@ class LogIn extends React.Component {
     axios.post(API_BASE_URL + '/login', submitData)
     .then(response => {
       console.log(response.data);
+      this.setState(response.data);
     })
     .catch(error => {
       // handle error
@@ -28,11 +30,15 @@ class LogIn extends React.Component {
   render() {
     return (
       <div>
-        <h2>Sign In</h2>
-        <hr />
-        <form onSubmit={ this.handleSubmit }>
-          <label htmlFor="username">Username</label><br />
-          <input type="text" name="username" /><br />
+        <div>
+          <h2>Sign In</h2>
+          <hr />
+          <div id="message">
+            {this.state.message}
+          </div>
+          <form onSubmit={ this.handleSubmit }>
+            <label htmlFor="username">Username</label><br />
+            <input type="text" name="username" /><br />
 
           <label htmlFor="password">Pass</label><br />
           <input type="password" name="password" /><br />

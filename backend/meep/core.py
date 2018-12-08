@@ -63,7 +63,7 @@ def loadDocuments():
 
 def loadTabooList():
     global tabooList
-    directory= cwd + "/meep/system/words"
+    directory= cwd + "/meep/system/taboo"
     file_taboo_list = open(directory, 'rb')
     tabooList = pickle.load(file_taboo_list)
     file_taboo_list.close()
@@ -121,6 +121,8 @@ def blocked(User):  # Blocked function to check whether a user can do anything o
 def timeStamp():
     return (str(date.today()) + " " + str(datetime.now().strftime("%X")))
 
+def searchUsers():
+    return
 
 def suggestTaboo(word,su):
     if word in [x.upper() for x in tabooList]:
@@ -139,11 +141,13 @@ def readOpenDocuments():#returns a list of documents that have open as their pri
 
 class SuperUser:
 
-    def __init__(self, name, password, interests):
+    def __init__(self, username,name, password, interests):
         global uniqueIdUsers
         uniqueIdUsers += 1
         self._membership = str.upper("Super")
-        self._username = name
+        self._username = username
+        self._firstName=name[0]
+        self._Lastname=name[1]
         self._blocked = False
         self._interests = [interest.upper() for interest in interests]
         self._requestPromotion = 0
@@ -157,9 +161,10 @@ class SuperUser:
 
     def promote(self, user):
         if str.upper(user._membership) == "GUEST":
+            user._firstName=user._application[0][0]
+            user._lastName=user._application[0][1]
             user._membership = "ORDINARY"
-            user._password = user._application[0]
-            user._interests = str.upper(user._application[1])
+            user._interests = [x.upper() for x in user._application[1]]
             del user._application
             user._ownedDocuments = []
             return
@@ -233,32 +238,36 @@ class Complaint:
 
 
 class GuestUser:
-    def __init__(self, name):
+    def __init__(self, username,password):
         global uniqueIdUsers
         uniqueIdUsers += 1
         self._membership = str.upper("GUEST")
-        self._username = name
+        self._username = username
+        self._password=password
         self._blocked = False
         self._requestPromotion = 0
         self._userDocumentRequests = []
         self._id = uniqueIdUsers
+        self._application=[]
         allUsers.append(self)
         return
 
-    def applyToOrdinary(self, password, interests):
-        self._application = [password, interests]
+    def applyToOrdinary(self, name, interests):
+        self._application = [name, interests]
         self._requestPromotion = 1
         return
 
 
 class OrdinaryUser:
-    def __init__(self, name, password, interests):
+    def __init__(self, username,name,password, interests):
         global uniqueIdUsers
         uniqueIdUsers += 1
         self._membership = str.upper("ORDINARY")
-        self._username = name
+        self._username = username
         self._blocked = False
         self._requestPromotion = 0
+        self._firstName=name[0]
+        self._Lastname=name[1]
         self._userDocumentRequests = []
         self._interests = [interest.upper() for interest in interests]
         self._ownedDocuments = []
@@ -372,6 +381,6 @@ class Document:
             self._privacy=self.privacies[2]
         return
 
+
+su = SuperUser("su", ["Super","User"], "root",["Algorithms", "Minecraft", "Pokemon"])
 loadUsers()
-# su = SuperUser("su", "root", ["Algorithms", "Minecraft", "Pokemon"]) 
-# saveUsers()
