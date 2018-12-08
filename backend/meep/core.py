@@ -3,7 +3,7 @@ from datetime import date
 from datetime import datetime
 import os
 
-cwd=os.getcwd()
+cwd = os.getcwd()
 tabooList = ["EVIL", "LIAR", "FAKE", "hello"]
 pending = []  # words that are going to be added to the taboo list through user requests.
 allDocuments = []
@@ -12,9 +12,32 @@ uniqueIdUsers = -1
 uniqueIdDocuments = -1
 
 
+def searchByName(user, name):
+    available = []
+    if user._membership != "GUEST":
+        for x in allUsers:
+            if ((name.upper() == x._firstName.upper()) or (name.upper() == x._lastName.upper())):
+                available.append(x)
+                print(x._firstName)
+                print(x._username)
+                print(name.upper())
+        return (available)
+    return (available)
+
+
+def searchByInterest(user, interest):
+    available = []
+    if user._membership != "GUEST":
+        for x in allUsers:
+            if interest.upper() in [y.upper() for y in x._interests]:
+                available.append(x)
+        return (available)
+    return (available)
+
+
 def saveUsers():
     global allUsers
-    directory= cwd + "/meep/system/users"
+    directory = cwd + "/meep/system/users"
     file_users = open(directory, 'wb')
     pickle.dump(allUsers, file_users)
     file_users.close()
@@ -23,7 +46,7 @@ def saveUsers():
 
 def saveDocuments():
     global allDocuments
-    directory= cwd + "/meep/system/documents"
+    directory = cwd + "/meep/system/documents"
     file_doc = open(directory, 'wb')
     pickle.dump(allDocuments, file_doc)
     file_doc.close()
@@ -32,7 +55,7 @@ def saveDocuments():
 
 def saveTabooList():
     global tabooList
-    directory= cwd + "/meep/system/taboo"
+    directory = cwd + "/meep/system/taboo"
     file_taboo_list = open(directory, 'wb')
     pickle.dump(tabooList, file_taboo_list)
     file_taboo_list.close()
@@ -41,7 +64,7 @@ def saveTabooList():
 
 def loadUsers():
     global allUsers
-    directory= cwd + "/meep/system/users"
+    directory = cwd + "/meep/system/users"
     file_users = open(directory, 'rb')
     allUsers = pickle.load(file_users)
     for user in allUsers:
@@ -52,7 +75,7 @@ def loadUsers():
 
 def loadDocuments():
     global allDocuments
-    directory= cwd + "/meep/system/documents"
+    directory = cwd + "/meep/system/documents"
     file_doc = open(directory, 'rb')
     allDocuments = pickle.load(file_doc)
     for document in allDocuments:
@@ -63,7 +86,7 @@ def loadDocuments():
 
 def loadTabooList():
     global tabooList
-    directory= cwd + "/meep/system/taboo"
+    directory = cwd + "/meep/system/taboo"
     file_taboo_list = open(directory, 'rb')
     tabooList = pickle.load(file_taboo_list)
     file_taboo_list.close()
@@ -72,7 +95,7 @@ def loadTabooList():
 
 def savePending():
     global pending
-    directory= cwd + "/meep/system/pending"
+    directory = cwd + "/meep/system/pending"
     file_pending = open(directory, 'wb')
     pickle.dump(pending, file_pending)
     file_pending.close()
@@ -81,7 +104,7 @@ def savePending():
 
 def loadPending():
     global pending
-    directory= cwd + "/meep/system/pending"
+    directory = cwd + "/meep/system/pending"
     file_pending = open(directory, "rb")
     pending = pickle.load(file_pending)
 
@@ -102,13 +125,14 @@ def saveInformation():
     return
 
 
-def searchOwnedDocuments(User,word):
-    available=[]
+def searchOwnedDocuments(User, word):
+    available = []
     for document in User._ownedDocuments:
         if word.upper() in [c.upper() for c in document._documentBody]:
             # print("Here",document._documentBody)
             available.append(document)
     return available
+
 
 def blocked(User):  # Blocked function to check whether a user can do anything or if they have to fix a document
     if (User._blocked == True):
@@ -121,33 +145,37 @@ def blocked(User):  # Blocked function to check whether a user can do anything o
 def timeStamp():
     return (str(date.today()) + " " + str(datetime.now().strftime("%X")))
 
+
 def searchUsers():
     return
 
-def suggestTaboo(word,su):
+
+def suggestTaboo(word, su):
     if word in [x.upper() for x in tabooList]:
         return
     else:
-        su._suggestions=0
+        su._suggestions = 0
         pending.append(word)
         #    Add the possible taboo word to a place where the super user add it
 
-def readOpenDocuments():#returns a list of documents that have open as their privacy
-    available=[]
+
+def readOpenDocuments():  # returns a list of documents that have open as their privacy
+    available = []
     for document in allDocuments:
         if document._privacy is document.privacies[0]:
             available.append(document)
     return available
 
+
 class SuperUser:
 
-    def __init__(self, username,name, password, interests):
+    def __init__(self, username, name, password, interests):
         global uniqueIdUsers
         uniqueIdUsers += 1
         self._membership = str.upper("Super")
         self._username = username
-        self._firstName=name[0]
-        self._Lastname=name[1]
+        self._firstName = name[0]
+        self._Lastname = name[1]
         self._blocked = False
         self._interests = [interest.upper() for interest in interests]
         self._requestPromotion = 0
@@ -161,8 +189,8 @@ class SuperUser:
 
     def promote(self, user):
         if str.upper(user._membership) == "GUEST":
-            user._firstName=user._application[0][0]
-            user._lastName=user._application[0][1]
+            user._firstName = user._application[0][0]
+            user._lastName = user._application[0][1]
             user._membership = "ORDINARY"
             user._interests = [x.upper() for x in user._application[1]]
             del user._application
@@ -207,7 +235,6 @@ class SuperUser:
             tabooList.append(word.upper())
         self.applyTabooList()
 
-
     def resolveSuggestions(self):  # add suggested taboo words to the taboo list
         global pending
         if self._suggestions is -1:
@@ -238,17 +265,17 @@ class Complaint:
 
 
 class GuestUser:
-    def __init__(self, username,password):
+    def __init__(self, username, password):
         global uniqueIdUsers
         uniqueIdUsers += 1
         self._membership = str.upper("GUEST")
         self._username = username
-        self._password=password
+        self._password = password
         self._blocked = False
         self._requestPromotion = 0
         self._userDocumentRequests = []
         self._id = uniqueIdUsers
-        self._application=[]
+        self._application = []
         allUsers.append(self)
         return
 
@@ -259,15 +286,15 @@ class GuestUser:
 
 
 class OrdinaryUser:
-    def __init__(self, username,name,password, interests):
+    def __init__(self, username, name, password, interests):
         global uniqueIdUsers
         uniqueIdUsers += 1
         self._membership = str.upper("ORDINARY")
         self._username = username
         self._blocked = False
         self._requestPromotion = 0
-        self._firstName=name[0]
-        self._Lastname=name[1]
+        self._firstName = name[0]
+        self._lastName = name[1]
         self._userDocumentRequests = []
         self._interests = [interest.upper() for interest in interests]
         self._ownedDocuments = []
@@ -278,11 +305,12 @@ class OrdinaryUser:
 
 
 class Document:
-    privacies={0:"OPEN",1:"RESTRICTED",2:"SHARED",3:"PRIVATE"}
+    privacies = {0: "OPEN", 1: "RESTRICTED", 2: "SHARED", 3: "PRIVATE"}
+
     def __init__(self, documentName, User):
         global uniqueIdDocuments
         uniqueIdDocuments += 1
-        self._privacy= self.privacies[3]
+        self._privacy = self.privacies[3]
         self._lock = False
         self._documentName = documentName
         self._owner = User._username
@@ -291,7 +319,7 @@ class Document:
         self._users = [User._username]
         self._documentBody = []  # DocumentBody will always be the current version
         self._id = uniqueIdDocuments
-        self._versionHistory = [(0,"CREATE",self._documentBody.copy(), self._owner, timeStamp())]
+        self._versionHistory = [(0, "CREATE", self._documentBody.copy(), self._owner, timeStamp())]
         # self._versionHistory[-1] is also the current versoin/latest
         User._ownedDocuments.append(self)
         allDocuments.append(self)
@@ -350,14 +378,15 @@ class Document:
     def add(self, Word, User):
         self._documentBody.append(Word)
         su.applyTabooList()
-        self._versionHistory.append((len(self._versionHistory),"ADD", self._documentBody.copy(), User._username, timeStamp()))
+        self._versionHistory.append(
+            (len(self._versionHistory), "ADD", self._documentBody.copy(), User._username, timeStamp()))
         return
 
     def delete(self, index, User):
         if len(self._documentBody) >= index:
             del self._documentBody[index]
             self._versionHistory.append(
-                (len(self._versionHistory),"DELETE", self._documentBody.copy(), User._username, timeStamp()))
+                (len(self._versionHistory), "DELETE", self._documentBody.copy(), User._username, timeStamp()))
         else:
             return
 
@@ -366,7 +395,7 @@ class Document:
             self._documentBody[index] = word
             su.applyTabooList()
             self._versionHistory.append(
-                (len(self._versionHistory), "UPDATE" ,self._documentBody.copy(), User._username, timeStamp()))
+                (len(self._versionHistory), "UPDATE", self._documentBody.copy(), User._username, timeStamp()))
         return
 
     def denyInvitation(self, Owner, User):
@@ -378,9 +407,9 @@ class Document:
         if (self._documentName, User._username) in Owner._userDocumentRequests:
             del Owner._userDocumentRequests[(Owner._userDocumentRequests.index((self._documentName, User._username)))]
             self._users.append(User._username)
-            self._privacy=self.privacies[2]
+            self._privacy = self.privacies[2]
         return
 
 
-su = SuperUser("su", ["Super","User"], "root",["Algorithms", "Minecraft", "Pokemon"])
-loadUsers()
+su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
+# loadUsers()
