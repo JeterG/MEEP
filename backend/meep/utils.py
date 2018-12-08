@@ -17,18 +17,18 @@ def checkUserExists(username):
 
 def validateUserLogin(username, password):
     # cwd = os.getcwd()
-    # userfile = cwd + "/meep/system/users" # assuming "users" is going to be the name of the object file containing user objects
+    # userfile = cwd + "/meep/system/users" 
     if checkUserExists(username):
         if allUsers[allUsers.index(globals()[username])]._password == password:
-            return "Logged In"
+            return True
     else:
-        return "Login Failed"
+        return False
 
-def validateRegistration(username, password, interests):
+def validateRegistration(username, password):
     # confirm username doesn't already exist
-    if checkUserExists(username) == True:  # username exists
-        return "Username taken"
+    if checkUserExists(username):  # username exists
+        return False
                                   # username does not exist
-    globals()[username] = OrdinaryUser(username, password, interests)
+    globals()[username] = GuestUser(username, password)
     saveUsers()
-    return "Successful Registration"
+    return True

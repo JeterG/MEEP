@@ -8,9 +8,12 @@ def login():
     submitData = request.json;
     username = submitData.get("username")
     password = submitData.get("password")
-
-    return jsonify({"message" : validateUserLogin(username, password)}) # return either true or false
-                                          # if false... try again + give option of creating account as a guest user?
+    if validateUserLogin(username, password):
+        data = {'message': 'successful login'}
+        return jsonify(data)
+    else:
+        data = {'message': 'login failed'}
+        return jsonify(data), 403
 
 @app.route('/api/register', methods=["post"])
 def post():

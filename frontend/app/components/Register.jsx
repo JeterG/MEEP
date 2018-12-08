@@ -14,7 +14,6 @@ class Register extends React.Component {
     let submitData = {
       username: e.target[0].value,
       password: e.target[1].value,
-      interests: e.target[2].value
     }
 
     axios.post(API_BASE_URL + '/register', submitData)
@@ -43,9 +42,6 @@ class Register extends React.Component {
 
             <label htmlFor="password">Pass</label><br />
             <input type="password" name="password" /><br />
-
-            <label htmlFor="interests">Interests</label><br />
-            <input type="string" name="interests" /><br />
 
             <button type="submit">Submit</button>
           </form>
