@@ -65,3 +65,16 @@ def get_doc():
 def post_doc():
     # Save a specific document to the server
     return jsonify("placeholder")
+
+@app.route('/api/OU_application', methods=['POST'])
+def OUapp():
+    submitData = request.json;
+    firstName = submitData.get("firstName")
+    lastName = submitData.get("lastName")
+    interests = submitData.get("interests")
+    userid = submitData.get("userid")
+    membership = submitData.get("type")
+
+    #check if membership == GUEST
+    #then globals()[username].applyToOrdinary([firstName, lastName], interests)
+    return jsonify({"message":"Request Submitted"})
