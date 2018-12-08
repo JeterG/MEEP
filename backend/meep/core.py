@@ -2,7 +2,7 @@ import pickle
 from datetime import date
 from datetime import datetime
 import os
-
+#add saveids to the functions that use the ids that way its more concise
 cwd = os.getcwd()
 tabooList = ["EVIL", "LIAR", "FAKE", "hello"]
 pending = []  # words that are going to be added to the taboo list through user requests.
@@ -11,7 +11,11 @@ allUsers = []
 uniqueIdUsers = -1
 uniqueIdDocuments = -1
 uniqueIdComplaint = -1
+testid=[0]
 
+def incrementusers():
+    global uniqueIdUsers
+    uniqueIdUsers=uniqueIdUsers+1
 
 def searchByName(user, name):
     available = []
@@ -464,3 +468,6 @@ class Document:
 su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
 # loadUsers()
 
+# print(uniqueIdUsers)
+# uniqueIdUsers+=1
+# print(uniqueIdUsers)
