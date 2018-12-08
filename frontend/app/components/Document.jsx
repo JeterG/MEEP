@@ -1,17 +1,26 @@
-import React from 'react';
+import React, {Component} from 'react';
+import Header from './Header';
+import Editor from './Editor/Editor';
 
-const Document = (props) => {
-  var { doc_id, doc_title, doc_owner } = props.doc;
+class Document extends React.Component {
+  state = {
+    document: {
 
-  return (
-    <div className="doc-card">
-      <div className="doc-preview">
-        {doc_id}
+    }
+  }
+
+
+  render() {
+    console.log(this.props);
+    var doc = null;
+    var {name, type, pic} = getLocal("user");
+    return (
+      <div className="document">
+        <Header name={name} type={type} pic={pic} />
+        <Editor doc={this.state.document} />
       </div>
-
-      {doc_title} -- by {doc_owner}
-    </div>
-  )
+    )
+  }
 }
 
 export default Document;

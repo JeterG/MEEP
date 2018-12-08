@@ -1,11 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App.jsx';
-import Editor from './components/Editor/Editor';
 
 // Since our app will use HTML5 LocalStorage API, and not all browsers support it,
 // only load the app component if the localstorage object is available to us.
-let rootContainer = storageAvailable('localStorage') ? <App /> : <p>Local storage is unsupported</p>;
+let rootContainer = storageAvailable('localStorage') ? <App /> : <p>Local storage is unsupported, app will not run.</p>;
 
 ReactDOM.render(
   rootContainer,
@@ -33,5 +32,5 @@ function storageAvailable(type) {
       e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
       // acknowledge QuotaExceededError only if there's something already stored
       storage.length !== 0;
-    }
   }
+}

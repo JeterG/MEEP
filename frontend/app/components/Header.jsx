@@ -24,7 +24,7 @@ const Header = (props) => {
       <div style={{display: "inline-block"}}>
         <nav>
         <ul>
-          <li><Link to="/editor">New Document</Link></li>
+          <li><Link to="/docs/new">New Document</Link></li>
           <li><Link to="/docs">All Documents</Link></li>
           <li><Link to="/taboos">Taboo List</Link></li>
           {displayOUapply}

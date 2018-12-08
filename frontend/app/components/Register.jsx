@@ -17,7 +17,7 @@ class Register extends React.Component {
 
     axios.post(API_BASE_URL + '/register', submitData)
     .then(response => {
-      localStorage.user = JSON.stringify(response.data);
+      saveLocal("user", response.data);
 
       // Redirect to "/"
       this.props.history.push('/');

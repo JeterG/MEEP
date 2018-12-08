@@ -19,7 +19,7 @@ class LogIn extends React.Component {
     .then(response => {
       this.setState(response.data);
 
-      localStorage.user = JSON.stringify(response.data);
+      saveLocal("user", response.data);
 
       // Redirect to "/"
       window.location.reload();
