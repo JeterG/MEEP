@@ -2,6 +2,8 @@ import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 
 const Header = (props) => {
+  // if user type is guest render apply link to become an OU
+  // else do nothing
   var displayOUapply = (props.type == "guest") ?
     ( <li>
         <Link to="/apply">Become a Member</Link>

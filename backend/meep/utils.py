@@ -39,3 +39,7 @@ def validateRegistration(username, password):
     saveUsers()
 
     return globals()[username]
+
+def requestpromotion(username, name, interests):
+    # globals()[username].applyToOrdinary(name, interest)
+    return "Request Submitted"

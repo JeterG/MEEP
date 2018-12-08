@@ -1,6 +1,5 @@
 from flask import request, jsonify
 from meep import app
-from .core import *
 from .utils import *
 
 @app.route('/api/login', methods=["POST"])
@@ -72,9 +71,7 @@ def OUapp():
     firstName = submitData.get("firstName")
     lastName = submitData.get("lastName")
     interests = submitData.get("interests")
-    userid = submitData.get("userid")
-    membership = submitData.get("type")
-
-    #check if membership == GUEST
-    #then globals()[username].applyToOrdinary([firstName, lastName], interests)
-    return jsonify({"message":"Request Submitted"})
+    username = submitData.get("username")
+    print(username)
+    result = requestpromotion(username, [firstName, lastName], interests)
+    return jsonify({"message": result})#"Request Submitted"})

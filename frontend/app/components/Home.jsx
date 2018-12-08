@@ -22,13 +22,6 @@ class Home extends React.Component {
     var docList = this.state.documents.map(doc => {
       return <DocumentCard key={doc.doc_id} doc={doc} />
     });
-
-    // var displayOUapply = (type == "guest") ?
-    //   ( <div>
-    //       <a href="/apply">Become a Member</a>
-    //     </div>
-    //   ) : null;
-
     return (
       <div className="home-page">
         <Header name={name} type={type} pic={pic} />

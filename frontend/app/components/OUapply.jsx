@@ -15,8 +15,7 @@ class OUapply extends React.Component {
       firstName: e.target[0].value,
       lastName: e.target[1].value,
       interests: e.target[2].value,
-      userid: this.props.id,
-      type: this.props.type
+      username: this.props,  // FIX PROBLEM
     }
 
     axios.post(API_BASE_URL + '/apply', submitData)
