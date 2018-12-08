@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { API_BASE_URL } from '../Config';
 
 class Register extends React.Component {
-
   state = { "message" : null }
 
   handleSubmit = (e) => {
@@ -18,16 +17,21 @@ class Register extends React.Component {
 
     axios.post(API_BASE_URL + '/register', submitData)
     .then(response => {
-      console.log(response.data);
-      this.setState(response.data);
+      localStorage.user = JSON.stringify(response.data);
+
+      // Redirect to "/"
+      this.props.history.push('/');
     })
     .catch(error => {
       // handle error
-      console.log(error);
+      console.error("register error", error);
+      this.setState(error.response.data);
     });
   }
 
   render() {
+    console.log(this.props);
+
     return (
       <div>
         <div>

@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { API_BASE_URL } from '../Config';
 
 class LogIn extends React.Component {
@@ -18,14 +17,17 @@ class LogIn extends React.Component {
 
     axios.post(API_BASE_URL + '/login', submitData)
     .then(response => {
-      console.log(response.data);
       this.setState(response.data);
-      this.props.setUser(response.data);
+
+      localStorage.user = JSON.stringify(response.data);
+
+      // Redirect to "/"
+      this.props.history.push('/');
     })
     .catch(error => {
       // handle error
+      console.error("login error", error);
       this.setState(error.response.data);
-      console.log(error.response);
     });
   }
 
@@ -46,7 +48,6 @@ class LogIn extends React.Component {
           <input type="password" name="password" /><br />
           <button type="submit">Submit</button>
         </form>
-        <Link to="/register">Create An Account</Link>
       </div>
     </div>
     )

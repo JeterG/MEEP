@@ -8,8 +8,10 @@ def login():
     submitData = request.json;
     username = submitData.get("username")
     password = submitData.get("password")
-    if validateUserLogin(username, password):
-        userObject = validateUserLogin(username, password)
+
+    userObject = validateUserLogin(username, password)
+
+    if userObject:
         data = createUserFromObj(userObject);
         return jsonify(data)
     else:
@@ -21,9 +23,16 @@ def post():
     submitData = request.json;
     username = submitData.get("username")
     password = submitData.get("password")
-    interests = submitData.get("interests")
 
-    return jsonify({"message" : validateRegistration(username, password, interests)}) #hmm...
+    userObject = validateRegistration(username, password)
+    print("the userObj is", userObject)
+    
+    if userObject:
+        data = createUserFromObj(userObject)
+        return jsonify(data), 200
+    else:
+        data = {'message' : 'registration failed'}
+        return jsonify(data), 403
 
 @app.route('/api/users', methods=["GET"])
 def users():

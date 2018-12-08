@@ -12,7 +12,6 @@ class Home extends React.Component {
   }
 
   render() {
-    console.log("the user props is", this.props.user);
     var {name, type, pic} = this.props.user;
     var docList = this.state.documents.map(doc => {
       return <DocumentCard key={doc.doc_id} doc={doc} />
