@@ -10,6 +10,7 @@ allDocuments = []
 allUsers = []
 uniqueIdUsers = -1
 uniqueIdDocuments = -1
+uniqueIdComplaint = -1
 
 
 def searchByName(user, name):
@@ -42,6 +43,31 @@ def saveUsers():
     pickle.dump(allUsers, file_users)
     file_users.close()
     return
+
+
+def saveIds():
+    global uniqueIdComplaint
+    global uniqueIdDocuments
+    global uniqueIdUsers
+    ids = [uniqueIdComplaint, uniqueIdDocuments, uniqueIdUsers]
+    directory = cwd + "/meep/system/ids"
+    file_ids = open(directory, 'wb')
+    pickle.dump(ids, file_ids)
+    file_ids.close()
+
+
+def loadIds():
+    global uniqueIdComplaint
+    global uniqueIdDocuments
+    global uniqueIdUsers
+    global ids
+    directory = cwd + "/meep/system/ids"
+    file_ids = open(directory, 'rb')
+    ids = pickle.load(file_ids)
+    uniqueIdComplaint = ids[0]
+    uniqueIdDocuments = ids[1]
+    uniqueIdComplaint = ids[2]
+    file_ids.close()
 
 
 def saveDocuments():
@@ -167,6 +193,19 @@ def readOpenDocuments():  # returns a list of documents that have open as their 
     return available
 
 
+def fileComplaint(Document, victim, target, Problem):  # helper Function
+    global uniqueIdComplaint
+    uniqueIdComplaint += 1
+    globals()["Complaint_" + str(uniqueIdComplaint)] = Complaint(uniqueIdComplaint, victim, target,
+                                                                 globals()[Document._owner], Problem, Document)
+    globals()[Document._owner].addComplaint(((globals()["Complaint_" + str(uniqueIdComplaint)]), Document))
+    return (((globals()["Complaint_" + str(uniqueIdComplaint)]), Document))
+
+
+def storeComplaint(Document, victim, target, Problem):
+    globals()[Document._owner]._complaints.append(fileComplaint(Document, victim, target, Problem))
+
+
 class SuperUser:
 
     def __init__(self, username, name, password, interests):
@@ -184,8 +223,13 @@ class SuperUser:
         self._id = uniqueIdUsers
         self._password = password
         self._suggestions = -1
+        self._complaints = []
         allUsers.append(self)
         return
+
+    def addComplaint(self, complaint):
+        self._complaints.append(complaint)
+        print(self._complaints)
 
     def promote(self, user):
         if str.upper(user._membership) == "GUEST":
@@ -195,6 +239,7 @@ class SuperUser:
             user._interests = [x.upper() for x in user._application[1]]
             del user._application
             user._ownedDocuments = []
+            user._complaints = []
             return
         elif str.upper(user._membership) == "ORDINARY":
             user._membership = "SUPER"
@@ -257,11 +302,15 @@ class SuperUser:
 
 
 class Complaint:
-    def __init__(self, Complain, Target, problem):  # Both Complain and target are User types SU,OU,GU
+    def __init__(self, id, Victim, Target, Owner, Problem,
+                 Document):  # Both Complain and target are User types SU,OU,GU
         self._resolved = False
-        self._complaintBy = Complain._username
-        self._complaintFor = Target._username
-        self._problem = problem
+        self._id = id
+        self._complaintBy = Victim._username
+        self._complaintFor = Owner._username
+        self._complaintAbout = Target._username
+        self._Document = Document
+        self._problem = Problem
 
 
 class GuestUser:
@@ -288,7 +337,7 @@ class GuestUser:
 class OrdinaryUser:
     def __init__(self, username, name, password, interests):
         global uniqueIdUsers
-        uniqueIdUsers += 1
+        uniqueIdUsers = uniqueIdUsers+1
         self._membership = str.upper("ORDINARY")
         self._username = username
         self._blocked = False
@@ -300,6 +349,7 @@ class OrdinaryUser:
         self._ownedDocuments = []
         self._id = uniqueIdUsers
         self._password = password
+        self._complaints = []
         allUsers.append(self)
         return
 
@@ -413,3 +463,4 @@ class Document:
 
 su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
 # loadUsers()
+
