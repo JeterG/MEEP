@@ -22,7 +22,7 @@ class LogIn extends React.Component {
       localStorage.user = JSON.stringify(response.data);
 
       // Redirect to "/"
-      this.props.history.push('/');
+      window.location.reload();
     })
     .catch(error => {
       // handle error

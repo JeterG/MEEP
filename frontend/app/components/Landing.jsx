@@ -16,6 +16,7 @@ class Landing extends React.Component {
   componentDidMount = () => {
     // Get user log in status.
     var currentUser = localStorage.user ? JSON.parse(localStorage.user) : null;
+    // console.log("The current user is...", JSON.parse(localStorage.user))
     this.setState({user: currentUser});
   }
 
@@ -27,7 +28,7 @@ class Landing extends React.Component {
       <Home user={user} />
     : (
       <div>
-        <LogIn setUser={setUser} />
+        <LogIn setUser={setUser} history={this.props.history} />
         <Link to="/register">Create An Account</Link>
       </div>
     )
