@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { API_BASE_URL } from '../Config';
 
-class OUapp extends React.Component {
+class OUapply extends React.Component {
   state = { "message" : null }
 
   handleSubmit = (e) => {
@@ -50,11 +50,12 @@ class OUapp extends React.Component {
             <label htmlFor="interests">Interests</label><br/>
             <input type="text" name="interests" /><br />
 
-          <button type="submit">Submit</button>
-        </form>
+            <button type="submit">Submit</button>
+          </form>
+        </div>
       </div>
     )
   }
 }
 
-export default OUapp;
+export default OUapply;

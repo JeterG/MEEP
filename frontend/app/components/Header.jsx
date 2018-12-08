@@ -2,6 +2,11 @@ import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 
 const Header = (props) => {
+  var displayOUapply = (props.type == "guest") ?
+    ( <li>
+        <Link to="/apply">Become a Member</Link>
+      </li>
+    ) : null;
   return (
     <div className="header">
       <div style={{display: "inline-block", marginRight: "40px"}}>
@@ -20,7 +25,7 @@ const Header = (props) => {
           <li><Link to="/editor">New Document</Link></li>
           <li><Link to="/documents">All Documents</Link></li>
           <li><Link to="/taboos">Taboo List</Link></li>
-          <li><Link to="/apply">Apply for OU</Link></li>
+          {displayOUapply}
         </ul>
         </nav>
       </div>
