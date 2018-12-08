@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { API_BASE_URL } from '../Config';
 
-class LogIn extends React.Component {
+class OUapp extends React.Component {
   state = { "message" : null }
 
   handleSubmit = (e) => {
@@ -12,11 +12,14 @@ class LogIn extends React.Component {
 
     // Data passed to the server.
     let submitData = {
-      username: e.target[0].value,
-      password: e.target[1].value
+      firstName: e.target[0].value,
+      lastName: e.target[1].value,
+      interests: e.target[2].value,
+      userid: this.props.id,
+      type: this.props.type
     }
 
-    axios.post(API_BASE_URL + '/login', submitData)
+    axios.post(API_BASE_URL + '/OUapp', submitData)
     .then(response => {
       console.log(response.data);
       this.setState(response.data);
@@ -32,24 +35,26 @@ class LogIn extends React.Component {
     return (
       <div>
         <div>
-          <h2>Sign In</h2>
+          <h2>Apply for Promotion</h2>
           <hr />
           <div id="message">
             {this.state.message}
           </div>
           <form onSubmit={ this.handleSubmit }>
-            <label htmlFor="username">Username</label><br />
-            <input type="text" name="username" /><br />
+            <label htmlFor="firstName">First Name</label><br />
+            <input type="text" name="firstName" /><br />
 
-          <label htmlFor="password">Pass</label><br />
-          <input type="password" name="password" /><br />
+            <label htmlFor="lastName">Last Name</label><br />
+            <input type="text" name="lastName" /><br />
+
+            <label htmlFor="interests">Interests</label><br/>
+            <input type="text" name="interests" /><br />
+
           <button type="submit">Submit</button>
         </form>
-        <Link to="/register">Create An Account</Link>
-        </div>
       </div>
     )
   }
 }
 
-export default LogIn;
+export default OUapp;
