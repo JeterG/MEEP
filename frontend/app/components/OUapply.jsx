@@ -35,7 +35,20 @@ class OUapply extends React.Component {
   render() {
     return (
       <div>
-        <div>
+        <div className="header" style={{display: "inline-block", marginRight: "40px"}}>
+          <img src="/images/logo.png" />
+        </div>
+        <div style={{display: "inline-block"}}>
+          <nav>
+          <ul>
+            <li><Link to="/editor">New Document</Link></li>
+            <li><Link to="/docs">All Documents</Link></li>
+            <li><Link to="/taboos">Taboo List</Link></li>
+          </ul>
+          </nav>
+        </div>
+
+        <div className="body">
           <h2>Apply for Promotion</h2>
           <hr />
           <div id="message">

@@ -34,6 +34,9 @@ class LogIn extends React.Component {
   render() {
     return (
       <div>
+        <div className="header" style={{display: "inline-block", marginRight: "40px"}}>
+          <img src="/images/logo.png" />
+        </div>
         <div>
           <h2>Sign In</h2>
           <hr />

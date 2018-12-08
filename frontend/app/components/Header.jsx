@@ -12,6 +12,10 @@ const Header = (props) => {
   return (
     <div className="header">
       <div style={{display: "inline-block", marginRight: "40px"}}>
+        <img id="logo" src="/images/logo.png" />
+      </div>
+
+      <div style={{display: "inline-block", marginRight: "40px"}}>
         Welcome,<br />
         { props.name }
       </div>
