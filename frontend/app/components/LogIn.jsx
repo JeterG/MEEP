@@ -23,7 +23,8 @@ class LogIn extends React.Component {
     })
     .catch(error => {
       // handle error
-      console.log(error);
+      this.setState(error.response.data);
+      console.log(error.response);
     });
   }
 
