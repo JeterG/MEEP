@@ -5,12 +5,10 @@ import Home from './Home';
 class Landing extends React.Component {
   state = {
     user: null
-    // user: {
-    //   id: 0,
-    //   name: "myusername",
-    //   type: "guest",
-    //   pic: "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
-    // }
+  }
+
+  setUser = (user) => {
+    this.setState({ user: user });
   }
 
   componentDidMount = () => {
@@ -23,7 +21,7 @@ class Landing extends React.Component {
     var { user } = this.state;
     var display = user ?
       <Home user={user} />
-    : <LogIn />
+    : <LogIn setUser={this.setUser} />
 
     return (
       <div>

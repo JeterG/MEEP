@@ -9,7 +9,8 @@ def login():
     username = submitData.get("username")
     password = submitData.get("password")
     if validateUserLogin(username, password):
-        data = {'message': 'successful login'}
+        userObject = validateUserLogin(username, password)
+        data = createUserFromObj(userObject);
         return jsonify(data)
     else:
         data = {'message': 'login failed'}
@@ -29,11 +30,7 @@ def users():
     returnUsers = []
 
     for user in allUsers:
-        userData = {
-            "id" : user._id,
-            "name": user._username,
-            "type": user._membership
-        }
+        userData = createUserFromObj(user)
         returnUsers.append(userData)
 
     return jsonify(returnUsers)
@@ -45,11 +42,7 @@ def documents():
 
     for doc in allDocuments:
         # Map object properties to a Python dictionary for JSON conversion
-        docData = {
-            "doc_id" : "",
-            "doc_title" : doc._documentName,
-            "doc_owner" : doc._owner
-        }
+        docData = createDocFromObj(doc)
         returnDocs.append(docData)
 
     return jsonify(returnDocs);

@@ -20,6 +20,7 @@ class LogIn extends React.Component {
     .then(response => {
       console.log(response.data);
       this.setState(response.data);
+      this.props.setUser(response.data);
     })
     .catch(error => {
       // handle error
@@ -47,6 +48,7 @@ class LogIn extends React.Component {
         </form>
         <Link to="/register">Create An Account</Link>
       </div>
+    </div>
     )
   }
 }
