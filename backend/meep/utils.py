@@ -41,5 +41,5 @@ def validateRegistration(username, password):
     return globals()[username]
 
 def requestpromotion(username, name, interests):
-    # globals()[username].applyToOrdinary(name, interest)
+    globals()[username].applyToOrdinary(name, interests)
     return "Request Submitted"
