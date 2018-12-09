@@ -27,8 +27,11 @@ def getUserFromID(id):
     return False
 
 def getDocFromID(id):
+    print("in gdfi", allDocuments)
     for doc in allDocuments:
+        print('in gdgfi', doc._id, id, doc._id == id)
         if doc._id == id:
+            print("The DOC is", doc);
             return doc
     return False
 

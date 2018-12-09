@@ -55,7 +55,7 @@ def documents():
 
     return jsonify(returnDocs);
 
-@app.route('/api/docs/<doc_id>', methods=["GET"])
+@app.route('/api/docs/<int:doc_id>', methods=["GET"])
 def get_doc(doc_id):
     # Retrieve a specific document from the server
     doc = getDocFromID(int(doc_id))
@@ -79,9 +79,16 @@ def post_doc(doc_id):
 
     return jsonify("placeholder")
 
-@app.route('/api/docs/<doc_id>/rename', methods=["POST"])
+@app.route('/api/docs/<int:doc_id>/rename', methods=["POST"])
 def rename_doc(doc_id):
     newTitle = request.json.get("title")
+    docObj = getDocFromID(doc_id)
+    if docObj:
+        docObj._documentName = newTitle
+        return jsonify({"message" : "Successful rename"})
+    else:
+        print(allDocuments[0]._id);
+        return jsonify({"message" : "doc_id not found"}), 403
 
 @app.route('/api/taboos', methods=["post"])
 def post_taboo():

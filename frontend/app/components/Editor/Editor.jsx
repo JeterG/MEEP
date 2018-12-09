@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import EditorHeader from './EditorHeader';
 import EditorLine from './EditorLine';
 
+import {API_BASE_URL} from '../../Config.js';
+import axios from 'axios';
+
 class Editor extends React.Component {
   state = {
     // title: "My Test Doc",
@@ -246,6 +249,16 @@ class Editor extends React.Component {
   }
 
   setTitle = (title) => {
+    var submit = {title: title}
+    console.log(this.state.doc.doc_id)
+    axios.post(API_BASE_URL + "/docs/" + this.state.doc.doc_id + "/rename", submit)
+    .then( response => {
+      console.log("Changing title... ", response.data.message);
+    })
+    .catch( error => {
+      console.error("SetTitle error", error, error.response.data);
+    });
+
     this.setState({
       doc: {
         ...this.state.doc,
