@@ -5,6 +5,7 @@ import Landing from './components/Landing';
 import LogIn from './components/LogIn';
 import Register from './components/Register';
 import OUapply from './components/OUapply';
+import Taboos from './components/Taboos';
 import UserDirectory from './components/UserDirectory';
 import Document from './components/Document';
 import DocumentDirectory from './components/DocumentDirectory';
@@ -21,7 +22,7 @@ class App extends React.Component {
           <Route path="/docs/:doc_id" component={Document} onChange={() => console.log('Entered /')} />            {/* Display the editor for a given document */}
           <Route path="/users" component={UserDirectory} />            {/* Return directory of all public users */}
           <Route path="/users/:u_id" component={DocumentDirectory} />  {/* Display the profile for a given user */}
-          <Route path="/taboos" component={DocumentDirectory} />       {/* Display the taboo list + suggestion form */}
+          <Route path="/taboos" component={Taboos} />       {/* Display the taboo list + suggestion form */}
         </div>
       </BrowserRouter>
     )

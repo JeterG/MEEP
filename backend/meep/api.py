@@ -17,7 +17,7 @@ def login():
         data = {'message': 'login failed'}
         return jsonify(data), 403
 
-@app.route('/api/register', methods=["post"])
+@app.route('/api/register', methods=["POST"])
 def post():
     submitData = request.json;
     username = submitData.get("username")
@@ -78,6 +78,14 @@ def post_doc(doc_id):
         return jsonify(createDocFromObj(globals()[doc_title]))
 
     return jsonify("placeholder")
+
+@app.route('/api/taboos', methods=["post"])
+def post():
+    submitData = request.json;
+    suggestedTaboo = submitData.get("suggestedTaboo")
+    username = submitData.get("username")
+    # ADD: CALL A UTILS UTILS TO CALL A CORE FUNCTION TO SUGGEST TABOO
+    return jsonify({"message" : "Request Sent"})
 
 @app.route('/api/apply', methods=['POST'])
 def OUapp():
