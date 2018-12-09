@@ -176,9 +176,6 @@ def timeStamp():
     return (str(date.today()) + " " + str(datetime.now().strftime("%X")))
 
 
-def searchUsers():
-    return
-
 
 def suggestTaboo(word, su):
     if word in [x.upper() for x in tabooList]:
@@ -218,7 +215,7 @@ class SuperUser:
         self._membership = str.upper("Super")
         self._username = username
         self._firstName = name[0]
-        self._Lastname = name[1]
+        self._lastName = name[1]
         self._blocked = False
         self._interests = [interest.upper() for interest in interests]
         self._requestPromotion = 0
@@ -244,9 +241,11 @@ class SuperUser:
             del user._application
             user._ownedDocuments = []
             user._complaints = []
+            user.__class__=OrdinaryUser
             return
         elif str.upper(user._membership) == "ORDINARY":
             user._membership = "SUPER"
+            user.__class__=SuperUser
             return
         else:
             return
@@ -254,10 +253,12 @@ class SuperUser:
     def demote(self, User):
         if str.upper(User._membership) == "ORDINARY":
             User._membership = "GUEST"
+            User.__class__=GuestUser
             User._requestPromotion = 0
             return
         elif str.upper(User._membership) == "SUPER":
             User._membership = "ORDINARY"
+            User.__class__=OrdinaryUser
             User._requestPromotion = 0
             return
         else:
@@ -374,6 +375,7 @@ class Document:
         self._documentBody = []  # DocumentBody will always be the current version
         self._id = uniqueIdDocuments
         self._versionHistory = [(0, "CREATE", self._documentBody.copy(), self._owner, timeStamp())]
+        self._complaintHistory=[]
         # self._versionHistory[-1] is also the current versoin/latest
         User._ownedDocuments.append(self)
         allDocuments.append(self)
@@ -465,6 +467,9 @@ class Document:
         return
 
 
+# print(uniqueIdUsers)
+# uniqueIdUsers+=1
+# print(uniqueIdUsers)
 # su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
 loadUsers();
 
