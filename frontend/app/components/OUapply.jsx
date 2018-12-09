@@ -1,10 +1,11 @@
 import axios from 'axios';
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { API_BASE_URL } from '../Config';
 
 class OUapply extends React.Component {
-  state = { "message" : null }
+  state = { "message" : null,
+            redirect: false}
 
   handleSubmit = (e) => {
     // Prevents default behavior of refreshing the page
@@ -32,11 +33,23 @@ class OUapply extends React.Component {
     });
   }
 
+  setRedirect = () => {
+    this.setState({
+      redirect: true
+    })
+  }
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect to='/' />
+    }
+  }
+
   render() {
     return (
       <div>
         <div className="header" style={{display: "inline-block", marginRight: "40px"}}>
-          <img src="/images/logo.png" />
+          {this.renderRedirect()}
+          <img src="/images/logo.png" onClick={this.setRedirect}/>
         </div>
         <div style={{display: "inline-block"}}>
           <nav>
