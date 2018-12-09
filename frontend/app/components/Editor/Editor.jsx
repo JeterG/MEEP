@@ -248,28 +248,8 @@ class Editor extends React.Component {
     document.getElementById("lock-btn").blur();
   }
 
-  setTitle = (title) => {
-    var submit = {title: title}
-    console.log(this.state.doc.doc_id)
-    axios.post(API_BASE_URL + "/docs/" + this.state.doc.doc_id + "/rename", submit)
-    .then( response => {
-      console.log("Changing title... ", response.data.message);
-    })
-    .catch( error => {
-      console.error("SetTitle error", error, error.response.data);
-    });
-
-    this.setState({
-      doc: {
-        ...this.state.doc,
-        title : title
-      }
-    })
-  }
-
   render() {
-    var { title, owner, locked, lockedBy, privacy, words } = this.state.doc;
-    console.log("render called", this.state.doc);
+    var { title, owner, locked, lockedBy, privacy, words } = this.props.doc;
 
     let wordList = words.map(word => {
       return <EditorLine key={ word.lineNum } lineNum={ word.lineNum } content={ word.content } editing={ word.editing } locked={ locked }/>
@@ -279,7 +259,7 @@ class Editor extends React.Component {
       <div className="editor">
         <EditorHeader
           title={title}
-          setTitle={this.setTitle}
+          setTitle={this.props.setTitle}
           owner={owner}
           selected={privacy}
           locked={locked}
@@ -304,7 +284,8 @@ class Editor extends React.Component {
 
 function convertWords(doc) {
   if (doc.words.length) {
-    console.log("CONVERT WORDS", docs.words);
+    console.log("CONVERT WORDS", doc.words);
+
   } else {
     doc.words.push( { lineNum: 0, editing: true, content: "" } );
   }

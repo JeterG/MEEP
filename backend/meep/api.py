@@ -68,16 +68,18 @@ def get_doc(doc_id):
 @app.route('/api/docs/<doc_id>', methods=["POST"])
 def post_doc(doc_id):
     # Save a specific document to the server
-    if doc_id == "new":
-        doc_title = request.json.get("title")
-        user_id = request.json.get("user_id")
+    user_id = int(request.json.get("user_id"))
 
-        user = getUserFromID(user_id)
-        globals()[doc_title] = Document(doc_title, user)
+    if userHasPerms(user_id):
+        if doc_id == "new":
+            doc_title = request.json.get("title")
 
-        return jsonify(createDocFromObj(globals()[doc_title]))
+            user = getUserFromID(user_id)
+            globals()[doc_title] = Document(doc_title, user)
 
-    return jsonify("placeholder")
+            return jsonify(createDocFromObj(globals()[doc_title]))
+    else:
+        return jsonify({"message" : "Insufficient permissions"}), 401
 
 @app.route('/api/docs/<int:doc_id>/rename', methods=["POST"])
 def rename_doc(doc_id):

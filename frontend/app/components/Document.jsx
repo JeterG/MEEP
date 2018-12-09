@@ -61,6 +61,27 @@ class Document extends React.Component {
     })
   }
 
+  setTitle = (title) => {
+    var submit = {title: title}
+
+    axios.post(API_BASE_URL + "/docs/" + this.state.document.doc_id + "/rename", submit)
+    .then( response => {
+      console.log("Changing title... ", response.data.message);
+    })
+    .catch( error => {
+      console.error("SetTitle error", error, error.response.data);
+    });
+
+    console.log("this state", this.state);
+
+    this.setState({
+      document: {
+        ...this.state.document,
+        title : title
+      }
+    });
+  }
+
   render() {
     var {name, type, pic} = getLocal("user");
     var {document} = this.state;
@@ -69,7 +90,7 @@ class Document extends React.Component {
     var display = document
     ? (
       <div>
-        <Editor doc={document} user={user} />
+        <Editor doc={document} setTitle={this.setTitle} user={user} />
       </div>
     )
     : <h3>Invalid Document ID</h3>;
