@@ -80,7 +80,7 @@ def post_doc(doc_id):
     return jsonify("placeholder")
 
 @app.route('/api/taboos', methods=["post"])
-def post():
+def post_taboo():
     submitData = request.json;
     suggestedTaboo = submitData.get("suggestedTaboo")
     username = submitData.get("username")
