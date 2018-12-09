@@ -6,7 +6,7 @@ class Header extends React.Component {
   logOut = (e) => {
     console.log('logOut', e, this.props);
     localStorage.clear();
-    window.location.reload();
+    window.location.href = "/";
   }
 
   handleSubmit = (e) => {
