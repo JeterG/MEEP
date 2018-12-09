@@ -492,10 +492,92 @@ class Document:
         except:
             return
 
+def Print(user):
+    thetype=str(type(user))
+    if ((thetype=="<class 'core.SuperUser'>") or  (thetype=="<class 'core.OrdinaryUser'>") or  (thetype=="<class 'core.GuestUser'>")):
+        if user._membership == "SUPER":
+            print("Object = ",user)
+            print("\t\t__class__ = ", user.__class__)
+            print("\t\t_username = ", user._username)
+            print("\t\t_membership = ", user._membership)
+            print("\t\t_firstName = ", user._firstName)
+            print("\t\t_lastName = ", user._lastName)
+            print("\t\t_blocked = ", user._blocked)
+            print("\t\t_interest = ", user._interests)
+            print("\t\t_requestPromotion  = ", user._requestPromotion)
+            print("\t\t_userDocumentRequests = ", user._userDocumentRequests)
+            print("\t\t_ownedDocuments = ", user._ownedDocuments)
+            print("\t\t_id = ", user._id)
+            print("\t\t_password = ", user._password)
+            print("\t\t_suggestions = ", user._suggestions)
+            print("\t\t_complaints = ", user._complaints)
+            print("\t\t_complaintusers = ",user._complaintsusers,"\n")
+
+        elif user._membership == "GUEST":
+            print("Object = ",user)
+            print("\t\t_username = ", user._username)
+            print("\t\t_membership = ", user._membership)
+            print("\t\t_firstName = ", user._firstName)
+            print("\t\t_lastName = ", user._lastName)
+            print("\t\t_blocked = ", user._blocked)
+            print("\t\t_requestPromotion  = ", user._requestPromotion)
+            print("\t\t_userDocumentRequests = ", user._userDocumentRequests)
+            print("\t\t_id = ", user._id)
+            print("\t\t_application  = ", user._application,"\n")
+
+        else:
+            print("Object = ", user)
+            print("\t\t_username = ", user._username)
+            print("\t\tmembership = ", user._membership)
+            print("\t\t_firstName = ", user._firstName)
+            print("\t\tlastName = ", user._lastName)
+            print("\t\t_blocked = ", user._blocked)
+            print("\t\t_interests = ", user._interests)
+            print("\t\t_requestPromotion  = ", user._requestPromotion)
+            print("\t\t_userDocumentRequests = ", user._userDocumentRequests)
+            print("\t\t_ownedDocuments = ", user._ownedDocuments)
+            print("\t\t_id = ", user._id)
+            print("\t\t_id = ", user._password)
+            print("\t\t_complaints = ", user._complaints,"\n")
+
+    elif thetype=="<class 'core.Document'>":
+        print("Object = ", user)
+        print("\t\t__class__ =", user.__class__ )
+        print("\t\t_documentName = ", user._documentName)
+        print("\t\t_lock = ", user._lock)
+        print("\t\t_owner = ", user._owner)
+        print("\t\t_lockedBy = ", user._lockedBy)
+        print("\t\t_unlockedBy = ", user._unlockedBy)
+        print("\t\t_users = ", user._users)
+        print("\t\t_documentBody  = ", user._documentBody)
+        print("\t\t_versionHistory = ", user._versionHistory)
+        print("\t\t_privacy = ", user._privacy)
+        print("\t\t_id = ", user._id)
+        print("\t\t_complaintHistory = ",user._complaintHistory,"\n")
+    elif thetype=="<class 'core.ClomplaintDocuments'>":
+        print("Object = ", user)
+        print("\t\t__class__ =", user.__class__ )
+        print("\t\t_id = ",user._id)
+        print("\t\t_complaintBy = ",user._complaintBy)
+        print("\t\t_complaintFor = ",user._complaintFor)
+        print("\t\t_complaintAbout = ",user._complaintAbout)
+        print("\t\t_Document = ",user._Document)
+        print("\t\t_problem = ",user._problem,"\n")
+    elif thetype=="<class 'core.ComplaintUsers>":
+        print("Object = ", user)
+        print("\t\t__class__ = ", user.__class__ )
+        print("\t\t _id = ",user._id)
+        print("\t\t _complaintBy = ",user._complaintBy)
+        print("\t\t _complaintAbout = ",user._complaintAbout)
+        print("\t\t _problem = ",user._problem)
+
+    else:
+        print(user)
+
+
+
+
+
 
 # su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
 loadUsers();
-
-# print(uniqueIdUsers)
-# uniqueIdUsers+=1
-# print(uniqueIdUsers)
