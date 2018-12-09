@@ -16,6 +16,7 @@ def createDocFromObj(doc):
         "owner" : doc._owner,
         "locked": doc._lock,
         "lockedBy": doc._lockedBy,
+        "privacy": doc._privacy,
         "words" : doc._documentBody
     }
 

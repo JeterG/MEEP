@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../Config';
+import Header from './Header';
 
 class UserDirectory extends React.Component {
   state = {
@@ -26,8 +27,10 @@ class UserDirectory extends React.Component {
     })
     : "No users found";
 
+    var { name, type, pic } = getLocal("user");
     return (
       <div>
+        <Header name={name} type={type} pic={pic} />
         <h1>User Directory</h1>
         <ul>
         { items }

@@ -79,6 +79,10 @@ def post_doc(doc_id):
 
     return jsonify("placeholder")
 
+@app.route('/api/docs/<doc_id>/rename', methods=["POST"])
+def rename_doc(doc_id):
+    newTitle = request.json.get("title")
+
 @app.route('/api/taboos', methods=["post"])
 def post_taboo():
     submitData = request.json;

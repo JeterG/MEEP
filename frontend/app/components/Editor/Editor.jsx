@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import EditorHeader from './EditorHeader';
 import EditorLine from './EditorLine';
 
 class Editor extends React.Component {
@@ -244,33 +245,45 @@ class Editor extends React.Component {
     document.getElementById("lock-btn").blur();
   }
 
+  setTitle = (title) => {
+    this.setState({
+      doc: {
+        ...this.state.doc,
+        title : title
+      }
+    })
+  }
+
   render() {
-    var { title, owner, locked, lockedBy, words } = this.state.doc;
+    var { title, owner, locked, lockedBy, privacy, words } = this.state.doc;
     console.log("render called", this.state.doc);
 
     let wordList = words.map(word => {
       return <EditorLine key={ word.lineNum } lineNum={ word.lineNum } content={ word.content } editing={ word.editing } locked={ locked }/>
-    })
+    });
 
     return (
       <div className="editor">
-      <div className="doc-header">
-      <h1>{ title }</h1>
-      <h2>{ owner }</h2>
-      <p>Status: { locked ? "Locked by " + lockedBy : "Unlocked" }</p>
-      </div>
+        <EditorHeader
+          title={title}
+          setTitle={this.setTitle}
+          owner={owner}
+          selected={privacy}
+          locked={locked}
+          lockedBy={lockedBy}
+        />
 
-      <div className="editor-composer" id="editor-composer">
-      { wordList }
-      </div>
+        <div className="editor-composer" id="editor-composer">
+        { wordList }
+        </div>
 
-      <div className="editor-buttons">
-      <button>Save</button>
-      <button id="lock-btn" onClick={ this.handleLock }>
-      { locked ? "Unlock" : "Lock" }
-      </button>
-      <button>Complain</button>
-      </div>
+        <div className="editor-buttons">
+          <button>Save</button>
+          <button id="lock-btn" onClick={ this.handleLock }>
+          { locked ? "Unlock" : "Lock" }
+          </button>
+          <button>Complain</button>
+        </div>
       </div>
     )
   }
@@ -278,7 +291,7 @@ class Editor extends React.Component {
 
 function convertWords(doc) {
   if (doc.words.length) {
-
+    console.log("CONVERT WORDS", docs.words);
   } else {
     doc.words.push( { lineNum: 0, editing: true, content: "" } );
   }

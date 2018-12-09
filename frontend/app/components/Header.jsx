@@ -62,7 +62,7 @@ class Header extends React.Component {
             <button type="submit">Submit</button>
           </form>
         </div>
-
+        <hr />
       </div>
     )
   }

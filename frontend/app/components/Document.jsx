@@ -67,7 +67,11 @@ class Document extends React.Component {
     var user = getLocal('user');
 
     var display = document
-    ? <Editor doc={document} user={user} />
+    ? (
+      <div>
+        <Editor doc={document} user={user} />
+      </div>
+    )
     : <h3>Invalid Document ID</h3>;
 
     return (
