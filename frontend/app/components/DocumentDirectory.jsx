@@ -11,7 +11,8 @@ class DocumentDirectory extends React.Component {
   componentDidMount() {
     axios.get(API_BASE_URL + "/docs").then(response => {
       console.log(response);
-      this.setState({docs: response.data});
+      if (response.data.length)
+        this.setState({docs: response.data});
     })
   }
 
@@ -27,7 +28,7 @@ class DocumentDirectory extends React.Component {
         </li>
       );
     })
-    : "No documents found";
+    : <h3>No documents found</h3>;
 
     return (
       <div>
