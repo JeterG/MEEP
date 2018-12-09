@@ -1,9 +1,11 @@
 import axios from 'axios';
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { API_BASE_URL } from '../Config';
 
 class Register extends React.Component {
-  state = { "message" : null }
+  state = { "message" : null,
+            register : false}
 
   handleSubmit = (e) => {
     // Prevents default behavior of refreshing the page
@@ -29,11 +31,26 @@ class Register extends React.Component {
     });
   }
 
+  setRedirect = () => {
+    this.setState({
+      redirect: true
+    })
+  }
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect to='/' />
+    }
+  }
+
   render() {
     console.log(this.props);
 
     return (
       <div>
+        <div className="header" style={{display: "inline-block", marginRight: "40px"}}>
+          {this.renderRedirect()}
+          <img src="/images/logo.png" onClick={this.setRedirect}/>
+        </div>
         <div>
           <h2>Regististration for New Users</h2>
           <hr />

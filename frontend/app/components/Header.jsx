@@ -5,12 +5,14 @@ const Header = (props) => {
   // if user type is guest render apply link to become an OU
   // else do nothing
   var displayOUapply = (props.type == "guest") ?
-    ( <li>
-        <Link to="/apply">Become a Member</Link>
-      </li>
-    ) : null;
+    ( <li><Link to="/apply">Become a Member</Link></li> ) : null;
+
   return (
     <div className="header">
+      <div style={{display: "inline-block", marginRight: "40px"}}>
+        <img id="logo" src="/images/logo.png" />
+      </div>
+
       <div style={{display: "inline-block", marginRight: "40px"}}>
         Welcome,<br />
         { props.name }
