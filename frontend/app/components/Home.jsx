@@ -11,12 +11,6 @@ class Home extends React.Component {
     ]
   }
 
-  logOut = (e) => {
-    console.log('logOut', e, this.props);
-    localStorage.clear();
-    window.location.reload();
-  }
-
   render() {
     var {name, type, pic} = this.props.user;
     var docList = this.state.documents.map(doc => {
