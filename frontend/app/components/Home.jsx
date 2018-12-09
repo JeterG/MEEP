@@ -11,6 +11,18 @@ class Home extends React.Component {
     ]
   }
 
+  handleSubmit = (e) => {
+    e.preventDefault(); // prevent default behavior
+
+    let submitData = {  // pass data to server
+      search = e.target[0].value
+    }
+    // create a get request
+    // redirect page to results
+
+
+  }
+
   logOut = (e) => {
     console.log('logOut', e, this.props);
     localStorage.clear();
@@ -25,6 +37,12 @@ class Home extends React.Component {
     return (
       <div className="home-page">
         <Header name={name} type={type} pic={pic} />
+        <div className="search-container">
+          <form onSubmit={ this.handleSubmit }>
+            <input type="text" placeholder="Search.." name="search" />
+            <button type="submit">Submit</button>
+          </form>
+        </div>
         <button onClick={this.logOut}>Log Out</button>
 
         <h2>Recently Edited</h2>
