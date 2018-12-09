@@ -465,7 +465,13 @@ class Document:
             self._users.append(User._username)
             self._privacy = self.privacies[2]
         return
-
+    
+    def setPrivacy(self,user,index):
+        try:
+            if user._username==self._owner:
+                self._privacy=self.privacies[index]
+        except:
+            return
 
 # print(uniqueIdUsers)
 # uniqueIdUsers+=1
