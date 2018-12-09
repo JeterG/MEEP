@@ -3,18 +3,19 @@ import EditorLine from './EditorLine';
 
 class Editor extends React.Component {
   state = {
-    title: "My Test Doc",
-    owner: "myusername",
-    locked: false,
-    lockedBy: null,
-    editingLine: 0,
-    words: [
-      { lineNum: 0, editing: true, content: ""}
-    ]
+    // title: "My Test Doc",
+    // owner: "myusername",
+    // locked: false,
+    // lockedBy: null,
+    // editingLine: 0,
+    // words: [
+    //   { lineNum: 0, editing: true, content: ""}
+    // ]
   }
 
   // Attach keyboard listener to the Editor
   componentWillMount = () => {
+    this.setState({doc: this.props.doc });
     document.addEventListener("keyup", this.keyUpListen )
   }
 
@@ -23,7 +24,7 @@ class Editor extends React.Component {
   }
 
   keyUpListen = (e) => {
-    var { words, locked, lockedBy, editingLine } = this.state;
+    var { words, locked, lockedBy, editingLine } = this.state.doc;
     var typingWord = "";
     var currentUser = "myusername";
 
@@ -185,7 +186,7 @@ class Editor extends React.Component {
   }
 
   handleLock = (e) => {
-    var { words, locked } = this.state;
+    var { words, locked } = this.state.doc;
     var currentUser = "myusername";
 
     if (!locked) {
@@ -200,7 +201,7 @@ class Editor extends React.Component {
   }
 
   render() {
-    var { title, owner, locked, lockedBy, words } = this.state;
+    var { title, owner, locked, lockedBy, words } = this.state.doc;
 
     let wordList = words.map(word => {
       return <EditorLine key={ word.lineNum } lineNum={ word.lineNum } content={ word.content } editing={ word.editing } locked={ locked }/>

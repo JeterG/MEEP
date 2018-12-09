@@ -12,9 +12,26 @@ def createUserFromObj(userObj):
 def createDocFromObj(doc):
     return {
         "doc_id" : doc._id,
-        "doc_title" : doc._documentName,
-        "doc_owner" : doc._owner
+        "title" : doc._documentName,
+        "owner" : doc._owner,
+        "locked": doc._lock,
+        "lockedBy": doc._lockedBy,
+        "words" : doc._documentBody
     }
+
+def getUserFromID(id):
+    for user in allUsers:
+        if user._id == id:
+            return user
+    return False
+
+def getDocFromID(id):
+    print("help", allDocuments)
+    for doc in allDocuments:
+        print("getting doc from ID...", doc._id)
+        if doc._id == id:
+            return doc
+    return False
 
 def checkUserExists(username):
     try:
