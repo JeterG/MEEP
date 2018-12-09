@@ -194,21 +194,24 @@ def readOpenDocuments():  # returns a list of documents that have open as their 
     return available
 
 
-def fileComplaint(Document, victim, target, Problem):  # helper Function
+def fileComplaintDocument(Document, victim, target, Problem):  # helper Function
     global uniqueIdComplaint
     uniqueIdComplaint += 1
-    globals()["Complaint_" + str(uniqueIdComplaint)] = Complaint(uniqueIdComplaint, victim, target,
+    globals()["Complaint_" + str(uniqueIdComplaint)] = ComplaintDocuments(uniqueIdComplaint, victim, target,
                                                                  globals()[Document._owner], Problem, Document)
-    globals()[Document._owner].addComplaint(((globals()["Complaint_" + str(uniqueIdComplaint)]), Document))
-    return (((globals()["Complaint_" + str(uniqueIdComplaint)]), Document))
+    globals()[Document._owner].addComplaint(((globals()["Complaint_" + str(uniqueIdComplaint)])))
+
+def fileComplaintUser(victim,target,problem):
+    global uniqueIdComplaint
+    uniqueIdComplaint += 1
+    globals()["Complaint_" + str(uniqueIdComplaint)]=ComplaintUsers(uniqueIdComplaint,victim,target,problem)
+    SuperUser.addComplaint(SuperUser,globals()["Complaint_" + str(uniqueIdComplaint)])
 
 
-def storeComplaint(Document, victim, target, Problem):
-    globals()[Document._owner]._complaints.append(fileComplaint(Document, victim, target, Problem))
 
 
 class SuperUser:
-
+    _complaintsusers = []
     def __init__(self, username, name, password, interests):
         global uniqueIdUsers
         uniqueIdUsers += 1
@@ -229,8 +232,10 @@ class SuperUser:
         return
 
     def addComplaint(self, complaint):
-        self._complaints.append(complaint)
-        print(self._complaints)
+        if complaint.__class__==ComplaintDocuments:
+            self._complaints.append(complaint)
+        else:
+            self._complaintsusers.append(complaint)
 
     def promote(self, user):
         if str.upper(user._membership) == "GUEST":
@@ -264,8 +269,8 @@ class SuperUser:
         else:
             return
 
-    def processComplaint(self, Complaint, OrdinaryUser):
-        return
+    def processNextComplaintUsers(self):
+        return (self._complaintsusers.pop(0))#returns the next complaint about a user
 
     def updateMembership(self, User):
         if (User._requestPromotion == 1):
@@ -277,7 +282,6 @@ class SuperUser:
 
     def updateTabooList(self, word):  # Check if the word is already in the taboo list,
         # otherwise add it to the list and remove it from all documents
-        temp = [x.upper() for x in tabooList]
         # tabooList=[x.upper() for x in tabooList]
         if word.upper() in [x.upper() for x in tabooList]:
             return
@@ -306,17 +310,23 @@ class SuperUser:
         return
 
 
-class Complaint:
+class ComplaintDocuments:#Complaints about documents to the owner
     def __init__(self, id, Victim, Target, Owner, Problem,
                  Document):  # Both Complain and target are User types SU,OU,GU
         self._resolved = False
         self._id = id
-        self._complaintBy = Victim._username
-        self._complaintFor = Owner._username
-        self._complaintAbout = Target._username
+        self._complaintBy = Victim
+        self._complaintFor = Owner
+        self._complaintAbout = Target
         self._Document = Document
         self._problem = Problem
 
+class ComplaintUsers:#complaints handlded by SU's about other users
+    def __init__(self,id,Victim,Target,Problem):
+        self._id=id
+        self._complaintBy=Victim._username
+        self._complaintAbout=Target._username
+        self._problem=Problem
 
 class GuestUser:
     def __init__(self, username, password):
@@ -357,6 +367,16 @@ class OrdinaryUser:
         self._complaints = []
         allUsers.append(self)
         return
+
+
+def processComplaintDocuments(user):
+    print("complaints",user._complaints)
+    for complaint in user._complaints:
+        if complaint._complaintAbout._username in complaint._Document._users:
+            if complaint._complaintAbout._username != complaint._Document._owner:
+                complaint._Document._users.remove(complaint._complaintAbout._username)
+                complaint._Document._complaintHistory.append((complaint,timeStamp()))
+    del user._complaints[:]
 
 
 class Document:
@@ -465,7 +485,6 @@ class Document:
             self._users.append(User._username)
             self._privacy = self.privacies[2]
         return
-    
     def setPrivacy(self,user,index):
         try:
             if user._username==self._owner:
@@ -473,9 +492,7 @@ class Document:
         except:
             return
 
-# print(uniqueIdUsers)
-# uniqueIdUsers+=1
-# print(uniqueIdUsers)
+
 # su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
 loadUsers();
 
