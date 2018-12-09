@@ -16,4 +16,6 @@ try:
 except OSError:
     pass
 
+from meep.core import *
+from meep.utils import *
 import meep.api

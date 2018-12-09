@@ -1,5 +1,6 @@
 import os
-from .core import *
+from meep import *
+# from .core import *
 
 def createUserFromObj(userObj):
     return {

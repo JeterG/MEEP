@@ -1,6 +1,6 @@
 from flask import request, jsonify
-from meep import app
-from .utils import *
+from meep import *
+# from .utils import *
 
 @app.route('/api/login', methods=["POST"])
 def login():
