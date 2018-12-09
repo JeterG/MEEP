@@ -15,8 +15,7 @@ class Landing extends React.Component {
 
   componentDidMount = () => {
     // Get user log in status.
-    var currentUser = localStorage.user ? JSON.parse(localStorage.user) : null;
-    // console.log("The current user is...", JSON.parse(localStorage.user))
+    var currentUser = getLocal("user");
     this.setState({user: currentUser});
   }
 

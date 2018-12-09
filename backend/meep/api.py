@@ -2,7 +2,6 @@ from flask import request, jsonify
 from meep import app
 from .utils import *
 
-
 @app.route('/api/login', methods=["POST"])
 def login():
     submitData = request.json;
@@ -29,7 +28,7 @@ def post():
 
     if userObject:
         data = createUserFromObj(userObject)
-        return jsonify(data), 200
+        return jsonify(data)
     else:
         data = {'message' : 'registration failed'}
         return jsonify(data), 403
@@ -44,7 +43,7 @@ def users():
 
     return jsonify(returnUsers)
 
-@app.route('/api/documents', methods=["GET"])
+@app.route('/api/docs', methods=["GET"])
 def documents():
     # Return list of all public documents
     returnDocs = []
@@ -56,14 +55,28 @@ def documents():
 
     return jsonify(returnDocs);
 
-@app.route('/api/doc/:doc_id', methods=["GET"])
-def get_doc():
+@app.route('/api/docs/<doc_id>', methods=["GET"])
+def get_doc(doc_id):
     # Retrieve a specific document from the server
-    return jsonify("Your document here")
+    doc = getDocFromID(int(doc_id))
+    print(doc, doc_id, int(doc_id))
+    if doc:
+        return jsonify(createDocFromObj(doc))
+    else:
+        return jsonify({"message" : "Invalid document ID"}), 403
 
-@app.route('/api/doc/:doc_id', methods=["POST"])
-def post_doc():
+@app.route('/api/docs/<doc_id>', methods=["POST"])
+def post_doc(doc_id):
     # Save a specific document to the server
+    if doc_id == "new":
+        doc_title = request.json.get("title")
+        user_id = request.json.get("user_id")
+
+        user = getUserFromID(user_id)
+        globals()[doc_title] = Document(doc_title, user)
+
+        return jsonify(createDocFromObj(globals()[doc_title]))
+
     return jsonify("placeholder")
 
 @app.route('/api/apply', methods=['POST'])

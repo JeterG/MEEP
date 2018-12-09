@@ -11,7 +11,7 @@ class OUapply extends React.Component {
     // Prevents default behavior of refreshing the page
     e.preventDefault();
 
-    var userData = JSON.parse(localStorage.user);
+    var userData = getLocal("user");
 
     // Data passed to the server.
     let submitData = {

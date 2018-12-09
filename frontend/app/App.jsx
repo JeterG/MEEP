@@ -6,7 +6,6 @@ import LogIn from './components/LogIn';
 import Register from './components/Register';
 import OUapply from './components/OUapply';
 import UserDirectory from './components/UserDirectory';
-import Editor from './components/Editor/Editor';
 import Document from './components/Document';
 import DocumentDirectory from './components/DocumentDirectory';
 
@@ -19,7 +18,7 @@ class App extends React.Component {
           <Route path="/register" component={Register} />              {/* Allow new users to register guest accounts */}
           <Route path="/apply" component={OUapply} />                  {/* Allow guest users to apply to be an ordinary user */}
           <Route exact path="/docs" component={DocumentDirectory} />   {/* Return directory of all public documents */}
-          <Route path="/docs/:doc_id" component={Editor} />            {/* Display the editor for a given document */}
+          <Route path="/docs/:doc_id" component={Document} onChange={() => console.log('Entered /')} />            {/* Display the editor for a given document */}
           <Route path="/users" component={UserDirectory} />            {/* Return directory of all public users */}
           <Route path="/users/:u_id" component={DocumentDirectory} />  {/* Display the profile for a given user */}
           <Route path="/taboos" component={DocumentDirectory} />       {/* Display the taboo list + suggestion form */}
