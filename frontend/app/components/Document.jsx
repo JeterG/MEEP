@@ -6,29 +6,16 @@ import Header from './Header';
 import Editor from './Editor/Editor';
 
 class Document extends React.Component {
-  constructor(props) {
-    super(props);
-
-    //Here ya go
-    // this.props.history.listen((location, action) => {
-    //   console.log("on route change");
-    //   this.updateDoc();
-    // });
-  }
-
   state = {
     document: null
   }
 
-  updateDoc() {
-    console.log("in the updateDoc")
+  componentWillMount() {
     var { doc_id } = this.props.match.params;
     var user = getLocal('user');
 
-    console.log("check bool", Number.isInteger(Number(doc_id)), doc_id)
     if (Number.isInteger(Number(doc_id))) {
       // GET doc from API request
-      console.log("in this")
       this.getDoc(doc_id);
     } else if (doc_id == "new") {
       // Create new doc and get its ID
@@ -36,7 +23,6 @@ class Document extends React.Component {
         title: "New Document",
         user_id: user.id
       }
-
       this.newDoc(payload);
     }
   }
@@ -75,17 +61,13 @@ class Document extends React.Component {
     })
   }
 
-  componentWillMount() {
-    console.log("the component will Mount", this.props.match.params);
-    this.updateDoc();
-  }
-
   render() {
     var {name, type, pic} = getLocal("user");
     var {document} = this.state;
+    var user = getLocal('user');
 
     var display = document
-    ? <Editor doc={document} />
+    ? <Editor doc={document} user={user} />
     : <h3>Invalid Document ID</h3>;
 
     return (
@@ -97,4 +79,4 @@ class Document extends React.Component {
   }
 }
 
-export default withRouter(Document);
+export default Document;

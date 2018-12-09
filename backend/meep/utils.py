@@ -26,9 +26,7 @@ def getUserFromID(id):
     return False
 
 def getDocFromID(id):
-    print("help", allDocuments)
     for doc in allDocuments:
-        print("getting doc from ID...", doc._id)
         if doc._id == id:
             return doc
     return False

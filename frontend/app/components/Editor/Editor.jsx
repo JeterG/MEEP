@@ -11,12 +11,24 @@ class Editor extends React.Component {
     // words: [
     //   { lineNum: 0, editing: true, content: ""}
     // ]
+    editingLine: 0
   }
 
   // Attach keyboard listener to the Editor
   componentWillMount = () => {
-    this.setState({doc: this.props.doc });
     document.addEventListener("keyup", this.keyUpListen )
+    var doc = this.props.doc;
+
+    // Convert each line in the words array from the server to the object format
+    // the editor is expecting. Mainly, { lineNum: 0, editing: true, content: "" }
+    convertWords(doc);
+
+    this.setState(
+      {
+        doc: doc,
+        user: this.props.user
+      }
+    );
   }
 
   componentWillUnMount = () => {
@@ -24,20 +36,23 @@ class Editor extends React.Component {
   }
 
   keyUpListen = (e) => {
-    var { words, locked, lockedBy, editingLine } = this.state.doc;
-    var typingWord = "";
-    var currentUser = "myusername";
+    var { doc, user, editingLine } = this.state;
+
+    var { words, locked, lockedBy } = doc;
+    var { name } = user;
 
     // Set the typing word to the content that already exists on this line,
     //    or to blank if the word array is empty.
-    typingWord = words.length ? words[editingLine].content : "";
+    var typingWord = words.length ? words[editingLine].content : "";
 
     // Editing should only occur if the document is locked
     //  and the document is locked by the current user
     // (OR if the document owner is editing -- TO BE IMPLEMENTED)
-    if ( locked && lockedBy == currentUser ) {
+    if ( locked && lockedBy == name ) {
 
       let currentWords = [...words]; // Create copy of the words list to avoid altering state directly.
+
+      currentWords = currentWords.length ? currentWords : currentWords.push({})
 
       // Test for key presses
       switch (e.key) {
@@ -99,7 +114,10 @@ class Editor extends React.Component {
     }
 
     this.setState({
-      words: currentWords,
+      doc: {
+        ...this.state.doc,
+        words: currentWords
+      },
       editingLine: newID
     });
   }
@@ -114,7 +132,11 @@ class Editor extends React.Component {
     // Set the current editing line to the typing word.
     currentWords[editingLine].content = typingWord;
 
-    this.setState({ words: currentWords });
+    this.setState(
+      {
+        doc: {...this.state.doc, words: currentWords}
+      }
+    );
   }
 
   deleteChar = (typingWord, currentWords, editingLine) => {
@@ -127,7 +149,10 @@ class Editor extends React.Component {
     currentWords[editingLine].content = typingWord;
 
     this.setState({
-      words: currentWords
+      doc: {
+        ...this.state.doc,
+        words: currentWords
+      }
     });
   }
 
@@ -147,7 +172,10 @@ class Editor extends React.Component {
       currentWords[currentLineNumber].editing = true;
 
       this.setState({
-        words: currentWords,
+        doc: {
+          ...this.state.doc,
+          words: currentWords
+        },
         editingLine: currentLineNumber
       });
     }
@@ -164,7 +192,10 @@ class Editor extends React.Component {
     currentWords[currentLine].editing = false;
 
     this.setState({
-      words: currentWords,
+      doc: {
+        ...this.state.doc,
+        words: currentWords
+      },
       editingLine: newLine
     })
   }
@@ -180,21 +211,34 @@ class Editor extends React.Component {
     currentWords[currentLine].editing = false;
 
     this.setState({
-      words: currentWords,
+      doc: {
+        ...this.state.doc,
+        words: currentWords
+      },
       editingLine: newLine
     })
   }
 
   handleLock = (e) => {
     var { words, locked } = this.state.doc;
-    var currentUser = "myusername";
+    var doc = {...this.state.doc};
+    var { name } = this.state.user;
+    console.log("handle locked", name, locked)
 
     if (!locked) {
       // The user locks (i.e. reserves) the document for editing.
-      this.setState({ locked: true, lockedBy: currentUser });
+      doc.locked = true;
+      doc.lockedBy = name;
+      this.setState(
+        { doc: doc }
+      );
     } else {
       // Do this when the document is changing from unlocked to locked.
-      this.setState({ locked: false, lockedBy: null });
+      doc.locked = false;
+      doc.lockedBy = null;
+      this.setState(
+        { doc: doc }
+      );
     }
 
     document.getElementById("lock-btn").blur();
@@ -202,6 +246,7 @@ class Editor extends React.Component {
 
   render() {
     var { title, owner, locked, lockedBy, words } = this.state.doc;
+    console.log("render called", this.state.doc);
 
     let wordList = words.map(word => {
       return <EditorLine key={ word.lineNum } lineNum={ word.lineNum } content={ word.content } editing={ word.editing } locked={ locked }/>
@@ -228,6 +273,14 @@ class Editor extends React.Component {
       </div>
       </div>
     )
+  }
+};
+
+function convertWords(doc) {
+  if (doc.words.length) {
+
+  } else {
+    doc.words.push( { lineNum: 0, editing: true, content: "" } );
   }
 }
 
