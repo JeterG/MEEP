@@ -32,6 +32,10 @@ const Header = (props) => {
           {displayOUapply}
         </ul>
         </nav>
+        <button onClick={() => {
+          localStorage.clear();
+          window.location.href = "/";
+        }}>Log Out</button>
       </div>
     </div>
   )

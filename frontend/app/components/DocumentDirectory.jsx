@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import { API_BASE_URL } from '../Config';
+import axios from 'axios';
+
+import Header from './Header';
 
 class DocumentDirectory extends React.Component {
   state = {
@@ -30,8 +32,11 @@ class DocumentDirectory extends React.Component {
     })
     : <h3>No documents found</h3>;
 
+    var {name, type, pic} = getLocal("user");
+
     return (
       <div>
+      <Header name={name} type={type} pic={pic}/>
         <h1>Doc Directory</h1>
         <ul>
         { items }

@@ -25,7 +25,6 @@ class Home extends React.Component {
     return (
       <div className="home-page">
         <Header name={name} type={type} pic={pic} />
-        <button onClick={this.logOut}>Log Out</button>
 
         <h2>Recently Edited</h2>
         <div>{ docList }</div>
