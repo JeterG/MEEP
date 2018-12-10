@@ -5,7 +5,8 @@ import { API_BASE_URL } from '../Config';
 
 class Register extends React.Component {
   state = { "message" : null,
-            register : false}
+            register : false,
+            redirect : false}
 
   handleSubmit = (e) => {
     // Prevents default behavior of refreshing the page
