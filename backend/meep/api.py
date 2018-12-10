@@ -47,17 +47,18 @@ def users():
 def documents():
     # Return list of all public documents
     returnDocs = []
-    # open: for everyone to view
+    # open: for everyone to view, for everyone to edit
     # restricted: guests view, ordinary edit
     # shared: view and edit by ppl w/ access
     # private: view and only by owner and superuser
     # UNCLEAR INSTRUCTIONS. ASK PROFESSOR TO CLARIFY.
-    openDocs = readOpenDocuments()
-    for doc in allDocuments:
-        # Map object properties to a Python dictionary for JSON conversion
+    openDocs = searchDocumentByPrivacy(0)
+    print(openDocs)
+    # Map object properties to a Python dictionary for JSON conversion
+    for doc in openDocs:
         docData = createDocFromObj(doc)
         returnDocs.append(docData)
-
+    print(returnDocs)
     return jsonify(returnDocs);
 
 @app.route('/api/docs/<int:doc_id>', methods=["GET"])

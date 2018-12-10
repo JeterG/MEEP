@@ -11,8 +11,9 @@ class DocumentDirectory extends React.Component {
   }
 
   componentDidMount() {
-    axios.get(API_BASE_URL + "/docs").then(response => {
-      console.log(response);
+    axios.get(API_BASE_URL + "/docs")
+    .then(response => {
+      console.log(response.data);
       if (response.data.length)
         this.setState({docs: response.data});
     })
