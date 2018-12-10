@@ -27,7 +27,12 @@ class Header extends React.Component {
   }
   renderRedirect = () => {
     if (this.state.redirect) {
-      return <Redirect to='/' />
+      if (window.location.pathname == '/') {
+        window.location.reload()
+      }
+      else {
+        return <Redirect to='/' />
+      }
     }
   }
   // <div className="header" style={{display: "inline-block", marginRight: "40px"}}>
@@ -42,6 +47,9 @@ class Header extends React.Component {
     // else do nothing
     var displayOUapply = (type == "guest") ?
       ( <li><Link to="/apply">Become a Member</Link></li> ) : null;
+    var displayNewDoc = (type == "guest") ? null :
+      ( <li><Link to="/docs/new" onClick={window.location.reload}>New Document</Link></li> );
+
 
     return (
       <div className="header">
@@ -63,7 +71,7 @@ class Header extends React.Component {
         <div style={{display: "inline-block"}}>
           <nav>
           <ul>
-            <li><Link to="/docs/new" onClick={window.location.reload}>New Document</Link></li>
+            {displayNewDoc}
             <li><Link to="/docs">All Documents</Link></li>
             <li><Link to="/taboos">Taboo List</Link></li>
             {displayOUapply}
