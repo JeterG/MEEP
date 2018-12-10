@@ -399,7 +399,6 @@ class Document:
     privacies = {0: "OPEN", 1: "RESTRICTED", 2: "SHARED", 3: "PRIVATE"}
 
     def __init__(self, documentName, User):
-        loadDocuments()
         self._privacy = self.privacies[3]
         self._lock = False
         self._documentName = documentName
@@ -417,8 +416,7 @@ class Document:
         self._complaintHistory = []
         # self._versionHistory[-1] is also the current versoin/latest
         User._ownedDocuments.append(self)
-        allDocuments.append(self)
-        saveDocuments()
+        # allDocuments.append(self)
         return
 
     def unlockDocument(self,

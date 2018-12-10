@@ -17,5 +17,8 @@ except OSError:
     pass
 
 from meep.core import *
+print("All Docs", allDocuments)
+loadInformation()
+
 from meep.utils import *
 import meep.api
