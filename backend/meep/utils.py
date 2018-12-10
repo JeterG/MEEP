@@ -60,6 +60,15 @@ def validateRegistration(username, password):
 
     return globals()[username]
 
+def suggestTaboos():
+    
+
+def requestTaboos():
+    if tabooList:
+        return tabooList;
+    else:
+        return []
+
 def requestpromotion(username, firstName, lastName, interests):
     # check if form is completed
     if (not interests) or (not firstName) or (not lastName) :

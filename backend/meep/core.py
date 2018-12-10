@@ -4,6 +4,7 @@ from datetime import datetime
 import os
 #add saveids to the functions that use the ids that way its more concise
 cwd = os.getcwd()
+# tabooList = []
 tabooList = ["EVIL", "LIAR", "FAKE", "hello"]
 pending = []  # words that are going to be added to the taboo list through user requests.
 allDocuments = []
@@ -581,3 +582,5 @@ def Print(user):
 
 # su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
 loadUsers();
+loadDocuments();
+loadTabooList();

@@ -92,13 +92,19 @@ def rename_doc(doc_id):
         print(allDocuments[0]._id);
         return jsonify({"message" : "doc_id not found"}), 403
 
-@app.route('/api/taboos', methods=["post"])
-def post_taboo():
+@app.route('/api/taboos', methods=["POST"])
+def suggest_taboo():
     submitData = request.json;
     suggestedTaboo = submitData.get("suggestedTaboo")
     username = submitData.get("username")
+    print(username)
     # ADD: CALL A UTILS UTILS TO CALL A CORE FUNCTION TO SUGGEST TABOO
     return jsonify({"message" : "Request Sent"})
+
+@app.route('/api/taboos', methods=['GET'])
+def get_taboo():
+    data = requestTaboos()
+    return jsonify(data)
 
 @app.route('/api/apply', methods=['POST'])
 def OUapp():
