@@ -411,7 +411,6 @@ class Document:
             self._id = 0
         else:
             self._id = allDocuments[-1]._id + 1
-            # print("\nIN CONSTRUCTOR", dir(allDocuments[-1]))
         self._versionHistory = [(0, "CREATE", self._documentBody.copy(), User._username, timeStamp())]
         self._complaintHistory = []
         # self._versionHistory[-1] is also the current versoin/latest

@@ -84,7 +84,6 @@ def post_doc(doc_id):
 
             allDocuments.append(globals()[doc_title])
             saveDocuments()
-            print("CREATED NEW", allDocuments, globals()[doc_title]);
             return jsonify(createDocFromObj(globals()[doc_title]))
         else:
             doc_id = int(doc_id)
