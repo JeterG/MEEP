@@ -2,13 +2,15 @@ import pickle
 from datetime import date
 from datetime import datetime
 import os
-#add saveids to the functions that use the ids that way its more concise
+
+# add saveids to the functions that use the ids that way its more concise
 cwd = os.getcwd()
 tabooList = ["EVIL", "LIAR", "FAKE", "FART"]
 pending = []  # words that are going to be added to the taboo list through user requests.
 allDocuments = []
 allUsers = []
 allComplaints = []
+
 
 def searchByName(user, name):
     available = []
@@ -59,6 +61,7 @@ def saveTabooList():
     file_taboo_list.close()
     return
 
+
 def saveComplaints():
     global allComplaints
     directory = cwd + "/meep/system/complaints"
@@ -74,9 +77,10 @@ def loadComplaints():
     file_complaints = open(directory, 'rb')
     allComplaints = pickle.load(file_complaints)
     for complaint in allComplaints:
-        globals()["Complaint_"+str(complaint._id)] = complaint
+        globals()["Complaint_" + str(complaint._id)] = complaint
     file_complaints.close()
     return
+
 
 def loadUsers():
     global allUsers
@@ -147,7 +151,6 @@ def searchOwnedDocuments(User, word):
     available = []
     for document in User._ownedDocuments:
         if word.upper() in [c.upper() for c in document._documentBody]:
-            # print("Here",document._documentBody)
             available.append(document)
     return available
 
@@ -164,12 +167,11 @@ def timeStamp():
     return (str(date.today()) + " " + str(datetime.now().strftime("%X")))
 
 
-
-def suggestTaboo(word, su):
+def suggestTaboo(word):
     if word in [x.upper() for x in tabooList]:
         return
     else:
-        su._suggestions = 0
+        SuperUser._suggestions = 0
         pending.append(word)
         #    Add the possible taboo word to a place where the super user add it
 
@@ -188,23 +190,23 @@ def fileComplaintDocument(Document, victim, target, Problem):  # helper Function
     else:
         id = allComplaints[-1]._id + 1
     globals()["Complaint_" + str(id)] = ComplaintDocuments(id, victim, target,
-                                                                 globals()[Document._owner], Problem, Document)
+                                                           globals()[Document._owner], Problem, Document)
     globals()[Document._owner].addComplaint(((globals()["Complaint_" + str(id)])))
 
-def fileComplaintUser(victim,target,problem):
+
+def fileComplaintUser(victim, target, problem):
     if len(allComplaints) == 0:
         id = 0
     else:
         id = allComplaints[-1]._id + 1
-    globals()["Complaint_" + str(id)]=ComplaintUsers(id,victim,target,problem)
-    SuperUser.addComplaint(SuperUser,globals()["Complaint_" + str(id)])
-
-
+    globals()["Complaint_" + str(id)] = ComplaintUsers(id, victim, target, problem)
+    SuperUser.addComplaint(SuperUser, globals()["Complaint_" + str(id)])
 
 
 class SuperUser:
     _complaintsusers = []
     _suggestions = -1
+
     def __init__(self, username, name, password, interests):
         self._membership = str.upper("Super")
         self._username = username
@@ -215,17 +217,17 @@ class SuperUser:
         self._requestPromotion = 0
         self._userDocumentRequests = []
         self._ownedDocuments = []
-        if len(allUsers)==0:
+        if len(allUsers) == 0:
             self._id = 0
         else:
-            self._id=allUsers[-1]._id+1
+            self._id = allUsers[-1]._id + 1
         self._password = password
         self._complaints = []
         allUsers.append(self)
         return
 
     def addComplaint(self, complaint):
-        if complaint.__class__==ComplaintDocuments:
+        if complaint.__class__ == ComplaintDocuments:
             self._complaints.append(complaint)
         else:
             self._complaintsusers.append(complaint)
@@ -239,11 +241,11 @@ class SuperUser:
             del user._application
             user._ownedDocuments = []
             user._complaints = []
-            user.__class__=OrdinaryUser
+            user.__class__ = OrdinaryUser
             return
         elif str.upper(user._membership) == "ORDINARY":
             user._membership = "SUPER"
-            user.__class__=SuperUser
+            user.__class__ = SuperUser
             return
         else:
             return
@@ -251,19 +253,19 @@ class SuperUser:
     def demote(self, User):
         if str.upper(User._membership) == "ORDINARY":
             User._membership = "GUEST"
-            User.__class__=GuestUser
+            User.__class__ = GuestUser
             User._requestPromotion = 0
             return
         elif str.upper(User._membership) == "SUPER":
             User._membership = "ORDINARY"
-            User.__class__=OrdinaryUser
+            User.__class__ = OrdinaryUser
             User._requestPromotion = 0
             return
         else:
             return
 
     def processNextComplaintUsers(self):
-        return (self._complaintsusers.pop(0))#returns the next complaint about a user
+        return (self._complaintsusers.pop(0))  # returns the next complaint about a user
 
     def updateMembership(self, User):
         if (User._requestPromotion == 1):
@@ -302,7 +304,7 @@ class SuperUser:
         return
 
 
-class ComplaintDocuments:#Complaints about documents to the owner
+class ComplaintDocuments:  # Complaints about documents to the owner
     def __init__(self, id, Victim, Target, Owner, Problem,
                  Document):  # Both Complain and target are User types SU,OU,GU
         self._resolved = False
@@ -314,13 +316,16 @@ class ComplaintDocuments:#Complaints about documents to the owner
         self._problem = Problem
         allComplaints.append(self)
 
-class ComplaintUsers:#complaints handlded by SU's about other users
-    def __init__(self,id,Victim,Target,Problem):
-        self._id=id
-        self._complaintBy=Victim._username
-        self._complaintAbout=Target._username
-        self._problem=Problem
+
+class ComplaintUsers:  # complaints handlded by SU's about other users
+    def __init__(self, id, Victim, Target, Problem):
+        self._id = id
+        self._complaintBy = Victim._username
+        self._complaintAbout = Target._username
+        self._problem = Problem
         allComplaints.append(self)
+
+
 class GuestUser:
     def __init__(self, username, password):
         self._membership = str.upper("GUEST")
@@ -329,10 +334,10 @@ class GuestUser:
         self._blocked = False
         self._requestPromotion = 0
         self._userDocumentRequests = []
-        if len(allUsers)==0:
+        if len(allUsers) == 0:
             self._id = 0
         else:
-            self._id=allUsers[-1]._id+1
+            self._id = allUsers[-1]._id + 1
         self._application = []
         allUsers.append(self)
         return
@@ -354,10 +359,10 @@ class OrdinaryUser:
         self._userDocumentRequests = []
         self._interests = [interest.upper() for interest in interests]
         self._ownedDocuments = []
-        if len(allUsers)==0:
+        if len(allUsers) == 0:
             self._id = 0
         else:
-            self._id=allUsers[-1]._id+1
+            self._id = allUsers[-1]._id + 1
         self._password = password
         self._complaints = []
         allUsers.append(self)
@@ -365,12 +370,12 @@ class OrdinaryUser:
 
 
 def processComplaintDocuments(user):
-    print("complaints",user._complaints)
+    print("complaints", user._complaints)
     for complaint in user._complaints:
         if complaint._complaintAbout._username in complaint._Document._users:
             if complaint._complaintAbout._username != complaint._Document._owner:
                 complaint._Document._users.remove(complaint._complaintAbout._username)
-                complaint._Document._complaintHistory.append((complaint,timeStamp()))
+                complaint._Document._complaintHistory.append((complaint, timeStamp()))
     del user._complaints[:]
 
 
@@ -386,12 +391,12 @@ class Document:
         self._unlockedBy = ""
         self._users = [User._username]
         self._documentBody = []  # DocumentBody will always be the current version
-        if len(allDocuments)==0:
+        if len(allDocuments) == 0:
             self._id = 0
         else:
-            self._id=allDocuments[-1]._id+1
+            self._id = allDocuments[-1]._id + 1
         self._versionHistory = [(0, "CREATE", self._documentBody.copy(), self._owner, timeStamp())]
-        self._complaintHistory=[]
+        self._complaintHistory = []
         # self._versionHistory[-1] is also the current versoin/latest
         User._ownedDocuments.append(self)
         allDocuments.append(self)
@@ -481,18 +486,21 @@ class Document:
             self._users.append(User._username)
             self._privacy = self.privacies[2]
         return
-    def setPrivacy(self,user,index):
+
+    def setPrivacy(self, user, index):
         try:
-            if user._username==self._owner:
-                self._privacy=self.privacies[index]
+            if user._username == self._owner:
+                self._privacy = self.privacies[index]
         except:
             return
 
+
 def Print(user):
-    thetype=str(type(user))
-    if ((thetype=="<class 'core.SuperUser'>") or  (thetype=="<class 'core.OrdinaryUser'>") or  (thetype=="<class 'core.GuestUser'>")):
+    thetype = str(type(user))
+    if ((thetype == "<class 'core.SuperUser'>") or (thetype == "<class 'core.OrdinaryUser'>") or (
+            thetype == "<class 'core.GuestUser'>")):
         if user._membership == "SUPER":
-            print("Object = ",user)
+            print("Object = ", user)
             print("\t\t__class__ = ", user.__class__)
             print("\t\t_username = ", user._username)
             print("\t\t_membership = ", user._membership)
@@ -502,15 +510,16 @@ def Print(user):
             print("\t\t_interest = ", user._interests)
             print("\t\t_requestPromotion  = ", user._requestPromotion)
             print("\t\t_userDocumentRequests = ", user._userDocumentRequests)
+            printUserDocumentRequests(user)
             print("\t\t_ownedDocuments = ", user._ownedDocuments)
             print("\t\t_id = ", user._id)
             print("\t\t_password = ", user._password)
             print("\t\t_suggestions = ", user._suggestions)
             print("\t\t_complaints = ", user._complaints)
-            print("\t\t_complaintusers = ",user._complaintsusers,"\n")
+            print("\t\t_complaintusers = ", user._complaintsusers, "\n")
 
         elif user._membership == "GUEST":
-            print("Object = ",user)
+            print("Object = ", user)
             print("\t\t_username = ", user._username)
             print("\t\t_membership = ", user._membership)
             print("\t\t_firstName = ", user._firstName)
@@ -519,7 +528,7 @@ def Print(user):
             print("\t\t_requestPromotion  = ", user._requestPromotion)
             print("\t\t_userDocumentRequests = ", user._userDocumentRequests)
             print("\t\t_id = ", user._id)
-            print("\t\t_application  = ", user._application,"\n")
+            print("\t\t_application  = ", user._application, "\n")
 
         else:
             print("Object = ", user)
@@ -531,14 +540,15 @@ def Print(user):
             print("\t\t_interests = ", user._interests)
             print("\t\t_requestPromotion  = ", user._requestPromotion)
             print("\t\t_userDocumentRequests = ", user._userDocumentRequests)
+            printUserDocumentRequests(user._userDocumentRequests)
             print("\t\t_ownedDocuments = ", user._ownedDocuments)
             print("\t\t_id = ", user._id)
             print("\t\t_id = ", user._password)
-            print("\t\t_complaints = ", user._complaints,"\n")
+            print("\t\t_complaints = ", user._complaints, "\n")
 
-    elif thetype=="<class 'core.Document'>":
+    elif thetype == "<class 'core.Document'>":
         print("Object = ", user)
-        print("\t\t__class__ =", user.__class__ )
+        print("\t\t__class__ =", user.__class__)
         print("\t\t_documentName = ", user._documentName)
         print("\t\t_lock = ", user._lock)
         print("\t\t_owner = ", user._owner)
@@ -549,26 +559,36 @@ def Print(user):
         print("\t\t_versionHistory = ", user._versionHistory)
         print("\t\t_privacy = ", user._privacy)
         print("\t\t_id = ", user._id)
-        print("\t\t_complaintHistory = ",user._complaintHistory,"\n")
-    elif thetype=="<class 'core.ClomplaintDocuments'>":
+        print("\t\t_complaintHistory = ", user._complaintHistory, "\n")
+    elif thetype == "<class 'core.ClomplaintDocuments'>":
         print("Object = ", user)
-        print("\t\t__class__ =", user.__class__ )
-        print("\t\t_id = ",user._id)
-        print("\t\t_complaintBy = ",user._complaintBy)
-        print("\t\t_complaintFor = ",user._complaintFor)
-        print("\t\t_complaintAbout = ",user._complaintAbout)
-        print("\t\t_Document = ",user._Document)
-        print("\t\t_problem = ",user._problem,"\n")
-    elif thetype=="<class 'core.ComplaintUsers>":
+        print("\t\t__class__ =", user.__class__)
+        print("\t\t_id = ", user._id)
+        print("\t\t_complaintBy = ", user._complaintBy)
+        print("\t\t_complaintFor = ", user._complaintFor)
+        print("\t\t_complaintAbout = ", user._complaintAbout)
+        print("\t\t_Document = ", user._Document)
+        print("\t\t_problem = ", user._problem, "\n")
+    elif thetype == "<class 'core.ComplaintUsers>":
         print("Object = ", user)
-        print("\t\t__class__ = ", user.__class__ )
-        print("\t\t _id = ",user._id)
-        print("\t\t _complaintBy = ",user._complaintBy)
-        print("\t\t _complaintAbout = ",user._complaintAbout)
-        print("\t\t _problem = ",user._problem)
+        print("\t\t__class__ = ", user.__class__)
+        print("\t\t _id = ", user._id)
+        print("\t\t _complaintBy = ", user._complaintBy)
+        print("\t\t _complaintAbout = ", user._complaintAbout)
+        print("\t\t _problem = ", user._problem)
     else:
         print(user)
 
+def printUserDocumentRequests(user):
+    if len(user._userDocumentRequests)==0:
+        return
+    else:
+        print("\t\t\t\t\t\t\t\tDocuments | Users")
+        for request in user._userDocumentRequests:
+            print("\t\t\t\t\t\t\t\t",request[0],"\t|\t",request[1])
+    return
+def printDocumentVersionHistory():
+    return
 
 
 # su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
