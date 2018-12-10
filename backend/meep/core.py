@@ -73,44 +73,52 @@ def saveComplaints():
 
 def loadComplaints():
     global allComplaints
-    directory = cwd + "/meep/system/complaints.p"
-    file_complaints = open(directory, 'rb')
-    allComplaints = pickle.load(file_complaints)
-    for complaint in allComplaints:
-        globals()["Complaint_" + str(complaint._id)] = complaint
-    file_complaints.close()
-    return
+    try:
+        directory = cwd + "/meep/system/complaints.p"
+        file_complaints = open(directory, 'rb')
+        allComplaints = pickle.load(file_complaints)
+        for complaint in allComplaints:
+            globals()["Complaint_" + str(complaint._id)] = complaint
+        file_complaints.close()
+    except:
+        return
 
 
 def loadUsers():
     global allUsers
-    directory = cwd + "/meep/system/users.p"
-    file_users = open(directory, 'rb')
-    allUsers = pickle.load(file_users)
-    for user in allUsers:
-        globals()[user._username] = user
-    file_users.close()
-    return
+    try:
+        directory = cwd + "/meep/system/users.p"
+        file_users = open(directory, 'rb')
+        allUsers = pickle.load(file_users)
+        for user in allUsers:
+            globals()[user._username] = user
+        file_users.close()
+    except:
+        return
 
 
 def loadDocuments():
     global allDocuments
-    directory = cwd + "/meep/system/documents.p"
-    file_doc = open(directory, 'rb')
-    allDocuments = pickle.load(file_doc)
-    for document in allDocuments:
-        globals()[document._documentName] = document
-    file_doc.close()
-    return
+    try:
+        directory = cwd + "/meep/system/documents.p"
+        file_doc = open(directory, 'rb')
+        allDocuments = pickle.load(file_doc)
+        for document in allDocuments:
+            globals()[document._documentName] = document
+        file_doc.close()
+    except:
+        return
 
 
 def loadTabooList():
     global tabooList
-    directory = cwd + "/meep/system/taboo.p"
-    file_taboo_list = open(directory, 'rb')
-    tabooList = pickle.load(file_taboo_list)
-    file_taboo_list.close()
-    return
+    try:
+        directory = cwd + "/meep/system/taboo.p"
+        file_taboo_list = open(directory, 'rb')
+        tabooList = pickle.load(file_taboo_list)
+        file_taboo_list.close()
+    except:
+        return
 
 
 def savePending():
@@ -124,10 +132,12 @@ def savePending():
 
 def loadPending():
     global pending
-    directory = cwd + "/meep/system/pending.p"
-    file_pending = open(directory, "rb")
-    pending = pickle.load(file_pending)
-
+    try:
+        directory = cwd + "/meep/system/pending.p"
+        file_pending = open(directory, "rb")
+        pending = pickle.load(file_pending)
+    except:
+        return
 
 def loadInformation():
     loadTabooList()
@@ -153,6 +163,7 @@ def searchOwnedDocuments(User, word):
         if word.upper() in [c.upper() for c in document._documentBody]:
             available.append(document)
     return available
+
 
 
 def blocked(User):  # Blocked function to check whether a user can do anything or if they have to fix a document
@@ -208,6 +219,7 @@ class SuperUser:
     _suggestions = -1
 
     def __init__(self, username, name, password, interests):
+        loadUsers()
         self._membership = str.upper("Super")
         self._username = username
         self._firstName = name[0]
@@ -308,6 +320,7 @@ class SuperUser:
 class ComplaintDocuments:  # Complaints about documents to the owner
     def __init__(self, id, Victim, Target, Owner, Problem,
                  Document):  # Both Complain and target are User types SU,OU,GU
+        loadComplaints()
         self._resolved = False
         self._id = id
         self._complaintBy = Victim
@@ -321,6 +334,7 @@ class ComplaintDocuments:  # Complaints about documents to the owner
 
 class ComplaintUsers:  # complaints handlded by SU's about other users
     def __init__(self, id, Victim, Target, Problem):
+        loadComplaints()
         self._id = id
         self._complaintBy = Victim._username
         self._complaintAbout = Target._username
@@ -331,6 +345,7 @@ class ComplaintUsers:  # complaints handlded by SU's about other users
 
 class GuestUser:
     def __init__(self, username, password):
+        loadUsers()
         self._membership = str.upper("GUEST")
         self._username = username
         self._password = password
@@ -354,6 +369,7 @@ class GuestUser:
 
 class OrdinaryUser:
     def __init__(self, username, name, password, interests):
+        loadUsers()
         self._membership = str.upper("ORDINARY")
         self._username = username
         self._blocked = False
@@ -388,6 +404,7 @@ class Document:
     privacies = {0: "OPEN", 1: "RESTRICTED", 2: "SHARED", 3: "PRIVATE"}
 
     def __init__(self, documentName, User):
+        loadDocuments()
         self._privacy = self.privacies[3]
         self._lock = False
         self._documentName = documentName
@@ -604,7 +621,4 @@ def printDocumentVersionHistory(document):
 
 #make sure to make constraints true for doning stuff that uses a user if they are blocked.
 
-
-# su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
-# saveInformation()
-loadInformation()
+su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
