@@ -176,10 +176,10 @@ def suggestTaboo(word):
         #    Add the possible taboo word to a place where the super user add it
 
 
-def readOpenDocuments():  # returns a list of documents that have open as their privacy
+def searchDocumentByPrivacy(privacy):  # returns a list of documents that have open as their privacy
     available = []
     for document in allDocuments:
-        if document._privacy is document.privacies[0]:
+        if document._privacy is document.privacies[privacy]:
             available.append(document)
     return available
 
