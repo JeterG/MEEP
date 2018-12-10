@@ -6,6 +6,16 @@ import {API_BASE_URL} from '../../Config.js';
 import axios from 'axios';
 
 class Editor extends React.Component {
+  constructor(props) {
+    super(props);
+
+    // this.setState({
+    //   doc: {
+    //     ...this.state.doc,
+    //     props.document
+    //   }
+    // })
+  }
   state = {
     // title: "My Test Doc",
     // owner: "myusername",
@@ -244,12 +254,24 @@ class Editor extends React.Component {
         { doc: doc }
       );
     }
-
     document.getElementById("lock-btn").blur();
   }
 
+  handleSave = (e) => {
+    var { doc_id, words } = this.state.doc;
+    var body = words.map(word => {
+      return word.content;
+    });
+
+    console.log("The handle save is", doc_id, body);
+    this.props.saveDoc(doc_id, {
+      user_id: this.state.user.id,
+      body: body
+    });
+  }
+
   render() {
-    var { title, owner, locked, lockedBy, privacy, words } = this.props.doc;
+    var { title, owner, locked, lockedBy, privacy, words } = this.state.doc;
 
     let wordList = words.map(word => {
       return <EditorLine key={ word.lineNum } lineNum={ word.lineNum } content={ word.content } editing={ word.editing } locked={ locked }/>
@@ -258,7 +280,7 @@ class Editor extends React.Component {
     return (
       <div className="editor">
         <EditorHeader
-          title={title}
+          title={this.props.doc.title}
           setTitle={this.props.setTitle}
           owner={owner}
           selected={privacy}
@@ -271,7 +293,7 @@ class Editor extends React.Component {
         </div>
 
         <div className="editor-buttons">
-          <button>Save</button>
+          <button onClick={ this.handleSave }>Save</button>
           <button id="lock-btn" onClick={ this.handleLock }>
           { locked ? "Unlock" : "Lock" }
           </button>
@@ -285,7 +307,14 @@ class Editor extends React.Component {
 function convertWords(doc) {
   if (doc.words.length) {
     console.log("CONVERT WORDS", doc.words);
+    var wordsMapped = [];
 
+    for (var i = 0; i < doc.words.length; i++) {
+      var line = { lineNum: i, editing: false, content: doc.words[i]};
+      wordsMapped.push(line);
+    }
+
+    doc.words = wordsMapped;
   } else {
     doc.words.push( { lineNum: 0, editing: true, content: "" } );
   }

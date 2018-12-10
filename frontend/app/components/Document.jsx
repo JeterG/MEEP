@@ -52,12 +52,14 @@ class Document extends React.Component {
   }
 
   saveDoc = (id, payload) => {
+    console.log("Saving the document...");
+
     axios.post(API_BASE_URL + "/docs/" + id, payload)
     .then( response => {
-
+      console.log(response.data);
     })
     .catch( error => {
-
+      console.error("SaveDoc error", error, error.response.data);
     })
   }
 
@@ -90,7 +92,7 @@ class Document extends React.Component {
     var display = document
     ? (
       <div>
-        <Editor doc={document} setTitle={this.setTitle} user={user} />
+        <Editor doc={document} setTitle={this.setTitle} user={user} saveDoc={this.saveDoc} />
       </div>
     )
     : <h3>Invalid Document ID</h3>;

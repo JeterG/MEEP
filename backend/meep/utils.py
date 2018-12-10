@@ -67,3 +67,6 @@ def requestpromotion(username, firstName, lastName, interests):
     else:
         globals()[username].applyToOrdinary([firstName, lastName], interests)
     return True
+
+def userHasPerms(uid):
+    return True

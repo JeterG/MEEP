@@ -78,6 +78,15 @@ def post_doc(doc_id):
             globals()[doc_title] = Document(doc_title, user)
 
             return jsonify(createDocFromObj(globals()[doc_title]))
+        else:
+            doc_id = int(doc_id)
+            doc_body = request.json.get("body")
+            doc = getDocFromID(doc_id)
+            if doc:
+                doc._documentBody = doc_body
+                return jsonify({"message" : "Successful body save"})
+            else:
+                return jsonify({"message" : "Invalid ID"}), 403
     else:
         return jsonify({"message" : "Insufficient permissions"}), 401
 
