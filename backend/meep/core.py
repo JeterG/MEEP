@@ -165,6 +165,7 @@ def searchOwnedDocuments(User, word):
     return available
 
 
+
 def blocked(User):  # Blocked function to check whether a user can do anything or if they have to fix a document
     if (User._blocked == True):
         print("Update document before you continue")
@@ -186,7 +187,12 @@ def suggestTaboo(word):
         #    Add the possible taboo word to a place where the super user add it
 
 
-
+def searchDocumentByPrivacy(privacy):  # returns a list of documents that have open as their privacy
+    available = []
+    for document in allDocuments:
+        if document._privacy is document.privacies[privacy]:
+            available.append(document)
+    return available
 
 
 def fileComplaintDocument(Document, victim, target, Problem):  # helper Function
@@ -314,6 +320,7 @@ class SuperUser:
 class ComplaintDocuments:  # Complaints about documents to the owner
     def __init__(self, id, Victim, Target, Owner, Problem,
                  Document):  # Both Complain and target are User types SU,OU,GU
+        loadComplaints()
         self._resolved = False
         self._id = id
         self._complaintBy = Victim
@@ -327,6 +334,7 @@ class ComplaintDocuments:  # Complaints about documents to the owner
 
 class ComplaintUsers:  # complaints handlded by SU's about other users
     def __init__(self, id, Victim, Target, Problem):
+        loadComplaints()
         self._id = id
         self._complaintBy = Victim._username
         self._complaintAbout = Target._username
