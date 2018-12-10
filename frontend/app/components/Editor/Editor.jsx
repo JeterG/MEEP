@@ -235,9 +235,9 @@ class Editor extends React.Component {
   }
 
   handleLock = (e) => {
-    var { words, locked } = this.state.doc;
+    var { doc_id, words, locked } = this.state.doc;
     var doc = {...this.state.doc};
-    var { name } = this.state.user;
+    var { id, name } = this.state.user;
     console.log("handle locked", name, locked)
 
     if (!locked) {
@@ -245,6 +245,14 @@ class Editor extends React.Component {
       doc.locked = true;
       doc.lockedBy = name;
       words[words.length - 1].editing = true;
+
+      axios.post(API_BASE_URL + "/docs/" + doc_id + "/lock", {
+        "user_id" : id
+      }).then( response => {
+        console.log(response.data);
+      }).catch( error => {
+        console.error("lock error", error, error.response.data);
+      });
 
       this.setState(
         {
@@ -256,6 +264,15 @@ class Editor extends React.Component {
       // Do this when the document is changing from unlocked to locked.
       doc.locked = false;
       doc.lockedBy = null;
+
+      axios.post(API_BASE_URL + "/docs/" + doc_id + "/unlock", {
+        "user_id" : id
+      }).then( response => {
+        console.log(response.data)
+      }).catch( error => {
+        console.error("unlock error", error, error.response.data);
+      })
+
       this.setState(
         { doc: doc }
       );
