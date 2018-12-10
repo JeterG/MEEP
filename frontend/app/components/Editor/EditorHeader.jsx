@@ -5,12 +5,12 @@ import EditorPrivacy from './EditorPrivacy';
 class EditorHeader extends React.Component {
 
   render() {
-    var {title, setTitle, owner, selected, locked, lockedBy} = this.props;
+    var {title, setTitle, setPrivacy, owner, selected, locked, lockedBy} = this.props;
     return (
       <div className="doc-header">
-        <EditorTitle title={title} setTitle={setTitle} />
+        <EditorTitle title={title} setTitle={setTitle} locked={locked} />
         <h2>{ owner }</h2>
-        <EditorPrivacy selected={selected} />
+        <EditorPrivacy locked={locked} setPrivacy={setPrivacy} selected={selected} />
         <p>Status: { locked ? "Locked by " + lockedBy : "Unlocked" }</p>
       </div>
     )

@@ -44,7 +44,9 @@ class Editor extends React.Component {
     // Editing should only occur if the document is locked
     //  and the document is locked by the current user
     // (OR if the document owner is editing -- TO BE IMPLEMENTED)
-    if ( locked && lockedBy == name ) {
+    var titleIsEditing = window.document.getElementById("title-rename");
+
+    if ( !titleIsEditing && locked && lockedBy == name ) {
 
       let currentWords = [...words]; // Create copy of the words list to avoid altering state directly.
 
@@ -286,6 +288,7 @@ class Editor extends React.Component {
         <EditorHeader
           title={this.props.doc.title}
           setTitle={this.props.setTitle}
+          setPrivacy={this.props.setPrivacy}
           owner={owner}
           selected={privacy}
           locked={locked}

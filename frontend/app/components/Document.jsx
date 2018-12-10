@@ -133,6 +133,19 @@ class Document extends React.Component {
     });
   }
 
+  setPrivacy = (privacy) => {
+    var user = getLocal('user')
+    var submit = {user_id: user.id, privacy: privacy};
+
+    axios.post(API_BASE_URL + "/docs/" + this.state.document.doc_id + "/setPrivacy", submit)
+    .then( response => {
+      console.log(response.data.message);
+    })
+    .catch( error => {
+      console.error("setPrivacy error", error, error.response.data);
+    })
+  }
+
   render() {
     var {document} = this.state;
     var user = getLocal('user');
@@ -144,6 +157,7 @@ class Document extends React.Component {
           doc={document}
           user={user}
           setTitle={this.setTitle}
+          setPrivacy={this.setPrivacy}
           saveDoc={this.saveDoc}
           addLine={this.addLine}
           deleteLine={this.deleteLine}

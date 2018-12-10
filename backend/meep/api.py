@@ -98,12 +98,30 @@ def post_doc(doc_id):
 @app.route('/api/docs/<int:doc_id>/unlock', methods=["POST"])
 def unlockDoc(doc_id):
     user_id = int(request.json["user_id"])
-    return True
+    doc = getDocFromID(doc_id)
+    if userHasPerms(user_id):
+        if doc:
+            user = getUserFromID(user_id)
+            doc.unlockDocument(user)
+            return jsonify({"locked" : False})
+        else:
+            return jsonify({"message" : "Invalid doc ID"}), 403
+    else:
+        return jsonify({"message" : "Insufficient permissions"}), 401
 
 @app.route('/api/docs/<int:doc_id>/lock', methods=["POST"])
 def lockDoc(doc_id):
     user_id = int(request.json["user_id"])
-    return True
+    doc = getDocFromID(doc_id)
+    if userHasPerms(user_id):
+        if doc:
+            user = getUserFromID(user_id)
+            doc.lockDocument(user)
+            return jsonify({"locked" : True, "lockedBy" : user._username})
+        else:
+            return jsonify({"message" : "Invalid doc ID"}), 403
+    else:
+        return jsonify({"message" : "Insufficient permissions"}), 401
 
 @app.route('/api/docs/<int:doc_id>/invite', methods=["POST"])
 def inviteUser(doc_id):
@@ -170,6 +188,24 @@ def rename_doc(doc_id):
     else:
         print(allDocuments[0]._id);
         return jsonify({"message" : "doc_id not found"}), 403
+
+@app.route('/api/docs/<int:doc_id>/setPrivacy', methods=["POST"])
+def set_privacy(doc_id):
+    # Save a specific document to the server
+    user_id = int(request.json.get("user_id"))
+    privacy = int(request.json.get("privacy"))
+
+    if userHasPerms(user_id):
+        docObj = getDocFromID(doc_id)
+        if docObj:
+            user = getUserFromID(user_id)
+            docObj.setPrivacy(user, privacy)
+            return jsonify({"message" : "Successful set privacy"})
+        else:
+            print(allDocuments[0]._id);
+            return jsonify({"message" : "doc_id not found"}), 403
+    else:
+        return jsonify({"message" : "Insufficient permissions"}), 401
 
 @app.route('/api/taboos', methods=["POST"])
 def suggest_taboo():

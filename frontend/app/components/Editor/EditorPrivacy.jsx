@@ -13,11 +13,16 @@ class EditorPrivacy extends React.Component {
 
   changeSelect = (e) => {
     console.log("Changed Select", e);
+    this.props.setPrivacy(e.target.value);
+    this.setState({selected: e.target.value});
   }
 
   render() {
+    // Disable if doc is unlocked, also disable if user does not have perms (TO-DO)
+    var isDisabled = this.props.locked ? false : true;
+
     return (
-      <select value={this.state.selected} onChange={this.changeSelect}>
+      <select disabled={isDisabled} value={this.state.selected} onChange={this.changeSelect}>
         <option value={0}>Open</option>
         <option value={1}>Restricted</option>
         <option value={2}>Shared</option>

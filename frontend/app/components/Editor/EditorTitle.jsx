@@ -13,7 +13,9 @@ class EditorTitle extends React.Component {
   }
 
   clickTitle = (e) => {
-    this.setState({editingTitle: true });
+    if (this.props.locked) {
+      this.setState({editingTitle: true });
+    }
   }
 
   render() {
@@ -31,9 +33,11 @@ class EditorTitle extends React.Component {
       <h1 onClick={ this.clickTitle }>{ title }</h1>
     )
 
-    if (this.state.editingTitle) {
-      window.document.getElementById("title-rename").focus();
-    };
+    setTimeout(() => {
+      if (this.state.editingTitle) {
+        window.document.getElementById("title-rename").focus();
+      };
+    }, 10);
 
     return (
       <div>{outputTitle}</div>
