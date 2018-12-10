@@ -4,18 +4,11 @@ from datetime import datetime
 import os
 #add saveids to the functions that use the ids that way its more concise
 cwd = os.getcwd()
-tabooList = ["EVIL", "LIAR", "FAKE", "hello"]
+tabooList = ["EVIL", "LIAR", "FAKE", "FART"]
 pending = []  # words that are going to be added to the taboo list through user requests.
 allDocuments = []
 allUsers = []
-uniqueIdUsers = -1
-uniqueIdDocuments = -1
-uniqueIdComplaint = -1
-testid=[0]
-
-def incrementusers():
-    global uniqueIdUsers
-    uniqueIdUsers=uniqueIdUsers+1
+allComplaints = []
 
 def searchByName(user, name):
     available = []
@@ -49,31 +42,6 @@ def saveUsers():
     return
 
 
-def saveIds():
-    global uniqueIdComplaint
-    global uniqueIdDocuments
-    global uniqueIdUsers
-    ids = [uniqueIdComplaint, uniqueIdDocuments, uniqueIdUsers]
-    directory = cwd + "/meep/system/ids"
-    file_ids = open(directory, 'wb')
-    pickle.dump(ids, file_ids)
-    file_ids.close()
-
-
-def loadIds():
-    global uniqueIdComplaint
-    global uniqueIdDocuments
-    global uniqueIdUsers
-    global ids
-    directory = cwd + "/meep/system/ids"
-    file_ids = open(directory, 'rb')
-    ids = pickle.load(file_ids)
-    uniqueIdComplaint = ids[0]
-    uniqueIdDocuments = ids[1]
-    uniqueIdComplaint = ids[2]
-    file_ids.close()
-
-
 def saveDocuments():
     global allDocuments
     directory = cwd + "/meep/system/documents"
@@ -91,6 +59,24 @@ def saveTabooList():
     file_taboo_list.close()
     return
 
+def saveComplaints():
+    global allComplaints
+    directory = cwd + "/meep/system/complaints"
+    file_complaints = open(directory, 'wb')
+    pickle.dump(allComplaints, file_complaints)
+    file_complaints.close()
+    return
+
+
+def loadComplaints():
+    global allComplaints
+    directory = cwd + "/meep/system/complaints"
+    file_complaints = open(directory, 'rb')
+    allComplaints = pickle.load(file_complaints)
+    for complaint in allComplaints:
+        globals()["Complaint_"+str(complaint._id)] = complaint
+    file_complaints.close()
+    return
 
 def loadUsers():
     global allUsers
@@ -144,6 +130,7 @@ def loadInformation():
     loadUsers()
     loadDocuments()
     loadPending()
+    loadComplaints()
     return
 
 
@@ -152,6 +139,7 @@ def saveInformation():
     saveDocuments()
     saveTabooList()
     savePending()
+    saveComplaints()
     return
 
 
@@ -195,26 +183,29 @@ def readOpenDocuments():  # returns a list of documents that have open as their 
 
 
 def fileComplaintDocument(Document, victim, target, Problem):  # helper Function
-    global uniqueIdComplaint
-    uniqueIdComplaint += 1
-    globals()["Complaint_" + str(uniqueIdComplaint)] = ComplaintDocuments(uniqueIdComplaint, victim, target,
+    if len(allComplaints) == 0:
+        id = 0
+    else:
+        id = allComplaints[-1]._id + 1
+    globals()["Complaint_" + str(id)] = ComplaintDocuments(id, victim, target,
                                                                  globals()[Document._owner], Problem, Document)
-    globals()[Document._owner].addComplaint(((globals()["Complaint_" + str(uniqueIdComplaint)])))
+    globals()[Document._owner].addComplaint(((globals()["Complaint_" + str(id)])))
 
 def fileComplaintUser(victim,target,problem):
-    global uniqueIdComplaint
-    uniqueIdComplaint += 1
-    globals()["Complaint_" + str(uniqueIdComplaint)]=ComplaintUsers(uniqueIdComplaint,victim,target,problem)
-    SuperUser.addComplaint(SuperUser,globals()["Complaint_" + str(uniqueIdComplaint)])
+    if len(allComplaints) == 0:
+        id = 0
+    else:
+        id = allComplaints[-1]._id + 1
+    globals()["Complaint_" + str(id)]=ComplaintUsers(id,victim,target,problem)
+    SuperUser.addComplaint(SuperUser,globals()["Complaint_" + str(id)])
 
 
 
 
 class SuperUser:
     _complaintsusers = []
+    _suggestions = -1
     def __init__(self, username, name, password, interests):
-        global uniqueIdUsers
-        uniqueIdUsers += 1
         self._membership = str.upper("Super")
         self._username = username
         self._firstName = name[0]
@@ -224,9 +215,11 @@ class SuperUser:
         self._requestPromotion = 0
         self._userDocumentRequests = []
         self._ownedDocuments = []
-        self._id = uniqueIdUsers
+        if len(allUsers)==0:
+            self._id = 0
+        else:
+            self._id=allUsers[-1]._id+1
         self._password = password
-        self._suggestions = -1
         self._complaints = []
         allUsers.append(self)
         return
@@ -295,7 +288,6 @@ class SuperUser:
             return
         else:
             for word in pending:
-                print(word)
                 self.updateTabooList(word)
             del pending[:]
             self._suggestions = -1
@@ -320,6 +312,7 @@ class ComplaintDocuments:#Complaints about documents to the owner
         self._complaintAbout = Target
         self._Document = Document
         self._problem = Problem
+        allComplaints.append(self)
 
 class ComplaintUsers:#complaints handlded by SU's about other users
     def __init__(self,id,Victim,Target,Problem):
@@ -327,18 +320,19 @@ class ComplaintUsers:#complaints handlded by SU's about other users
         self._complaintBy=Victim._username
         self._complaintAbout=Target._username
         self._problem=Problem
-
+        allComplaints.append(self)
 class GuestUser:
     def __init__(self, username, password):
-        global uniqueIdUsers
-        uniqueIdUsers += 1
         self._membership = str.upper("GUEST")
         self._username = username
         self._password = password
         self._blocked = False
         self._requestPromotion = 0
         self._userDocumentRequests = []
-        self._id = uniqueIdUsers
+        if len(allUsers)==0:
+            self._id = 0
+        else:
+            self._id=allUsers[-1]._id+1
         self._application = []
         allUsers.append(self)
         return
@@ -351,8 +345,6 @@ class GuestUser:
 
 class OrdinaryUser:
     def __init__(self, username, name, password, interests):
-        global uniqueIdUsers
-        uniqueIdUsers = uniqueIdUsers+1
         self._membership = str.upper("ORDINARY")
         self._username = username
         self._blocked = False
@@ -362,7 +354,10 @@ class OrdinaryUser:
         self._userDocumentRequests = []
         self._interests = [interest.upper() for interest in interests]
         self._ownedDocuments = []
-        self._id = uniqueIdUsers
+        if len(allUsers)==0:
+            self._id = 0
+        else:
+            self._id=allUsers[-1]._id+1
         self._password = password
         self._complaints = []
         allUsers.append(self)
@@ -383,8 +378,6 @@ class Document:
     privacies = {0: "OPEN", 1: "RESTRICTED", 2: "SHARED", 3: "PRIVATE"}
 
     def __init__(self, documentName, User):
-        global uniqueIdDocuments
-        uniqueIdDocuments += 1
         self._privacy = self.privacies[3]
         self._lock = False
         self._documentName = documentName
@@ -393,7 +386,10 @@ class Document:
         self._unlockedBy = ""
         self._users = [User._username]
         self._documentBody = []  # DocumentBody will always be the current version
-        self._id = uniqueIdDocuments
+        if len(allDocuments)==0:
+            self._id = 0
+        else:
+            self._id=allDocuments[-1]._id+1
         self._versionHistory = [(0, "CREATE", self._documentBody.copy(), self._owner, timeStamp())]
         self._complaintHistory=[]
         # self._versionHistory[-1] is also the current versoin/latest
@@ -570,12 +566,8 @@ def Print(user):
         print("\t\t _complaintBy = ",user._complaintBy)
         print("\t\t _complaintAbout = ",user._complaintAbout)
         print("\t\t _problem = ",user._problem)
-
     else:
         print(user)
-
-
-
 
 
 
