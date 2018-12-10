@@ -42,15 +42,13 @@ class Taboos extends React.Component {
   }
 
   render() {
-    var userData = getLocal("user");
-    var {name, type, pic} = userData;
     var tabooList = this.state.taboos.map(taboos => {
       return <li key={taboos}>{taboos}< /li>
     });
 
     return (
       <div className="taboo-page">
-        <Header name={name} type={type} pic={pic} />
+        <Header />
         <div>
           <h2>Taboo Words</h2>
           <div id="tabooList">{ tabooList }</div>

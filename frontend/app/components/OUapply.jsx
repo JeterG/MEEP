@@ -1,11 +1,11 @@
 import axios from 'axios';
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { API_BASE_URL } from '../Config';
+import Header from './Header';
 
 class OUapply extends React.Component {
-  state = { "message" : null,
-            redirect: false}
+  state = { "message" : null }
 
   handleSubmit = (e) => {
     // Prevents default behavior of refreshing the page
@@ -33,37 +33,12 @@ class OUapply extends React.Component {
     });
   }
 
-  setRedirect = () => {
-    this.setState({
-      redirect: true
-    })
-  }
-  renderRedirect = () => {
-    if (this.state.redirect) {
-      return <Redirect to='/' />
-    }
-  }
-
   render() {
     return (
       <div>
-        <div className="header" style={{display: "inline-block", marginRight: "40px"}}>
-          {this.renderRedirect()}
-          <img src="/images/logo.png" onClick={this.setRedirect}/>
-        </div>
-        <div style={{display: "inline-block"}}>
-          <nav>
-          <ul>
-            <li><Link to="/editor">New Document</Link></li>
-            <li><Link to="/docs">All Documents</Link></li>
-            <li><Link to="/taboos">Taboo List</Link></li>
-          </ul>
-          </nav>
-        </div>
-
+        <Header/>
         <div className="body">
           <h2>Apply for Promotion</h2>
-          <hr />
           <div id="message">
             {this.state.message}
           </div>

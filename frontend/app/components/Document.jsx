@@ -83,7 +83,6 @@ class Document extends React.Component {
   }
 
   render() {
-    var {name, type, pic} = getLocal("user");
     var {document} = this.state;
     var user = getLocal('user');
 
@@ -97,7 +96,7 @@ class Document extends React.Component {
 
     return (
       <div className="document">
-        <Header name={name} type={type} pic={pic} />
+        <Header/>
         { display }
       </div>
     )

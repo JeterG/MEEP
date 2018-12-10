@@ -27,10 +27,9 @@ class UserDirectory extends React.Component {
     })
     : "No users found";
 
-    var { name, type, pic } = getLocal("user");
     return (
       <div>
-        <Header name={name} type={type} pic={pic} />
+        <Header />
         <h1>User Directory</h1>
         <ul>
         { items }

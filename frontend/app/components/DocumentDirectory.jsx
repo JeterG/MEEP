@@ -32,11 +32,9 @@ class DocumentDirectory extends React.Component {
     })
     : <h3>No documents found</h3>;
 
-    var {name, type, pic} = getLocal("user");
-
     return (
       <div>
-      <Header name={name} type={type} pic={pic}/>
+      <Header/>
         <h1>Doc Directory</h1>
         <ul>
         { items }
