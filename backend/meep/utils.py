@@ -56,7 +56,6 @@ def validateRegistration(username, password):
         return False
                                   # username does not exist
     globals()[username] = GuestUser(username, password)
-    saveUsers()
 
     return globals()[username]
 

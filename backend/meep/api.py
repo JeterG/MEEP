@@ -47,7 +47,12 @@ def users():
 def documents():
     # Return list of all public documents
     returnDocs = []
-
+    # open: for everyone to view
+    # restricted: guests view, ordinary edit
+    # shared: view and edit by ppl w/ access
+    # private: view and only by owner and superuser
+    # UNCLEAR INSTRUCTIONS. ASK PROFESSOR TO CLARIFY.
+    openDocs = readOpenDocuments()
     for doc in allDocuments:
         # Map object properties to a Python dictionary for JSON conversion
         docData = createDocFromObj(doc)

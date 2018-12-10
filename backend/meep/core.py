@@ -606,6 +606,5 @@ def printDocumentVersionHistory(document):
 
 
 # su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
-loadUsers();
-loadDocuments();
-loadTabooList();
+# saveInformation()
+loadInformation()
