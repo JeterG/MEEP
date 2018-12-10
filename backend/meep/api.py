@@ -90,6 +90,71 @@ def post_doc(doc_id):
     else:
         return jsonify({"message" : "Insufficient permissions"}), 401
 
+@app.route('/api/docs/<int:doc_id>/unlock', methods=["POST"])
+def unlockDoc(doc_id):
+    user_id = int(request.json["user_id"])
+    return True
+
+@app.route('/api/docs/<int:doc_id>/lock', methods=["POST"])
+def lockDoc(doc_id):
+    user_id = int(request.json["user_id"])
+    return True
+
+@app.route('/api/docs/<int:doc_id>/invite', methods=["POST"])
+def inviteUser(doc_id):
+    owner_id = int(request.json["owner_id"])
+    user_id = int(request.json["user_id"])
+    return True
+
+@app.route('/api/docs/<int:doc_id>/addLine', methods=["POST"])
+def addLine(doc_id):
+    user_id = int(request.json["user_id"])
+    word = request.json["content"]
+    if userHasPerms(user_id):
+        user = getUserFromID(user_id)
+        doc = getDocFromID(doc_id)
+        if doc:
+            doc.add(word, user)
+            return jsonify({"message" : "Successful add to doc"})
+        else:
+            return jsonify({"message" : "Invalid ID"}), 403
+    else:
+        return jsonify({"message" : "Insufficient permissions"}), 401
+
+@app.route('/api/docs/<int:doc_id>/deleteLine', methods=["POST"])
+def deleteLine(doc_id):
+    user_id = int(request.json["user_id"])
+    index = int(request.json["index"])
+    if userHasPerms(user_id):
+        user = getUserFromID(user_id)
+        doc = getDocFromID(doc_id)
+        if doc:
+            doc.delete(index, user)
+            return jsonify({"message" : "Successful delete from doc"})
+        else:
+            return jsonify({"message" : "Invalid ID"}), 403
+    else:
+        return jsonify({"message" : "Insufficient permissions"}), 401
+
+@app.route('/api/docs/<int:doc_id>/updateLine', methods=["POST"])
+def updateLine(doc_id):
+    user_id = int(request.json.get("user_id"))
+    index = int(request.json.get("index"))
+    word = request.json.get("content")
+
+    print("UPDATE LINE", doc_id, user_id, index, word)
+
+    if userHasPerms(user_id):
+        user = getUserFromID(user_id)
+        doc = getDocFromID(doc_id)
+        if doc:
+            doc.update(user, index, word)
+            return jsonify({"message" : "Successful update doc"})
+        else:
+            return jsonify({"message" : "Invalid ID"}), 403
+    else:
+        return jsonify({"message" : "Insufficient permissions"}), 401
+
 @app.route('/api/docs/<int:doc_id>/rename', methods=["POST"])
 def rename_doc(doc_id):
     newTitle = request.json.get("title")

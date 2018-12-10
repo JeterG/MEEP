@@ -6,25 +6,7 @@ import {API_BASE_URL} from '../../Config.js';
 import axios from 'axios';
 
 class Editor extends React.Component {
-  constructor(props) {
-    super(props);
-
-    // this.setState({
-    //   doc: {
-    //     ...this.state.doc,
-    //     props.document
-    //   }
-    // })
-  }
   state = {
-    // title: "My Test Doc",
-    // owner: "myusername",
-    // locked: false,
-    // lockedBy: null,
-    // editingLine: 0,
-    // words: [
-    //   { lineNum: 0, editing: true, content: ""}
-    // ]
     editingLine: 0
   }
 
@@ -52,7 +34,7 @@ class Editor extends React.Component {
   keyUpListen = (e) => {
     var { doc, user, editingLine } = this.state;
 
-    var { words, locked, lockedBy } = doc;
+    var { doc_id, words, locked, lockedBy } = doc;
     var { name } = user;
 
     // Set the typing word to the content that already exists on this line,
@@ -76,20 +58,20 @@ class Editor extends React.Component {
 
         case "Enter":
         case " ":
-          this.insertLine(currentWords, editingLine);
+          this.insertLine(doc_id, currentWords, editingLine);
           break;
 
         case "Backspace":
           if (typingWord) this.deleteChar(typingWord, currentWords, editingLine);
-          else this.deleteLine(currentWords, editingLine);
+          else this.deleteLine(doc_id, currentWords, editingLine);
           break;
 
         case "ArrowDown":
-          this.moveCursorDown(currentWords, editingLine);
+          this.moveCursorDown(doc_id, currentWords, editingLine);
           break;
 
         case "ArrowUp":
-          this.moveCursorUp(currentWords, editingLine);
+          this.moveCursorUp(doc_id, currentWords, editingLine);
           break;
 
         case "ArrowLeft":
@@ -103,8 +85,7 @@ class Editor extends React.Component {
     }
   }
 
-  insertLine = (currentWords, editingLine) => {
-
+  insertLine = (doc_id, currentWords, editingLine) => {
     // Calculate the newID aka line number for the inserted line
     let newID = currentWords.length ? currentWords[editingLine].lineNum + 1 : 0;
 
@@ -134,6 +115,15 @@ class Editor extends React.Component {
       },
       editingLine: newID
     });
+
+    // Call server to update
+    console.log("THE ", editingLine, currentWords.length)
+    if (editingLine == currentWords.length - 2) {
+      console.log("Adding new line", doc_id, currentWords[editingLine].content);
+      this.props.addLine(doc_id, currentWords[editingLine].content);
+    } else {
+      // this.props.updateLine(doc_id, editingLine, currentWords[editingLine].content);
+    }
   }
 
   insertChar = (currentWords, editingLine, typingWord, key) => {
@@ -170,7 +160,7 @@ class Editor extends React.Component {
     });
   }
 
-  deleteLine = (currentWords, editingLine) => {
+  deleteLine = (doc_id, currentWords, editingLine) => {
     var currentLineNumber = editingLine;
     var offset = editingLine ? 1 : 0;
 
@@ -192,6 +182,9 @@ class Editor extends React.Component {
         },
         editingLine: currentLineNumber
       });
+
+      // Call server to record the delete
+      // this.props.deleteLine(doc_id, editingLine);
     }
   }
 
@@ -212,6 +205,9 @@ class Editor extends React.Component {
       },
       editingLine: newLine
     })
+
+    // Call server to update
+    // this.props.updateLine(doc_id, currentLine, currentWords[currentLine].content);
   }
 
   moveCursorDown = (currentWords, editingLine) => {
@@ -230,7 +226,10 @@ class Editor extends React.Component {
         words: currentWords
       },
       editingLine: newLine
-    })
+    });
+
+    // Call server to update
+    // this.props.updateLine(doc_id, currentLine, currentWords[currentLine].content);
   }
 
   handleLock = (e) => {
@@ -243,8 +242,13 @@ class Editor extends React.Component {
       // The user locks (i.e. reserves) the document for editing.
       doc.locked = true;
       doc.lockedBy = name;
+      words[words.length - 1].editing = true;
+
       this.setState(
-        { doc: doc }
+        {
+          doc: doc,
+          editingLine: words.length - 1
+        }
       );
     } else {
       // Do this when the document is changing from unlocked to locked.

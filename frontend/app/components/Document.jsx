@@ -51,6 +51,55 @@ class Document extends React.Component {
     })
   }
 
+  addLine = (id, content) => {
+    var user = getLocal('user')
+    let payload = {
+      "user_id" : user.id,
+      "content" : content
+    };
+
+    axios.post(API_BASE_URL + "/docs/" + id + "/addLine", payload)
+    .then( response => {
+      console.log(response.data.message);
+    })
+    .catch( error => {
+      console.error("addLine error,", error, error.response.data);
+    })
+  }
+
+  deleteLine = (id, index) => {
+    var user = getLocal('user')
+    let payload = {
+      "user_id" : user.id,
+      "index" : index
+    };
+
+    axios.post(API_BASE_URL + "/docs/" + id + "/deleteLine", payload)
+    .then( response => {
+      console.log(response.data.message);
+    })
+    .catch( error => {
+      console.error("addLine error,", error, error.response.data);
+    })
+  }
+
+  updateLine = (id, index, content) => {
+    var user = getLocal ('user')
+    let payload = {
+      'user_id' : user.id,
+      'index' : index,
+      'content' : content
+    };
+
+    axios.post(API_BASE_URL + "/docs/" + id + "/updateLine", payload)
+    .then( response => {
+      console.log(response.data.message);
+    })
+    .catch( error => {
+      console.error("addLine error,", error, error.response.data);
+    })
+  }
+
   saveDoc = (id, payload) => {
     console.log("Saving the document...");
 
@@ -92,7 +141,15 @@ class Document extends React.Component {
     var display = document
     ? (
       <div>
-        <Editor doc={document} setTitle={this.setTitle} user={user} saveDoc={this.saveDoc} />
+        <Editor
+          doc={document}
+          user={user}
+          setTitle={this.setTitle}
+          saveDoc={this.saveDoc}
+          addLine={this.addLine}
+          deleteLine={this.deleteLine}
+          updateLine={this.updateLine}
+        />
       </div>
     )
     : <h3>Invalid Document ID</h3>;
