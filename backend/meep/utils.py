@@ -60,8 +60,12 @@ def validateRegistration(username, password):
 
     return globals()[username]
 
-def suggestTaboos():
-    
+def suggestTaboos(suggestedTaboo):
+    if not suggestedTaboo:
+        return False
+    else:
+        suggestTaboo(suggestedTaboo)
+        return True
 
 def requestTaboos():
     if tabooList:

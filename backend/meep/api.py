@@ -96,9 +96,13 @@ def rename_doc(doc_id):
 def suggest_taboo():
     submitData = request.json;
     suggestedTaboo = submitData.get("suggestedTaboo")
-    response = suggestTaboo()
-    # ADD: CALL A UTILS UTILS TO CALL A CORE FUNCTION TO SUGGEST TABOO
-    return jsonify({"message" : "Request Sent"})
+    result = suggestTaboos(suggestedTaboo)
+    if result:
+        data = {'message' : 'Request Submitted'}
+        return jsonify(data), 200
+    else:
+        data = {'message' : 'Submit Something'}
+        return jsonify(data), 403
 
 @app.route('/api/taboos', methods=['GET'])
 def get_taboo():
@@ -114,8 +118,8 @@ def OUapp():
     username = submitData.get("username")
     result = requestpromotion(username, firstName, lastName, interests)
     if result:
-        data = {'message' : 'Request Submitted'}
+        data = {message : 'Request Submitted'}
         return jsonify(data), 200
     else:
-        data = {'message' : 'Complete the Form'}
+        data = {message : 'Complete the Form'}
         return jsonify(data), 403

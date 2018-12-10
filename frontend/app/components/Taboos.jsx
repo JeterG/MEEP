@@ -5,6 +5,7 @@ import { API_BASE_URL } from '../Config';
 
 class Taboos extends React.Component {
   state = {
+    message: null,
     taboos: [] //taboos : ["taboo", "taboos"]
   }
 
@@ -14,15 +15,17 @@ class Taboos extends React.Component {
     let submitData = {
       suggestedTaboo: e.target[0].value,
     }
-    // NEEDS MORE WORK. FIXXX
+
     axios.post(API_BASE_URL + '/taboos', submitData)
     .then(response => {
       console.log(response.data);
+      this.setState(response.data);
     })
     .catch(error => {
       // handle error
       // this.setState(error.response.data);
       console.log(error.response);
+      this.setState(error.response.data);
     });
   }
 
@@ -53,7 +56,8 @@ class Taboos extends React.Component {
           <div id="tabooList">{ tabooList }</div>
         </div>
         <div>
-          <h2>Suggest Tabbo</h2>
+          <h2>Suggest Taboo</h2>
+          <div>{ this.state.message }</div>
           <form onSubmit={ this.handleSubmit }>
             <label htmlFor="suggestedTaboo">Taboo Suggestions</label><br />
             <input type="text" name="suggestedTaboo" /><br />
