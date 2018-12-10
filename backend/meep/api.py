@@ -52,7 +52,7 @@ def documents():
     # shared: view and edit by ppl w/ access
     # private: view and only by owner and superuser
     # UNCLEAR INSTRUCTIONS. ASK PROFESSOR TO CLARIFY.
-    openDocs = readOpenDocuments()
+    openDocs = searchDocumentByPrivacy(0)
     for doc in allDocuments:
         # Map object properties to a Python dictionary for JSON conversion
         docData = createDocFromObj(doc)
