@@ -96,8 +96,7 @@ def rename_doc(doc_id):
 def suggest_taboo():
     submitData = request.json;
     suggestedTaboo = submitData.get("suggestedTaboo")
-    username = submitData.get("username")
-    print(username)
+    response = suggestTaboo()
     # ADD: CALL A UTILS UTILS TO CALL A CORE FUNCTION TO SUGGEST TABOO
     return jsonify({"message" : "Request Sent"})
 
