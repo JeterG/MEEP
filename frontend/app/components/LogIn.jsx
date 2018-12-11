@@ -35,7 +35,7 @@ class LogIn extends React.Component {
 
   render() {
     return (
-      <div className="card-panel #80d8ff light-blue accent-1">
+      <div className="card-panel light-blue accent-1">
         <div className="container">
           <div className="center-align">
             <img src="/images/logo.png" />

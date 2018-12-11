@@ -96,11 +96,12 @@ def loadUsers():
 def loadDocuments():
     global allDocuments
     directory = cwd + "/meep/system/documents.p"
-    file_doc = open(directory, 'rb')
-    allDocuments = pickle.load(file_doc)
-    for document in allDocuments:
-        globals()[document._documentName] = document
-    file_doc.close()
+    if (os.path.exists(directory)):
+        file_doc = open(directory, 'rb')
+        allDocuments = pickle.load(file_doc)
+        for document in allDocuments:
+            globals()[document._documentName] = document
+        file_doc.close()
     return
 
 
