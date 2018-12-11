@@ -47,28 +47,44 @@ class Register extends React.Component {
     console.log(this.props);
 
     return (
-      <div>
-        <div className="header" style={{display: "inline-block", marginRight: "40px"}}>
+      <div className="card-panel green accent-2">
+{/*         <div className="header" style={{display: "inline-block", marginRight: "40px"}}>
           {this.renderRedirect()}
           <img src="/images/logo.png" onClick={this.setRedirect}/>
-        </div>
-        <div>
-          <h2>Regististration for New Users</h2>
-          <hr />
-          <div>
-            {this.state.message}
+        </div> */}
+        <div className="container">
+          <div className="center-align">
+            {this.renderRedirect()}
+            <img src="/images/logo.png" onClick={this.setRedirect}/>
+              <div>
+                <h3>New User Registration</h3>
+                <hr />
+                <div>
+                  {this.state.message}
+                </div>
+                <form onSubmit={ this.handleSubmit }>
+                <div className="row">
+                <div className="input-field col s6 offset-m3">
+                  <i className="material-icons prefix">account_circle</i>
+                  <input id="username" type="text" className="validate" />
+                  <label htmlFor="username">Username</label>
+                </div>
+              </div>
+              <div className="row">
+                <div className="input-field col s6 offset-m3">
+                <i className="material-icons prefix">lock</i>
+                  <input id="password" type="password" className="validate" />
+                  <label htmlFor="password">Password</label>
+                </div>
+              </div>
+              <button className="btn waves-effect waves-light" type="submit" name="action">Submit
+                <i className="material-icons right">send</i>
+              </button>
+            </form>
           </div>
-          <form onSubmit={ this.handleSubmit }>
-            <label htmlFor="username">Username</label><br />
-            <input type="text" name="username" /><br />
-
-            <label htmlFor="password">Pass</label><br />
-            <input type="password" name="password" /><br />
-
-            <button type="submit">Submit</button>
-          </form>
         </div>
       </div>
+    </div>
     )
   }
 }
