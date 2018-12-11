@@ -1,20 +1,47 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { API_BASE_URL } from '../Config';
+import axios from 'axios';
 import Header from './Header';
 import DocumentCard from './DocumentCard';
 
 class Home extends React.Component {
   state = {
-    documents: [
-      {doc_id: 0, doc_title: "How to Cook", doc_owner: "James"},
-      {doc_id: 1, doc_title: "Hiking for Beginners", doc_owner: "Annie"},
-      {doc_id: 2, doc_title: "Analytical Algebra for Ph.D Students", doc_owner: "Lizzy"}
-    ]
+    docs: null
+  }
+  componentDidMount(){
+    this.getEdited()
+  }
+  getEdited = () => { //get list of docs edited or owned by the user
+    var userData = getLocal("user")
+    var {name, type} = userData;
+
+    axios.get(API_BASE_URL + "/home", {
+      params: {
+        name: name,
+        type: type
+      }
+    })
+    .then(response => {
+      console.log(response.data);
+      if (response.data.length)
+        this.setState({docs: response.data});
+    })
   }
 
   render() {
-    var docList = this.state.documents.map(doc => {
-      return <DocumentCard key={doc.doc_id} doc={doc} />
-    });
+    var docList = this.state.docs ? this.state.docs.map(doc => {
+      return (
+        <li key={doc.doc_id}>
+          <Link to={"/docs/" + doc.doc_id }>
+            <b>{doc.title}</b><br />
+          </Link>
+          <em>{doc.owner}</em>
+        </li>
+      );
+    })
+    : <h3>No documents</h3>;
+
     return (
       <div className="home-page">
         <Header />

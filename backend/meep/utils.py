@@ -59,6 +59,26 @@ def validateRegistration(username, password):
 
     return globals()[username]
 
+def editedDoc(username):
+    sortedDocs = []
+    print(allDocuments[5]._versionHistory)
+    for doc in allDocuments:
+        foundTup = False
+        for tuple in reversed(doc._versionHistory):
+            print(doc._id, tuple[3], tuple[4])
+            if (tuple[3] == username) and (not foundTup):
+                sortedDocs.append((doc._id, tuple[4]))
+                foundTup = True
+    sorted(sortedDocs, key=lambda x: x[1])
+    sortedDocs = sortedDocs[:3]
+    returnDocs = []
+    for a in sortedDocs:
+        b = getDocFromID(a[0])
+        returnDocs.append(b)
+    return returnDocs
+
+# sorted(list of tuples, key=lambda x: x[1])
+
 def viewableDoc(username, membership):
     # open: for everyone to view, for everyone to edit
     # restricted: guests view, ordinary & superuser edit
