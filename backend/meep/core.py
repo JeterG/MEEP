@@ -98,16 +98,15 @@ def loadUsers():
 
 
 def loadDocuments():
-    global allDocuments
-    try:
-        directory = cwd + "/meep/system/documents.p"
+    directory = cwd + "/meep/system/documents.p"
+    if (os.path.exists(directory)):
+        global allDocuments
         file_doc = open(directory, 'rb')
         allDocuments = pickle.load(file_doc)
         for document in allDocuments:
             globals()[document._documentName] = document
         file_doc.close()
-    except:
-        return
+    return
 
 
 def loadTabooList():

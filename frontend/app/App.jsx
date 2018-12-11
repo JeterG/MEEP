@@ -14,7 +14,7 @@ class App extends React.Component {
   render() {
     return (
       <BrowserRouter>
-        <div className="meep-app">
+        <div className="meep-app container">
           <Route exact path="/" component={Landing} />                 {/* Home page*/}
           <Route path="/register" component={Register} />              {/* Allow new users to register guest accounts */}
           <Route path="/apply" component={OUapply} />                  {/* Allow guest users to apply to be an ordinary user */}
