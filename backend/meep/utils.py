@@ -75,7 +75,6 @@ def viewableDoc(username, membership):
         privateDocs = searchDocumentByPrivacy(3)
         returnDocs = [y for x in [returnDocs, sharedDocs] for y in x]
         returnDocs = [y for x in [returnDocs, privateDocs] for y in x]
-        print(allDocuments)
         return returnDocs
         # return allDocuments
     else: # ORDINARY
