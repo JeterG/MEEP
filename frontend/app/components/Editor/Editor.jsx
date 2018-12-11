@@ -7,31 +7,42 @@ import axios from 'axios';
 
 class Editor extends React.Component {
   state = {
-    editingLine: 0
+    editingLine: 0,
+    listening: false
   }
 
   // Attach keyboard listener to the Editor
-  componentWillMount = () => {
-    document.addEventListener("keyup", this.keyUpListen )
+  componentDidMount = () => {
     var doc = this.props.doc;
 
     // Convert each line in the words array from the server to the object format
     // the editor is expecting. Mainly, { lineNum: 0, editing: true, content: "" }
     convertWords(doc);
 
+    var editLine = doc.words.length > 0 ? doc.words.length - 1 : 0;
+
     this.setState(
       {
         doc: doc,
-        user: this.props.user
+        user: this.props.user,
+        editingLine: editLine
       }
     );
+
+    console.log("Mounted Editor", this.state);
+    console.log("WE ADDED THE LISTNEER");
+    document.addEventListener("keyup", this.keyUpListen )
+    this.setState({listening: true})
   }
 
   componentWillUnMount = () => {
+    console.log("Unmounted Editor");
     document.removeEventListener("keyup", this.keyUpListen );
   }
 
   keyUpListen = (e) => {
+    addedListener = true;
+
     var { doc, user, editingLine } = this.state;
 
     var { doc_id, words, locked, lockedBy } = doc;
@@ -64,8 +75,7 @@ class Editor extends React.Component {
           break;
 
         case "Backspace":
-          if (typingWord) this.deleteChar(typingWord, currentWords, editingLine);
-          else this.deleteLine(doc_id, currentWords, editingLine);
+          this.pressBackspace(doc_id, typingWord, currentWords, editingLine);
           break;
 
         case "ArrowDown":
@@ -186,12 +196,22 @@ class Editor extends React.Component {
       });
 
       // Call server to record the delete
-      // this.props.deleteLine(doc_id, editingLine);
+      var deleteIndex = currentWords.length > 0 ? editingLine : 0;
+      this.props.deleteLine(doc_id, deleteIndex);
     }
   }
 
-  moveCursorUp = (currentWords, editingLine) => {
-    console.log("move cursor up")
+  pressBackspace(doc_id, typingWord, currentWords, editingLine) {
+    if (typingWord) {
+      this.deleteChar(typingWord, currentWords, editingLine);
+    } else {
+      this.deleteLine(doc_id, currentWords, editingLine);
+    }
+  }
+
+  moveCursorUp = (doc_id, currentWords, editingLine) => {
+    console.log("move cursor up", currentWords);
+    console.log("editingLine is", editingLine);
     var currentLine = editingLine;
     var newLine = currentLine > 0 ? currentLine - 1 : 0;
 
@@ -212,7 +232,7 @@ class Editor extends React.Component {
     // this.props.updateLine(doc_id, currentLine, currentWords[currentLine].content);
   }
 
-  moveCursorDown = (currentWords, editingLine) => {
+  moveCursorDown = (doc_id, currentWords, editingLine) => {
     console.log("move cursor down");
     var currentLine = editingLine;
     var newLine = (currentLine < currentWords.length - 1) ? currentLine + 1 : currentWords.length - 1;
@@ -294,11 +314,13 @@ class Editor extends React.Component {
   }
 
   render() {
-    var { title, owner, locked, lockedBy, privacy, words } = this.state.doc;
+    if (this.state.doc) {
+      var { title, owner, locked, lockedBy, privacy, words } = this.state.doc;
+    }
 
-    let wordList = words.map(word => {
+    let wordList = words ? words.map(word => {
       return <EditorLine key={ word.lineNum } lineNum={ word.lineNum } content={ word.content } editing={ word.editing } locked={ locked }/>
-    });
+    }) : null;
 
     return (
       <div className="editor">
@@ -329,7 +351,7 @@ class Editor extends React.Component {
 };
 
 function convertWords(doc) {
-  if (doc.words.length) {
+  if (doc.words.length > 0) {
     console.log("CONVERT WORDS", doc.words);
     var wordsMapped = [];
 
@@ -339,8 +361,15 @@ function convertWords(doc) {
     }
 
     doc.words = wordsMapped;
+
+    if (doc.words.length > 1) {
+      doc.words[doc.words.length - 1].editing = true;
+    } else {
+      doc.words[0].editing = true;
+    }
+  } else {
+    doc.words.push( { lineNum: 0, editing: true, content: "" } );
   }
-  doc.words.push( { lineNum: doc.words.length, editing: true, content: "" } );
 }
 
 export default Editor;

@@ -8,7 +8,12 @@ class EditorTitle extends React.Component {
   changeTitle = (e) => {
     e.preventDefault();
     console.log("changing title...", e.target[0].value);
-    this.props.setTitle(e.target[0].value);
+    console.log("value is", e.target[0].value);
+    if (e.target[0].value.length > 0) {
+      this.props.setTitle(e.target[0].value);
+    } else {
+      this.props.setTitle("My Document");
+    }
     this.setState({ editingTitle : false });
   }
 

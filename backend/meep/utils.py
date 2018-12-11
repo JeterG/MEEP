@@ -22,6 +22,7 @@ def createDocFromObj(doc):
     }
 
 def getUserFromID(id):
+    print("getuser", allUsers);
     for user in allUsers:
         if user._id == id:
             return user

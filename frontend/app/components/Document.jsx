@@ -10,7 +10,7 @@ class Document extends React.Component {
     document: null
   }
 
-  componentWillMount() {
+  componentDidMount() {
     var { doc_id } = this.props.match.params;
     var user = getLocal('user');
 
@@ -34,7 +34,7 @@ class Document extends React.Component {
       this.setState({document: response.data})
     })
     .catch( error => {
-      console.error("Document error: ", error, error.response);
+      console.error("Document error: ", error, error.response.data);
     })
   }
 
@@ -47,7 +47,7 @@ class Document extends React.Component {
       this.setState({ document: response.data })
     })
     .catch( error => {
-      console.error("error is", error)
+      console.error("NewDoc error ", error, error.response.data);
     })
   }
 
