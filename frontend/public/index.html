@@ -2,7 +2,20 @@
 
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' http://localhost:5000">
+<!--   <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' http://localhost:5000">--> 
+  <meta http=equiv="Content-Security-Policy" "default-src 'none'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js; 
+  style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.cs https://fonts.googleapis.com/icon?family=Material+Icons">
+ 
+ 
+  <!--Import Google Icon Font-->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">  
+
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+              
   <title>MEEP</title>
   <link rel="stylesheet" type="text/css" href="/index.css">
 </head>
@@ -20,6 +33,7 @@
     else
       return null
   }
+  
   </script>
   <script src="/bundle.js" type="text/javascript"></script>
 </body>

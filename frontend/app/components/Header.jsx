@@ -35,10 +35,6 @@ class Header extends React.Component {
       }
     }
   }
-  // <div className="header" style={{display: "inline-block", marginRight: "40px"}}>
-  //   {this.renderRedirect()}
-  //   <img src="/images/logo.png" onClick={this.setRedirect}/>
-  // </div>
 
   render () {
     var userData = getLocal("user");

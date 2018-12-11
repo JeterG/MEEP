@@ -59,6 +59,40 @@ def validateRegistration(username, password):
 
     return globals()[username]
 
+def viewableDoc(username, membership):
+    # open: for everyone to view, for everyone to edit
+    # restricted: guests view, ordinary & superuser edit
+    # shared: view and edit by ppl w/ access & superuser
+    # private: view and only by owner and superuser
+    openDocs = searchDocumentByPrivacy(0)
+    restrictedDocs = searchDocumentByPrivacy(1)
+    # Return list of viewable documents
+    returnDocs = [y for x in [openDocs, restrictedDocs] for y in x]
+    if membership == "guest":
+        return returnDocs
+    elif membership == "super":
+        sharedDocs = searchDocumentByPrivacy(2)
+        privateDocs = searchDocumentByPrivacy(3)
+        returnDocs = [y for x in [returnDocs, sharedDocs] for y in x]
+        returnDocs = [y for x in [returnDocs, privateDocs] for y in x]
+        print(allDocuments)
+        return returnDocs
+        # return allDocuments
+    else: # ORDINARY
+        contribDoc = contributorDoc(username)
+        returnDocs = [y for x in [returnDocs, contribDoc] for y in x]
+        return returnDocs
+
+def contributorDoc(username):
+    returnDocs = []
+    for docs in searchDocumentByPrivacy(2):
+        if username in docs._users:
+            returnDocs.append(docs)
+    for docs in searchDocumentByPrivacy(3):
+        if username in docs._users:
+            returnDocs.append(docs)
+    return returnDocs
+
 def suggestTaboos(suggestedTaboo):
     if not suggestedTaboo:
         return False
