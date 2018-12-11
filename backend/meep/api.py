@@ -49,7 +49,7 @@ def documents():
     username = request.args.get('name')
     membership = request.args.get('type')
 
-    # Map object properties to a Python dictionary for JSON conversion
+     # Map object properties to a Python dictionary for JSON conversion
     readDocs = viewableDoc(username, membership)
     for doc in readDocs:
         docData = createDocFromObj(doc)
@@ -137,6 +137,7 @@ def addLine(doc_id):
         doc = getDocFromID(doc_id)
         if doc:
             doc.add(word, user)
+            print("ADD LINE", doc._documentBody)
             return jsonify({"message" : "Successful add to doc"})
         else:
             return jsonify({"message" : "Invalid ID"}), 403
