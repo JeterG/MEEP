@@ -72,29 +72,27 @@ def saveComplaints():
 
 
 def loadComplaints():
-    global allComplaints
-    try:
-        directory = cwd + "/meep/system/complaints.p"
+    directory = cwd + "/meep/system/complaints.p"
+    if (os.path.exists(directory)):
+        global allComplaints
         file_complaints = open(directory, 'rb')
         allComplaints = pickle.load(file_complaints)
         for complaint in allComplaints:
             globals()["Complaint_" + str(complaint._id)] = complaint
         file_complaints.close()
-    except:
-        return
+    return
 
 
 def loadUsers():
-    global allUsers
-    try:
-        directory = cwd + "/meep/system/users.p"
+    directory = cwd + "/meep/system/users.p"
+    if (os.path.exists(directory)):
+        global allUsers
         file_users = open(directory, 'rb')
         allUsers = pickle.load(file_users)
         for user in allUsers:
             globals()[user._username] = user
         file_users.close()
-    except:
-        return
+    return
 
 
 def loadDocuments():
@@ -110,14 +108,13 @@ def loadDocuments():
 
 
 def loadTabooList():
-    global tabooList
-    try:
-        directory = cwd + "/meep/system/taboo.p"
+    directory = cwd + "/meep/system/taboo.p"
+    if (os.path.exists(directory)):
+        global tabooList
         file_taboo_list = open(directory, 'rb')
         tabooList = pickle.load(file_taboo_list)
         file_taboo_list.close()
-    except:
-        return
+    return
 
 
 def savePending():
@@ -130,13 +127,12 @@ def savePending():
 
 
 def loadPending():
-    global pending
-    try:
-        directory = cwd + "/meep/system/pending.p"
+    directory = cwd + "/meep/system/pending.p"
+    if (os.path.exists(directory)):
+        global pending
         file_pending = open(directory, "rb")
         pending = pickle.load(file_pending)
-    except:
-        return
+
 
 def loadInformation():
     loadTabooList()
@@ -164,7 +160,6 @@ def searchOwnedDocuments(User, word):
     return available
 
 
-
 def blocked(User):  # Blocked function to check whether a user can do anything or if they have to fix a document
     if (User._blocked == True):
         print("Update document before you continue")
@@ -183,10 +178,11 @@ def suggestTaboo(word):
     else:
         SuperUser._suggestions = 0
         pending.append(word)
+        savePending()
         #    Add the possible taboo word to a place where the super user add it
 
 
-def searchDocumentByPrivacy(privacy):  # returns a list of documents that have open as their privacy
+def searchDocumentByPrivacy(privacy):  # returns a list of documents that have specific privacy
     available = []
     for document in allDocuments:
         if document._privacy == document.privacies[privacy]:
@@ -218,7 +214,6 @@ class SuperUser:
     _suggestions = -1
 
     def __init__(self, username, name, password, interests):
-        loadUsers()
         self._membership = str.upper("Super")
         self._username = username
         self._firstName = name[0]
@@ -241,8 +236,10 @@ class SuperUser:
     def addComplaint(self, complaint):
         if complaint.__class__ == ComplaintDocuments:
             self._complaints.append(complaint)
+            saveUsers()
         else:
             self._complaintsusers.append(complaint)
+            saveUsers()
 
     def promote(self, user):
         if str.upper(user._membership) == "GUEST":
@@ -254,10 +251,12 @@ class SuperUser:
             user._ownedDocuments = []
             user._complaints = []
             user.__class__ = OrdinaryUser
+            saveUsers()
             return
         elif str.upper(user._membership) == "ORDINARY":
             user._membership = "SUPER"
             user.__class__ = SuperUser
+            saveUsers()
             return
         else:
             return
@@ -267,16 +266,18 @@ class SuperUser:
             User._membership = "GUEST"
             User.__class__ = GuestUser
             User._requestPromotion = 0
+            saveUsers()
             return
         elif str.upper(User._membership) == "SUPER":
             User._membership = "ORDINARY"
             User.__class__ = OrdinaryUser
             User._requestPromotion = 0
+            saveUsers()
             return
         else:
             return
 
-    def processNextComplaintUsers(self):
+    def processNextComplaintUsers(self):#Have to call saveComplaints after this fuction is called.
         return (self._complaintsusers.pop(0))  # returns the next complaint about a user
 
     def updateMembership(self, User):
@@ -294,17 +295,20 @@ class SuperUser:
             return
         else:
             tabooList.append(word.upper())
-        self.applyTabooList()
+            saveTabooList()
+            self.applyTabooList()
 
     def resolveSuggestions(self):  # add suggested taboo words to the taboo list
         global pending
-        if self._suggestions is -1:
+        if self._suggestions == -1:
             return
         else:
             for word in pending:
                 self.updateTabooList(word)
             del pending[:]
             self._suggestions = -1
+            savePending()
+            saveUsers()
 
     def applyTabooList(
             self):  # update all the taboo words from all existing documents and block users who added the word
@@ -313,13 +317,14 @@ class SuperUser:
             for word in dc:
                 if word.upper() in [x.upper() for x in tabooList]:
                     document._documentBody[dc.index(word)] = "UNK"
+        saveDocuments()
         return
+
 
 
 class ComplaintDocuments:  # Complaints about documents to the owner
     def __init__(self, id, Victim, Target, Owner, Problem,
                  Document):  # Both Complain and target are User types SU,OU,GU
-        loadComplaints()
         self._resolved = False
         self._id = id
         self._complaintBy = Victim
@@ -333,7 +338,6 @@ class ComplaintDocuments:  # Complaints about documents to the owner
 
 class ComplaintUsers:  # complaints handlded by SU's about other users
     def __init__(self, id, Victim, Target, Problem):
-        loadComplaints()
         self._id = id
         self._complaintBy = Victim._username
         self._complaintAbout = Target._username
@@ -344,7 +348,6 @@ class ComplaintUsers:  # complaints handlded by SU's about other users
 
 class GuestUser:
     def __init__(self, username, password):
-        loadUsers()
         self._membership = str.upper("GUEST")
         self._username = username
         self._password = password
@@ -363,12 +366,12 @@ class GuestUser:
     def applyToOrdinary(self, name, interests):
         self._application = [name, interests]
         self._requestPromotion = 1
+        saveUsers()
         return
 
 
 class OrdinaryUser:
     def __init__(self, username, name, password, interests):
-        loadUsers()
         self._membership = str.upper("ORDINARY")
         self._username = username
         self._blocked = False
@@ -387,7 +390,10 @@ class OrdinaryUser:
         allUsers.append(self)
         saveUsers()
         return
-
+    def addComplaint(self, complaint):
+        if complaint.__class__ == ComplaintDocuments:
+            self._complaints.append(complaint)
+            saveUsers()
 
 def processComplaintDocuments(user):
     print("complaints", user._complaints)
@@ -397,13 +403,14 @@ def processComplaintDocuments(user):
                 complaint._Document._users.remove(complaint._complaintAbout._username)
                 complaint._Document._complaintHistory.append((complaint, timeStamp()))
     del user._complaints[:]
+    saveUsers()
+    saveDocuments()
 
 
 class Document:
     privacies = {0: "OPEN", 1: "RESTRICTED", 2: "SHARED", 3: "PRIVATE"}
 
     def __init__(self, documentName, User):
-        loadDocuments()
         self._privacy = self.privacies[3]
         self._lock = False
         self._documentName = documentName
@@ -443,16 +450,14 @@ class Document:
                         self._lock = False
                         self._unlockedBy = User._username
                         self._lockedBy = ""
-                    else:
-                        return
-            else:  # Document isn't locked
-                return
+        saveDocuments()
 
     def lockDocument(self, User):  # lock the document that can be done by anyone
         if (self._lock == False):
             self._lock = True
             self._lockedBy = User._username
             self._unlockedBy = ""
+            saveDocuments()
         else:
             return
 
@@ -478,7 +483,7 @@ class Document:
 
     def add(self, Word, User):
         self._documentBody.append(Word)
-        su.applyTabooList()
+        SuperUser.applyTabooList(SuperUser)
         self._versionHistory.append(
             (len(self._versionHistory), "ADD", self._documentBody.copy(), User._username, timeStamp()))
         return
@@ -494,7 +499,7 @@ class Document:
     def update(self, User, index, word):
         if len(self._documentBody) >= index:
             self._documentBody[index] = word
-            su.applyTabooList()
+            SuperUser.applyTabooList()
             self._versionHistory.append(
                 (len(self._versionHistory), "UPDATE", self._documentBody.copy(), User._username, timeStamp()))
         return
@@ -506,17 +511,21 @@ class Document:
 
     def acceptInvitation(self, Owner, User):
         if (self._documentName, User._username) in Owner._userDocumentRequests:
-            del Owner._userDocumentRequests[(Owner._userDocumentRequests.index((self._documentName, User._username)))]
+            Owner._userDocumentRequests.remove((self._documentName, User._username))
             self._users.append(User._username)
             self._privacy = self.privacies[2]
+            saveUsers()
+            saveDocuments()
         return
 
     def setPrivacy(self, user, index):
         try:
             if user._username == self._owner:
                 self._privacy = self.privacies[index]
+                saveDocuments()
         except:
             return
+
 
 
 def Print(user):
@@ -616,27 +625,5 @@ def printUserDocumentRequests(user):
 def printDocumentVersionHistory(document):
     for tuple in document._versionHistory:
             print("\t\t\t\t\t\tversion = ", tuple[0],"|operation = ",tuple[1],"|By who = ",tuple[3],"|when = ",tuple[4])
+            print(tuple[2])
     return
-
-#make sure to make constraints true for doning stuff that uses a user if they are blocked.
-
-# su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
-# ou = OrdinaryUser("ou", ["Ordinary", "User"], "password", ["Studying", "Writing", "Acting"])
-# open0 = Document("open0", su)
-# open1 = Document("open1", ou)
-# rest0 = Document("rest0", su)
-# rest1 = Document("rest1", ou)
-# shared0 = Document("shared0", su)
-# shared1 = Document("shared1", ou)
-# private0 = Document("private0", su)
-# private1 = Document("private1", ou)
-# open0.setPrivacy(su, 0) #open
-# open1.setPrivacy(ou, 0)
-# rest0.setPrivacy(su, 1) #restricted
-# rest1.setPrivacy(ou, 1)
-# shared0.setPrivacy(su, 2) #shared
-# shared1.setPrivacy(ou, 2)
-# private0.setPrivacy(su, 3) #private
-# private1.setPrivacy(ou, 3)
-# saveInformation()
-loadInformation()
