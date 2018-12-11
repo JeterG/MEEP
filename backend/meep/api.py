@@ -45,16 +45,19 @@ def users():
 
 @app.route('/api/docs', methods=["GET"])
 def documents():
+    # Return list of all public documents
     returnDocs = []
-    username = request.args.get('name')
-    membership = request.args.get('type')
-
+    # open: for everyone to view, for everyone to edit
+    # restricted: guests view, ordinary edit
+    # shared: view and edit by ppl w/ access
+    # private: view and only by owner and superuser
+    # UNCLEAR INSTRUCTIONS. ASK PROFESSOR TO CLARIFY.
+    openDocs = searchDocumentByPrivacy(0)
+    print(openDocs)
     # Map object properties to a Python dictionary for JSON conversion
-    readDocs = viewableDoc(username, membership)
-    for doc in readDocs:
+    for doc in openDocs:
         docData = createDocFromObj(doc)
         returnDocs.append(docData)
-    print(membership)
     print(returnDocs)
     return jsonify(returnDocs);
 
@@ -80,7 +83,7 @@ def post_doc(doc_id):
             user = getUserFromID(user_id)
             globals()[doc_title] = Document(doc_title, user)
 
-            allDocuments.append(globals()[doc_title])
+            # allDocuments.append(globals()[doc_title])
             saveDocuments()
             return jsonify(createDocFromObj(globals()[doc_title]))
         else:

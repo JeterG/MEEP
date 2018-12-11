@@ -94,9 +94,9 @@ def loadUsers():
 
 
 def loadDocuments():
-    global allDocuments
     directory = cwd + "/meep/system/documents.p"
     if (os.path.exists(directory)):
+        global allDocuments
         file_doc = open(directory, 'rb')
         allDocuments = pickle.load(file_doc)
         for document in allDocuments:
