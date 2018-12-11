@@ -537,6 +537,7 @@ class Document:
         SuperUser.applyTabooList(SuperUser)
         self._versionHistory.append(
             (len(self._versionHistory), "ADD", self._documentBody.copy(), User._username, timeStamp()))
+        saveDocuments()
         return
 
     # suggested usage globals()[documentname].delete(index,globals()[username])
@@ -546,8 +547,8 @@ class Document:
             del self._documentBody[index]
             self._versionHistory.append(
                 (len(self._versionHistory), "DELETE", self._documentBody.copy(), User._username, timeStamp()))
-        else:
-            return
+        saveDocuments()
+        return
 
     #Suggested usage, globals()[documentname].update(globals()[globals()[documentname]._owner],index,word)
     def update(self, User, index, word):
@@ -556,12 +557,15 @@ class Document:
             SuperUser.applyTabooList(SuperUser)
             self._versionHistory.append(
                 (len(self._versionHistory), "UPDATE", self._documentBody.copy(), User._username, timeStamp()))
+            saveDocuments()
         return
 
     #Suggested usage globals()[documentname].denyInvitation(globals()[globals()[documentname]._owner],globals()[username])
     def denyInvitation(self, Owner, User):
         if (self._documentName, User._username) in Owner._userDocumentRequests:
             del Owner._userDocumentRequests[(Owner._userDocumentRequests.index((self._documentName, User._username)))]
+            saveDocuments()
+            saveUsers()
         return
 
     #Suggested usage globals()[documentname].acceptInvitation(globals()[globals()[documentname]._owner],globals()[username])
@@ -579,6 +583,7 @@ class Document:
             if user._username == self._owner:
                 self._privacy = self.privacies[index]
                 saveDocuments()
+                saveUsers()
         except:
             return
 
