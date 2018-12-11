@@ -9,16 +9,6 @@ class Header extends React.Component {
     window.location.href = "/";
   }
 
-  handleSubmit = (e) => {
-    e.preventDefault(); // prevent default behavior
-
-    let submitData = {  // pass data to server
-      search : e.target[0].value
-    }
-    // create a get request
-    // redirect page to results
-
-  }
   // redirect to homepage
   setRedirect = () => {
     this.setState({
@@ -68,22 +58,15 @@ class Header extends React.Component {
           <nav>
           <ul>
             {displayNewDoc}
-            <li><Link to="/docs">All Documents</Link></li>
+            <li><Link to="/docs">My Documents</Link></li>
             <li><Link to="/taboos">Taboo List</Link></li>
             {displayOUapply}
+            <li><Link to="/search">Search</Link></li>
           </ul>
           </nav>
           <button onClick={this.logOut}>Log Out</button>
         </div>
-
         <br />
-
-        <div className="search-container">
-          <form onSubmit={ this.handleSubmit }>
-            <input type="text" placeholder="Search.." name="search" />
-            <button type="submit">Submit</button>
-          </form>
-        </div>
         <hr />
       </div>
     )
