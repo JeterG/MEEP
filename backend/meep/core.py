@@ -669,4 +669,5 @@ def printDocumentVersionHistory(document):
 # make sure to make constraints true for doning stuff that uses a user if they are blocked.
 
 su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
-loadUsers()
+# loadUsers()
+loadInformation()
