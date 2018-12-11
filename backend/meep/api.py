@@ -80,6 +80,8 @@ def post_doc(doc_id):
             user = getUserFromID(user_id)
             globals()[doc_title] = Document(doc_title, user)
 
+            allDocuments.append(globals()[doc_title])
+            saveDocuments()
             return jsonify(createDocFromObj(globals()[doc_title]))
         else:
             doc_id = int(doc_id)
@@ -111,6 +113,7 @@ def unlockDoc(doc_id):
 def lockDoc(doc_id):
     user_id = int(request.json["user_id"])
     doc = getDocFromID(doc_id)
+    print("INSIDE LOCK", user_id, doc_id, doc)
     if userHasPerms(user_id):
         if doc:
             user = getUserFromID(user_id)
@@ -184,7 +187,7 @@ def rename_doc(doc_id):
         docObj._documentName = newTitle
         return jsonify({"message" : "Successful rename"})
     else:
-        print(allDocuments[0]._id);
+        # print(allDocuments[0]._id);
         return jsonify({"message" : "doc_id not found"}), 403
 
 @app.route('/api/docs/<int:doc_id>/setPrivacy', methods=["POST"])
@@ -200,7 +203,7 @@ def set_privacy(doc_id):
             docObj.setPrivacy(user, privacy)
             return jsonify({"message" : "Successful set privacy"})
         else:
-            print(allDocuments[0]._id);
+            # print(allDocuments[0]._id);
             return jsonify({"message" : "doc_id not found"}), 403
     else:
         return jsonify({"message" : "Insufficient permissions"}), 401

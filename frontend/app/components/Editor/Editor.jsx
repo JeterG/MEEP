@@ -119,7 +119,7 @@ class Editor extends React.Component {
     });
 
     // Call server to update
-    console.log("THE ", editingLine, currentWords.length)
+    console.log("THE ADD NEW LINE CONDITION", editingLine, currentWords.length)
     if (editingLine == currentWords.length - 2) {
       console.log("Adding new line", doc_id, currentWords[editingLine].content);
       this.props.addLine(doc_id, currentWords[editingLine].content);
