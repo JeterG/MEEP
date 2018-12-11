@@ -55,12 +55,13 @@ class LogIn extends React.Component {
               </div>
               <div className="row">
                 <div className="input-field col s6 offset-m3">
+                <i className="material-icons prefix">lock</i>
                   <input id="password" type="password" className="validate" />
                   <label htmlFor="password">Password</label>
                 </div>
               </div>
               <button className="btn waves-effect waves-light" type="submit" name="action">Submit
-                <i class="material-icons right">send</i>
+                <i className="material-icons right">send</i>
                 </button>
               {/*<button type="submit">Submit</button> */}
               </form>
