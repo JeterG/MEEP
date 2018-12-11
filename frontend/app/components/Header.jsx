@@ -38,39 +38,33 @@ class Header extends React.Component {
 
 
     return (
-      <nav>
-        <div className="nav-wrapper">
-          <a href="#" className="brand-logo">
-            {this.renderRedirect()}
-            <img id="logo" src="/images/logo.png" onClick={this.setRedirect}/>
-          </a>
-          <ul id="nav-mobile" className="right hide-on-med-and-down">
-            {displayNewDoc}
-            <li><Link to="/docs">My Documents</Link></li>
-            <li><Link to="/taboos">Taboo List</Link></li>
-              {displayOUapply}
-            <li><Link to="/search">Search</Link></li>
-            <li><a className="waves-effect waves-light btn" onClick={this.logOut}>Log Out
-              <i className="material-icons right">forward</i></a>
-             </li>
-          </ul>
-
-{/*           <div style={{display: "inline-block", marginRight: "40px"}}>
-            Welcome,<br />
-            { name }
-          </div> */}
-          <br />
-          <div style={{display: "inline-block"}}>
-            <img className="profile-pic" src={ pic } />
-            <div>{ type } user</div>
-          </div>
-          <br />
-          <hr />
-        </div>
-        <div className="nav-content">
-          <span className="nav-title">Welcome, {name}</span>
-        </div>
-      </nav>
+      <div className="row">
+        <div className="col s12">
+          <nav>
+            <div className="nav-wrapper">
+              <a href="#" className="brand-logo">
+                {this.renderRedirect()}
+                <img id="logo" src="/images/logo.png" onClick={this.setRedirect}/>
+              </a>
+              <ul id="nav-mobile" className="right hide-on-med-and-down">
+                {displayNewDoc}
+                <li><Link to="/docs">My Documents</Link></li>
+                <li><Link to="/taboos">Taboo List</Link></li>
+                  {displayOUapply}
+                <li><Link to="/search">Search</Link></li>
+                <li><a className="waves-effect waves-light btn" onClick={this.logOut}>Log Out
+                  <i className="material-icons right">forward</i></a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        <div className="col s12">
+          <img className="profile-pic" src={pic} style={{paddingTop: 20}}/>
+            <div style={{fontSize: 20}}>{type.toUpperCase()} user</div>
+            <div style={{fontSize: 30}}>Welcome, {name.toUpperCase()}!</div>
+         </div>
+      </div>
+    </div>
     )
   }
 }
