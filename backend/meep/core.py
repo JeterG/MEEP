@@ -558,11 +558,13 @@ class Document:
                 (len(self._versionHistory), "UPDATE", self._documentBody.copy(), User._username, timeStamp()))
         return
 
+    #Suggested usage globals()[documentname].denyInvitation(globals()[globals()[documentname]._owner],globals()[username])
     def denyInvitation(self, Owner, User):
         if (self._documentName, User._username) in Owner._userDocumentRequests:
             del Owner._userDocumentRequests[(Owner._userDocumentRequests.index((self._documentName, User._username)))]
         return
 
+    #Suggested usage globals()[documentname].acceptInvitation(globals()[globals()[documentname]._owner],globals()[username])
     def acceptInvitation(self, Owner, User):
         if (self._documentName, User._username) in Owner._userDocumentRequests:
             Owner._userDocumentRequests.remove((self._documentName, User._username))
@@ -683,7 +685,8 @@ def printDocumentVersionHistory(document):
 
 
 # make sure to make constraints true for doning stuff that uses a user if they are blocked.
-
+# loadUsers()
+# make sure to make constraints true for doning stuff that uses a user if they are blocked.
 # su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
 # ou = OrdinaryUser("ou", ["Ordinary", "User"], "password", ["Studying", "Writing", "Acting"])
 # open0 = Document("open0", su)
