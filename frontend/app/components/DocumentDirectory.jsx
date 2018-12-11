@@ -11,7 +11,18 @@ class DocumentDirectory extends React.Component {
   }
 
   componentDidMount() {
-    axios.get(API_BASE_URL + "/docs")
+    this.getDocs();
+  }
+  getDocs = () => { //get list of docs available for view to this user
+    var userData = getLocal("user")
+    var {name, type} = userData;
+
+    axios.get(API_BASE_URL + "/docs", {
+      params: {
+        name: name,
+        type: type
+      }
+    })
     .then(response => {
       console.log(response.data);
       if (response.data.length)
