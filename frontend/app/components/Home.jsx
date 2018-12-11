@@ -32,12 +32,17 @@ class Home extends React.Component {
   render() {
     var docList = this.state.docs ? this.state.docs.map(doc => {
       return (
-        <li key={doc.doc_id}>
-          <Link to={"/docs/" + doc.doc_id }>
-            <b>{doc.title}</b><br />
-          </Link>
-          <em>{doc.owner}</em>
+      <ul className="collection">
+        <li className="collection-item avatar">
+          <i className="material-icons circle">description</i>
+          <span className="title">
+            <Link to={"/docs/" + doc.doc_id}>
+              <b>{doc.title}</b><br />
+            </Link>
+            <em>{doc.owner}</em>
+          </span>
         </li>
+      </ul>
       );
     })
     : <h3>No documents</h3>;
@@ -45,7 +50,8 @@ class Home extends React.Component {
     return (
       <div className="home-page">
         <Header />
-
+        <br />
+        <hr />
         <h2>Recently Edited</h2>
         <div>{ docList }</div>
       </div>

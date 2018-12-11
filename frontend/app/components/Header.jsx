@@ -38,37 +38,39 @@ class Header extends React.Component {
 
 
     return (
-      <div className="header">
-        <div style={{display: "inline-block", marginRight: "40px"}}>
-          {this.renderRedirect()}
-          <img id="logo" src="/images/logo.png" onClick={this.setRedirect}/>
-        </div>
-
-        <div style={{display: "inline-block", marginRight: "40px"}}>
-          Welcome,<br />
-          { name }
-        </div>
-
-        <div style={{display: "inline-block"}}>
-          <img className="profile-pic" src={ pic } />
-          <div>{ type } user</div>
-        </div>
-
-        <div style={{display: "inline-block"}}>
-          <nav>
-          <ul>
+      <nav>
+        <div className="nav-wrapper">
+          <a href="#" className="brand-logo">
+            {this.renderRedirect()}
+            <img id="logo" src="/images/logo.png" onClick={this.setRedirect}/>
+          </a>
+          <ul id="nav-mobile" className="right hide-on-med-and-down">
             {displayNewDoc}
             <li><Link to="/docs">My Documents</Link></li>
             <li><Link to="/taboos">Taboo List</Link></li>
-            {displayOUapply}
+              {displayOUapply}
             <li><Link to="/search">Search</Link></li>
+            <li><a className="waves-effect waves-light btn" onClick={this.logOut}>Log Out
+              <i className="material-icons right">forward</i></a>
+             </li>
           </ul>
-          </nav>
-          <button onClick={this.logOut}>Log Out</button>
+
+{/*           <div style={{display: "inline-block", marginRight: "40px"}}>
+            Welcome,<br />
+            { name }
+          </div> */}
+          <br />
+          <div style={{display: "inline-block"}}>
+            <img className="profile-pic" src={ pic } />
+            <div>{ type } user</div>
+          </div>
+          <br />
+          <hr />
         </div>
-        <br />
-        <hr />
-      </div>
+        <div className="nav-content">
+          <span className="nav-title">Welcome, {name}</span>
+        </div>
+      </nav>
     )
   }
 }

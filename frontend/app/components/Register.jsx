@@ -48,14 +48,10 @@ class Register extends React.Component {
 
     return (
       <div className="card-panel green accent-2">
-{/*         <div className="header" style={{display: "inline-block", marginRight: "40px"}}>
-          {this.renderRedirect()}
-          <img src="/images/logo.png" onClick={this.setRedirect}/>
-        </div> */}
         <div className="container">
           <div className="center-align">
             {this.renderRedirect()}
-            <img src="/images/logo.png" onClick={this.setRedirect}/>
+            <img src="/images/logo.png" onClick={this.setRedirect} style={{cursor: 'pointer'}}/>
               <div>
                 <h3>New User Registration</h3>
                 <hr />
