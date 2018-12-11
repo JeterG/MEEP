@@ -18,3 +18,5 @@ build/
 node_modules/
 
 backend/documents
+frontend/public/LICENSE
+frontend/public/README.md
