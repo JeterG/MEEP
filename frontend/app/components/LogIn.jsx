@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 import { API_BASE_URL } from '../Config';
+import '../../public/css/materialize.min.css';
+import M from '../../public/js/materialize.min.js';
 
 class LogIn extends React.Component {
   state = { "message" : null }
@@ -33,25 +35,38 @@ class LogIn extends React.Component {
 
   render() {
     return (
-      <div>
-        <div className="header" style={{display: "inline-block", marginRight: "40px"}}>
-          <img src="/images/logo.png" />
+      <div className="card-panel #80d8ff light-blue accent-1">
+        <div className="container">
+          <div className="center-align">
+            <img src="/images/logo.png" />
+          <div>
+            <h3>Sign In</h3>
+            <hr />
+            <div id="message">
+              {this.state.message}
+            </div>
+            <form onSubmit={ this.handleSubmit }>
+              <div className="row">
+                <div className="input-field col s6 offset-m3">
+                  <i className="material-icons prefix">account_circle</i>
+                  <input id="username" type="text" className="validate" />
+                  <label htmlFor="username">Username</label>
+                </div>
+              </div>
+              <div className="row">
+                <div className="input-field col s6 offset-m3">
+                  <input id="password" type="password" className="validate" />
+                  <label htmlFor="password">Password</label>
+                </div>
+              </div>
+              <button className="btn waves-effect waves-light" type="submit" name="action">Submit
+                <i class="material-icons right">send</i>
+                </button>
+              {/*<button type="submit">Submit</button> */}
+              </form>
         </div>
-        <div>
-          <h2>Sign In</h2>
-          <hr />
-          <div id="message">
-            {this.state.message}
-          </div>
-          <form onSubmit={ this.handleSubmit }>
-            <label htmlFor="username">Username</label><br />
-            <input type="text" name="username" /><br />
-
-          <label htmlFor="password">Pass</label><br />
-          <input type="password" name="password" /><br />
-          <button type="submit">Submit</button>
-        </form>
       </div>
+    </div>
     </div>
     )
   }
