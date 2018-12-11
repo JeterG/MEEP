@@ -50,10 +50,13 @@ class Home extends React.Component {
     return (
       <div className="home-page">
         <Header />
-        <br />
-        <hr />
-        <h2>Recently Edited</h2>
-        <div>{ docList }</div>
+        <div className="row">
+          <hr/>
+          <h3>
+          <div className="col s6">Recently Edited</div>
+          </h3>
+          <div className="col s12">{docList}</div>
+        </div>
       </div>
     )
   }
