@@ -73,44 +73,52 @@ def saveComplaints():
 
 def loadComplaints():
     global allComplaints
-    directory = cwd + "/meep/system/complaints.p"
-    file_complaints = open(directory, 'rb')
-    allComplaints = pickle.load(file_complaints)
-    for complaint in allComplaints:
-        globals()["Complaint_" + str(complaint._id)] = complaint
-    file_complaints.close()
-    return
+    try:
+        directory = cwd + "/meep/system/complaints.p"
+        file_complaints = open(directory, 'rb')
+        allComplaints = pickle.load(file_complaints)
+        for complaint in allComplaints:
+            globals()["Complaint_" + str(complaint._id)] = complaint
+        file_complaints.close()
+    except:
+        return
 
 
 def loadUsers():
     global allUsers
-    directory = cwd + "/meep/system/users.p"
-    file_users = open(directory, 'rb')
-    allUsers = pickle.load(file_users)
-    for user in allUsers:
-        globals()[user._username] = user
-    file_users.close()
-    return
+    try:
+        directory = cwd + "/meep/system/users.p"
+        file_users = open(directory, 'rb')
+        allUsers = pickle.load(file_users)
+        for user in allUsers:
+            globals()[user._username] = user
+        file_users.close()
+    except:
+        return
 
 
 def loadDocuments():
     global allDocuments
-    directory = cwd + "/meep/system/documents.p"
-    file_doc = open(directory, 'rb')
-    allDocuments = pickle.load(file_doc)
-    for document in allDocuments:
-        globals()[document._documentName] = document
-    file_doc.close()
-    return
+    try:
+        directory = cwd + "/meep/system/documents.p"
+        file_doc = open(directory, 'rb')
+        allDocuments = pickle.load(file_doc)
+        for document in allDocuments:
+            globals()[document._documentName] = document
+        file_doc.close()
+    except:
+        return
 
 
 def loadTabooList():
     global tabooList
-    directory = cwd + "/meep/system/taboo.p"
-    file_taboo_list = open(directory, 'rb')
-    tabooList = pickle.load(file_taboo_list)
-    file_taboo_list.close()
-    return
+    try:
+        directory = cwd + "/meep/system/taboo.p"
+        file_taboo_list = open(directory, 'rb')
+        tabooList = pickle.load(file_taboo_list)
+        file_taboo_list.close()
+    except:
+        return
 
 
 def savePending():
@@ -124,10 +132,12 @@ def savePending():
 
 def loadPending():
     global pending
-    directory = cwd + "/meep/system/pending.p"
-    file_pending = open(directory, "rb")
-    pending = pickle.load(file_pending)
-
+    try:
+        directory = cwd + "/meep/system/pending.p"
+        file_pending = open(directory, "rb")
+        pending = pickle.load(file_pending)
+    except:
+        return
 
 def loadInformation():
     loadTabooList()
@@ -155,6 +165,7 @@ def searchOwnedDocuments(User, word):
     return available
 
 
+
 def blocked(User):  # Blocked function to check whether a user can do anything or if they have to fix a document
     if (User._blocked == True):
         print("Update document before you continue")
@@ -176,11 +187,10 @@ def suggestTaboo(word):
         #    Add the possible taboo word to a place where the super user add it
 
 
-def searchDocumentByPrivacy(privacy):  # returns a list of documents that have specific privacy
+def searchDocumentByPrivacy(privacy):  # returns a list of documents that have open as their privacy
     available = []
     for document in allDocuments:
         if document._privacy == document.privacies[privacy]:
-
             available.append(document)
     return available
 
@@ -209,6 +219,7 @@ class SuperUser:
     _suggestions = -1
 
     def __init__(self, username, name, password, interests):
+        loadUsers()
         self._membership = str.upper("Super")
         self._username = username
         self._firstName = name[0]
@@ -225,6 +236,7 @@ class SuperUser:
         self._password = password
         self._complaints = []
         allUsers.append(self)
+        saveUsers()
         return
 
     def addComplaint(self, complaint):
@@ -308,6 +320,7 @@ class SuperUser:
 class ComplaintDocuments:  # Complaints about documents to the owner
     def __init__(self, id, Victim, Target, Owner, Problem,
                  Document):  # Both Complain and target are User types SU,OU,GU
+        loadComplaints()
         self._resolved = False
         self._id = id
         self._complaintBy = Victim
@@ -316,19 +329,23 @@ class ComplaintDocuments:  # Complaints about documents to the owner
         self._Document = Document
         self._problem = Problem
         allComplaints.append(self)
+        saveComplaints()
 
 
 class ComplaintUsers:  # complaints handlded by SU's about other users
     def __init__(self, id, Victim, Target, Problem):
+        loadComplaints()
         self._id = id
         self._complaintBy = Victim._username
         self._complaintAbout = Target._username
         self._problem = Problem
         allComplaints.append(self)
+        saveComplaints()
 
 
 class GuestUser:
     def __init__(self, username, password):
+        loadUsers()
         self._membership = str.upper("GUEST")
         self._username = username
         self._password = password
@@ -352,6 +369,7 @@ class GuestUser:
 
 class OrdinaryUser:
     def __init__(self, username, name, password, interests):
+        loadUsers()
         self._membership = str.upper("ORDINARY")
         self._username = username
         self._blocked = False
@@ -368,6 +386,7 @@ class OrdinaryUser:
         self._password = password
         self._complaints = []
         allUsers.append(self)
+        saveUsers()
         return
 
 
@@ -385,6 +404,7 @@ class Document:
     privacies = {0: "OPEN", 1: "RESTRICTED", 2: "SHARED", 3: "PRIVATE"}
 
     def __init__(self, documentName, User):
+        loadDocuments()
         self._privacy = self.privacies[3]
         self._lock = False
         self._documentName = documentName
@@ -403,6 +423,7 @@ class Document:
         # self._versionHistory[-1] is also the current versoin/latest
         User._ownedDocuments.append(self)
         allDocuments.append(self)
+        saveDocuments()
         return
 
     def unlockDocument(self,
@@ -600,4 +621,23 @@ def printDocumentVersionHistory(document):
 
 #make sure to make constraints true for doning stuff that uses a user if they are blocked.
 
-su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
+# su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
+# ou = OrdinaryUser("ou", ["Ordinary", "User"], "password", ["Studying", "Writing", "Acting"])
+# open0 = Document("open0", su)
+# open1 = Document("open1", ou)
+# rest0 = Document("rest0", su)
+# rest1 = Document("rest1", ou)
+# shared0 = Document("shared0", su)
+# shared1 = Document("shared1", ou)
+# private0 = Document("private0", su)
+# private1 = Document("private1", ou)
+# open0.setPrivacy(su, 0) #open
+# open1.setPrivacy(ou, 0)
+# rest0.setPrivacy(su, 1) #restricted
+# rest1.setPrivacy(ou, 1)
+# shared0.setPrivacy(su, 2) #shared
+# shared1.setPrivacy(ou, 2)
+# private0.setPrivacy(su, 3) #private
+# private1.setPrivacy(ou, 3)
+# saveInformation()
+loadInformation()
