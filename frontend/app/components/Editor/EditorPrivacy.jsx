@@ -22,11 +22,11 @@ class EditorPrivacy extends React.Component {
     var isDisabled = this.props.locked ? false : true;
 
     return (
-      <select disabled={isDisabled} value={this.state.selected} onChange={this.changeSelect}>
-        <option value={0}>Open</option>
-        <option value={1}>Restricted</option>
-        <option value={2}>Shared</option>
-        <option value={3}>Private</option>
+      <select className="browser-default" disabled={isDisabled} value={this.state.selected} onChange={this.changeSelect}>
+          <option value={0}>Open</option>
+          <option value={1}>Restricted</option>
+          <option value={2}>Shared</option>
+          <option value={3}>Private</option>
       </select>
     )
   }

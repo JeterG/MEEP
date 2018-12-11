@@ -339,9 +339,8 @@ function convertWords(doc) {
     }
 
     doc.words = wordsMapped;
-  } else {
-    doc.words.push( { lineNum: 0, editing: true, content: "" } );
   }
+  doc.words.push( { lineNum: doc.words.length, editing: true, content: "" } );
 }
 
 export default Editor;
