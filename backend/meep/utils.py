@@ -62,7 +62,7 @@ def validateRegistration(username, password):
 
 def editedDoc(username):
     sortedDocs = []
-    print(allDocuments[8]._versionHistory)
+    # print(allDocuments[8]._versionHistory)
     for doc in allDocuments:
         foundTup = False
         for tuple in reversed(doc._versionHistory):
@@ -71,9 +71,9 @@ def editedDoc(username):
                 sortedDocs.append((doc._id, tuple[4]))
                 foundTup = True
     sortedDocs = sorted(sortedDocs, key=lambda x: x[1])
-    print(sortedDocs)
+    # print(sortedDocs)
     sortedDocs = sortedDocs[-3:]
-    print(sortedDocs)
+    # print(sortedDocs)
     returnDocs = []
     for a in sortedDocs:
         b = getDocFromID(a[0])

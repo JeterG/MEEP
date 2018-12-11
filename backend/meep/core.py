@@ -524,6 +524,7 @@ class Document:
         SuperUser.applyTabooList(SuperUser)
         self._versionHistory.append(
             (len(self._versionHistory), "ADD", self._documentBody.copy(), User._username, timeStamp()))
+        saveDocuments()
         return
 
     # suggested usage globals()[documentname].delete(index,globals()[username])
@@ -533,8 +534,8 @@ class Document:
             del self._documentBody[index]
             self._versionHistory.append(
                 (len(self._versionHistory), "DELETE", self._documentBody.copy(), User._username, timeStamp()))
-        else:
-            return
+        saveDocuments()
+        return
 
     #Suggested usage, globals()[documentname].update(globals()[globals()[documentname]._owner],index,word)
     def update(self, User, index, word):
@@ -543,13 +544,18 @@ class Document:
             SuperUser.applyTabooList(SuperUser)
             self._versionHistory.append(
                 (len(self._versionHistory), "UPDATE", self._documentBody.copy(), User._username, timeStamp()))
+            saveDocuments()
         return
 
+    #Suggested usage globals()[documentname].denyInvitation(globals()[globals()[documentname]._owner],globals()[username])
     def denyInvitation(self, Owner, User):
         if (self._documentName, User._username) in Owner._userDocumentRequests:
             del Owner._userDocumentRequests[(Owner._userDocumentRequests.index((self._documentName, User._username)))]
+            saveDocuments()
+            saveUsers()
         return
 
+    #Suggested usage globals()[documentname].acceptInvitation(globals()[globals()[documentname]._owner],globals()[username])
     def acceptInvitation(self, Owner, User):
         if (self._documentName, User._username) in Owner._userDocumentRequests:
             del Owner._userDocumentRequests[(Owner._userDocumentRequests.index((self._documentName, User._username)))]
@@ -561,6 +567,8 @@ class Document:
         try:
             if user._username == self._owner:
                 self._privacy = self.privacies[index]
+                saveDocuments()
+                saveUsers()
         except:
             return
 
@@ -667,7 +675,25 @@ def printDocumentVersionHistory(document):
 
 
 # make sure to make constraints true for doning stuff that uses a user if they are blocked.
-
-su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
 # loadUsers()
+# make sure to make constraints true for doning stuff that uses a user if they are blocked.
+# su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
+# ou = OrdinaryUser("ou", ["Ordinary", "User"], "password", ["Studying", "Writing", "Acting"])
+# open0 = Document("open0", su)
+# open1 = Document("open1", ou)
+# rest0 = Document("rest0", su)
+# rest1 = Document("rest1", ou)
+# shared0 = Document("shared0", su)
+# shared1 = Document("shared1", ou)
+# private0 = Document("private0", su)
+# private1 = Document("private1", ou)
+# open0.setPrivacy(su, 0) #open
+# open1.setPrivacy(ou, 0)
+# rest0.setPrivacy(su, 1) #restricted
+# rest1.setPrivacy(ou, 1)
+# shared0.setPrivacy(su, 2) #shared
+# shared1.setPrivacy(ou, 2)
+# private0.setPrivacy(su, 3) #private
+# private1.setPrivacy(ou, 3)
+# saveInformation()
 loadInformation()
