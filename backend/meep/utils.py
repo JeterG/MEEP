@@ -61,16 +61,18 @@ def validateRegistration(username, password):
 
 def editedDoc(username):
     sortedDocs = []
-    print(allDocuments[5]._versionHistory)
+    print(allDocuments[8]._versionHistory)
     for doc in allDocuments:
         foundTup = False
         for tuple in reversed(doc._versionHistory):
-            print(doc._id, tuple[3], tuple[4])
+            # print(doc._id, tuple[3], tuple[4])
             if (tuple[3] == username) and (not foundTup):
                 sortedDocs.append((doc._id, tuple[4]))
                 foundTup = True
-    sorted(sortedDocs, key=lambda x: x[1])
-    sortedDocs = sortedDocs[:3]
+    sortedDocs = sorted(sortedDocs, key=lambda x: x[1])
+    print(sortedDocs)
+    sortedDocs = sortedDocs[-3:]
+    print(sortedDocs)
     returnDocs = []
     for a in sortedDocs:
         b = getDocFromID(a[0])

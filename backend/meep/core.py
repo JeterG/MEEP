@@ -627,3 +627,24 @@ def printDocumentVersionHistory(document):
             print("\t\t\t\t\t\tversion = ", tuple[0],"|operation = ",tuple[1],"|By who = ",tuple[3],"|when = ",tuple[4])
             print(tuple[2])
     return
+
+# su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
+# ou = OrdinaryUser("ou", ["Ordinary", "User"], "password", ["Studying", "Writing", "Acting"])
+# open0 = Document("open0", su)
+# open1 = Document("open1", ou)
+# rest0 = Document("rest0", su)
+# rest1 = Document("rest1", ou)
+# shared0 = Document("shared0", su)
+# shared1 = Document("shared1", ou)
+# private0 = Document("private0", su)
+# private1 = Document("private1", ou)
+# open0.setPrivacy(su, 0) #open
+# open1.setPrivacy(ou, 0)
+# rest0.setPrivacy(su, 1) #restricted
+# rest1.setPrivacy(ou, 1)
+# shared0.setPrivacy(su, 2) #shared
+# shared1.setPrivacy(ou, 2)
+# private0.setPrivacy(su, 3) #private
+# private1.setPrivacy(ou, 3)
+# saveInformation()
+loadInformation()

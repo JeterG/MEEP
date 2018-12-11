@@ -39,7 +39,7 @@ def home():
     username = request.args.get('name')
     # Map object properties to a Python dictionary for JSON conversion
     readDocs = editedDoc(username)
-    for doc in readDocs:
+    for doc in reversed(readDocs):
         docData = createDocFromObj(doc)
         returnDocs.append(docData)
     # print(returnDocs)
