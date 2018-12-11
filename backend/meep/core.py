@@ -12,7 +12,9 @@ allUsers = []
 allComplaints = []
 
 
-def searchByName(user, name):
+
+# Suggested Usage searchByName(globlas()[username],name)
+def searchByName(user, name):  # user is a user object, name is a string
     available = []
     if user._membership != "GUEST":
         for x in allUsers:
@@ -25,7 +27,8 @@ def searchByName(user, name):
     return (available)
 
 
-def searchByInterest(user, interest):
+# Suggested Usage searchByInterest(globals()[username],interest)
+def searchByInterest(user, interest):  # user is a user object, interest is a string
     available = []
     if user._membership != "GUEST":
         for x in allUsers:
@@ -35,6 +38,7 @@ def searchByInterest(user, interest):
     return (available)
 
 
+# called automatically by mutation functions
 def saveUsers():
     global allUsers
     directory = cwd + "/meep/system/users.p"
@@ -44,6 +48,7 @@ def saveUsers():
     return
 
 
+# called automatically by mutation functions
 def saveDocuments():
     global allDocuments
     directory = cwd + "/meep/system/documents.p"
@@ -53,6 +58,7 @@ def saveDocuments():
     return
 
 
+# called automatically by mutation functions
 def saveTabooList():
     global tabooList
     directory = cwd + "/meep/system/taboo.p"
@@ -62,6 +68,7 @@ def saveTabooList():
     return
 
 
+# called automatically by mutation functions
 def saveComplaints():
     global allComplaints
     directory = cwd + "/meep/system/complaints.p"
@@ -71,6 +78,7 @@ def saveComplaints():
     return
 
 
+# used in loadInformation()
 def loadComplaints():
     global allComplaints
     directory = cwd + "/meep/system/complaints.p"
@@ -82,6 +90,7 @@ def loadComplaints():
     return
 
 
+# used in loadInformation
 def loadUsers():
     global allUsers
     directory = cwd + "/meep/system/users.p"
@@ -93,6 +102,7 @@ def loadUsers():
     return
 
 
+# used in loadInformation
 def loadDocuments():
     directory = cwd + "/meep/system/documents.p"
     if (os.path.exists(directory)):
@@ -105,6 +115,7 @@ def loadDocuments():
     return
 
 
+# used in loadInformation
 def loadTabooList():
     global tabooList
     directory = cwd + "/meep/system/taboo.p"
@@ -114,6 +125,7 @@ def loadTabooList():
     return
 
 
+# called automatically by mutation functions
 def savePending():
     global pending
     directory = cwd + "/meep/system/pending.p"
@@ -123,6 +135,7 @@ def savePending():
     return
 
 
+# used in loadInformation
 def loadPending():
     global pending
     directory = cwd + "/meep/system/pending.p"
@@ -130,6 +143,7 @@ def loadPending():
     pending = pickle.load(file_pending)
 
 
+# called automatically by mutation functions
 def loadInformation():
     loadTabooList()
     loadUsers()
@@ -139,6 +153,7 @@ def loadInformation():
     return
 
 
+# called automatically by mutation functions
 def saveInformation():
     saveUsers()
     saveDocuments()
@@ -148,7 +163,8 @@ def saveInformation():
     return
 
 
-def searchOwnedDocuments(User, word):
+# Suggested Usage searchOwnedDocuments(globals()[username],word)
+def searchOwnedDocuments(User, word):  # user is a user object that exists, word is a string
     available = []
     for document in User._ownedDocuments:
         if word.upper() in [c.upper() for c in document._documentBody]:
@@ -164,10 +180,12 @@ def blocked(User):  # Blocked function to check whether a user can do anything o
         return False
 
 
+# Used for keeping track of timing where its important
 def timeStamp():
     return (str(date.today()) + " " + str(datetime.now().strftime("%X")))
 
 
+# word should be a string it will be added to a list for pending taboo words if it is not
 def suggestTaboo(word):
     if word in [x.upper() for x in tabooList]:
         return
@@ -186,7 +204,9 @@ def searchDocumentByPrivacy(privacy):  # returns a list of documents that have s
     return available
 
 
+# Suggested usage fileComplaintDocument(globals()[document._documentName],globals()[username],globals()[document._owner],problem)
 def fileComplaintDocument(Document, victim, target, Problem):  # helper Function
+    # problem is a string that has the problem the target is the owner of hte doucment
     if len(allComplaints) == 0:
         id = 0
     else:
@@ -196,7 +216,9 @@ def fileComplaintDocument(Document, victim, target, Problem):  # helper Function
     globals()[Document._owner].addComplaint(((globals()["Complaint_" + str(id)])))
 
 
-def fileComplaintUser(victim, target, problem):
+# Suggested Usage fileComplaint(globals()[username],globals()[targetusername],problem)
+def fileComplaintUser(victim, target,
+                      problem):  # problem is a string that is the problem and the target is the user who the username is complaining about
     if len(allComplaints) == 0:
         id = 0
     else:
@@ -205,10 +227,30 @@ def fileComplaintUser(victim, target, problem):
     SuperUser.addComplaint(SuperUser, globals()["Complaint_" + str(id)])
 
 
+def processComplaintDocuments(user):
+    # print("complaints", user._complaints)
+    Print(su)
+    if user.__class__ != "<class 'core.GuestUser'>":
+        for complaint in user._complaints:
+            if complaint._complaintAbout._username in complaint._Document._users:
+                if complaint._complaintAbout._username != complaint._Document._owner:
+                    complaint._Document._users.remove(complaint._complaintAbout._username)
+                    complaint._Document._complaintHistory.append((complaint, timeStamp()))
+        del user._complaints[:]
+        saveUsers()
+        saveDocuments()
+
+
+
+
 class SuperUser:
-    _complaintsusers = []
+    _complaintsUsers = []
     _suggestions = -1
 
+    # Suggested usage globals()[username]=Superuser(username,name,password,interests)
+    # username is a string
+    # name is a list with 2 elements both string
+    # interests is a list of any number of elements all strings
     def __init__(self, username, name, password, interests):
         self._membership = str.upper("Super")
         self._username = username
@@ -228,12 +270,15 @@ class SuperUser:
         allUsers.append(self)
         return
 
+    # helper function
     def addComplaint(self, complaint):
         if complaint.__class__ == ComplaintDocuments:
             self._complaints.append(complaint)
         else:
-            self._complaintsusers.append(complaint)
+            self._complaintsUsers.append(complaint)
+            saveUsers()
 
+    # helper function
     def promote(self, user):
         if str.upper(user._membership) == "GUEST":
             user._firstName = user._application[0][0]
@@ -244,14 +289,20 @@ class SuperUser:
             user._ownedDocuments = []
             user._complaints = []
             user.__class__ = OrdinaryUser
+            user._userDocumentRequests = []
+            user._requestPromotion = 0
+            saveUsers()
             return
         elif str.upper(user._membership) == "ORDINARY":
             user._membership = "SUPER"
             user.__class__ = SuperUser
+            user._requestPromotion = 0
+            saveUsers()
             return
         else:
             return
 
+    # helper function
     def demote(self, User):
         if str.upper(User._membership) == "ORDINARY":
             User._membership = "GUEST"
@@ -266,9 +317,14 @@ class SuperUser:
         else:
             return
 
-    def processNextComplaintUsers(self):
-        return (self._complaintsusers.pop(0))  # returns the next complaint about a user
+    # Suggested usage globals()[username].processNextComplaintUsers() followed by saveComplaints() and saveUsers()
+    #       returns the complaint about a user at the top of the SuperUser._complaintsUsers
+    def processNextComplaintUsers(self):  # Have to call saveComplaints after this fuction is called.
+        return (self._complaintsUsers.pop(0))  # returns the next complaint about a user
 
+    # suggested usage SuperUser.updateMembership(SuperUser,user)
+    #       or if you are using a specific superuser than:
+    #                globals()[username].updateMembership(globals()[username],user)
     def updateMembership(self, User):
         if (User._requestPromotion == 1):
             self.promote(User)
@@ -277,6 +333,7 @@ class SuperUser:
         else:
             return
 
+    # helper function
     def updateTabooList(self, word):  # Check if the word is already in the taboo list,
         # otherwise add it to the list and remove it from all documents
         # tabooList=[x.upper() for x in tabooList]
@@ -286,6 +343,7 @@ class SuperUser:
             tabooList.append(word.upper())
         self.applyTabooList()
 
+#Suggested usage SuperUser.resolveSuggestions(SuperUser) or globals()[username].resolveSuggestions(globals()[username])
     def resolveSuggestions(self):  # add suggested taboo words to the taboo list
         global pending
         if self._suggestions is -1:
@@ -295,7 +353,12 @@ class SuperUser:
                 self.updateTabooList(word)
             del pending[:]
             self._suggestions = -1
+            self.applyTabooList()
+            savePending()
+            saveUsers()
 
+
+#helper function to apply taboolist to all documents
     def applyTabooList(
             self):  # update all the taboo words from all existing documents and block users who added the word
         for document in allDocuments:
@@ -306,6 +369,9 @@ class SuperUser:
         return
 
 
+
+
+#helper class
 class ComplaintDocuments:  # Complaints about documents to the owner
     def __init__(self, id, Victim, Target, Owner, Problem,
                  Document):  # Both Complain and target are User types SU,OU,GU
@@ -318,7 +384,7 @@ class ComplaintDocuments:  # Complaints about documents to the owner
         self._problem = Problem
         allComplaints.append(self)
 
-
+#helper class
 class ComplaintUsers:  # complaints handlded by SU's about other users
     def __init__(self, id, Victim, Target, Problem):
         self._id = id
@@ -329,7 +395,8 @@ class ComplaintUsers:  # complaints handlded by SU's about other users
 
 
 class GuestUser:
-    def __init__(self, username, password):
+    #Suggested Usage globals()[username]=GuestUser(username,password)
+    def __init__(self, username, password):#username is a string, password is a string
         self._membership = str.upper("GUEST")
         self._username = username
         self._password = password
@@ -345,14 +412,18 @@ class GuestUser:
         saveUsers()
         return
 
-    def applyToOrdinary(self, name, interests):
+#suggested usage globals()[username].applyToOrdinary(name,interests)
+    def applyToOrdinary(self, name, interests):#name is list with 2 string elemnts
+                                                # interests is a list of string elements
         self._application = [name, interests]
         self._requestPromotion = 1
         return
 
 
 class OrdinaryUser:
-    def __init__(self, username, name, password, interests):
+    #suggested usage globals()[username]=OrdinaryUser(username,name,password,interests)
+    def __init__(self, username, name, password, interests):# interests is a list of string elements
+                                                            #name is list with 2 string elements, username and password are strings
         self._membership = str.upper("ORDINARY")
         self._username = username
         self._blocked = False
@@ -371,20 +442,18 @@ class OrdinaryUser:
         allUsers.append(self)
         return
 
+#helper functions
+    def addComplaint(self, complaint):
+        if complaint.__class__ == ComplaintDocuments:
+            self._complaints.append(complaint)
+            saveUsers()
 
-def processComplaintDocuments(user):
-    print("complaints", user._complaints)
-    for complaint in user._complaints:
-        if complaint._complaintAbout._username in complaint._Document._users:
-            if complaint._complaintAbout._username != complaint._Document._owner:
-                complaint._Document._users.remove(complaint._complaintAbout._username)
-                complaint._Document._complaintHistory.append((complaint, timeStamp()))
-    del user._complaints[:]
 
 
 class Document:
     privacies = {0: "OPEN", 1: "RESTRICTED", 2: "SHARED", 3: "PRIVATE"}
-
+    #Suggested Usage globals()[documentname]=Document(documentname,user)
+    #document name is a string and user is the user who is the owner
     def __init__(self, documentName, User):
         self._privacy = self.privacies[3]
         self._lock = False
@@ -406,6 +475,7 @@ class Document:
         allDocuments.append(self)
         return
 
+#Suggested Usage globals()[documentname].unlockDocument(globals()[username])
     def unlockDocument(self,
                        User):  # Unlock the document, only the super user can unlock the document regardless of who locked it
         # otherwise document can be unlocked by whoever locked it or the owner
@@ -429,6 +499,7 @@ class Document:
             else:  # Document isn't locked
                 return
 
+#Suggested usage globals()[documentname].lockDocument(globals()[username])
     def lockDocument(self, User):  # lock the document that can be done by anyone
         if (self._lock == False):
             self._lock = True
@@ -437,17 +508,7 @@ class Document:
         else:
             return
 
-    def invite(self, Owner, User):
-        if (Owner._username == self._owner):
-            if (self._documentName, User._username) in Owner._userDocumentRequests:
-                self._users.append(User._username)
-                Owner._userDocumentRequests.remove((self._documentName, User._username))
-                return
-            else:
-                return
-        else:
-            return
-
+#Suggested usage globals()[documentName].requestpermission(globals()[documentname._owner],globals()[username])
     def requestPermission(self, Owner, User):
         if (Owner._username == self._owner):
             if User._username not in self._users:
@@ -456,14 +517,17 @@ class Document:
                 return
         else:
             return
-
-    def add(self, Word, User):
-        self._documentBody.append(Word)
-        su.applyTabooList()
+#suggested usage globals()[documentname].add(word,globals()[username])
+    #word is a string and the user is the user who is editing
+    def add(self, index, Word, User):
+        self._documentBody.insert(index,Word)
+        SuperUser.applyTabooList(SuperUser)
         self._versionHistory.append(
             (len(self._versionHistory), "ADD", self._documentBody.copy(), User._username, timeStamp()))
         return
 
+    # suggested usage globals()[documentname].delete(index,globals()[username])
+    # word is a string and the user is the user who is editing
     def delete(self, index, User):
         if len(self._documentBody) >= index:
             del self._documentBody[index]
@@ -472,10 +536,11 @@ class Document:
         else:
             return
 
+    #Suggested usage, globals()[documentname].update(globals()[globals()[documentname]._owner],index,word)
     def update(self, User, index, word):
         if len(self._documentBody) >= index:
             self._documentBody[index] = word
-            su.applyTabooList()
+            SuperUser.applyTabooList(SuperUser)
             self._versionHistory.append(
                 (len(self._versionHistory), "UPDATE", self._documentBody.copy(), User._username, timeStamp()))
         return
@@ -521,18 +586,14 @@ def Print(user):
             print("\t\t_password = ", user._password)
             print("\t\t_suggestions = ", user._suggestions)
             print("\t\t_complaints = ", user._complaints)
-            print("\t\t_complaintusers = ", user._complaintsusers, "\n")
+            print("\t\t_complaintsUsers = ", user._complaintsUsers, "\n")
 
         elif user._membership == "GUEST":
             print("Object = ", user)
             print("\t\t_username = ", user._username)
             print("\t\t_membership = ", user._membership)
-            print("\t\t_firstName = ", user._firstName)
-            print("\t\t_lastName = ", user._lastName)
             print("\t\t_blocked = ", user._blocked)
             print("\t\t_requestPromotion  = ", user._requestPromotion)
-            print("\t\t_userDocumentRequests = ", user._userDocumentRequests)
-            printUserDocumentRequests(user._userDocumentRequests)
             print("\t\t_id = ", user._id)
             print("\t\t_application  = ", user._application, "\n")
 
@@ -546,7 +607,7 @@ def Print(user):
             print("\t\t_interests = ", user._interests)
             print("\t\t_requestPromotion  = ", user._requestPromotion)
             print("\t\t_userDocumentRequests = ", user._userDocumentRequests)
-            printUserDocumentRequests(user._userDocumentRequests)
+            printUserDocumentRequests(user)
             print("\t\t_ownedDocuments = ", user._ownedDocuments)
             print("\t\t_id = ", user._id)
             print("\t\t_id = ", user._password)
@@ -586,20 +647,26 @@ def Print(user):
     else:
         print(user)
 
+
 def printUserDocumentRequests(user):
-    if len(user._userDocumentRequests)==0:
+    if len(user._userDocumentRequests) == 0:
         return
     else:
         print("\t\t\t\t\t\t\t\tDocuments | Users")
         for request in user._userDocumentRequests:
-            print("\t\t\t\t\t\t\t\t",request[0],"\t|\t",request[1])
+            print("\t\t\t\t\t\t\t\t", request[0], "\t|\t", request[1])
     return
+
+
 def printDocumentVersionHistory(document):
     for tuple in document._versionHistory:
-            print("\t\t\t\t\t\tversion = ", tuple[0],"|operation = ",tuple[1],"|By who = ",tuple[3],"|when = ",tuple[4])
+        print("\t\t\t\t\t\tversion = ", tuple[0], "|operation = ", tuple[1], "|By who = ", tuple[3], "|when = ",
+              tuple[4])
+        print(tuple[2])
     return
 
-#make sure to make constraints true for doning stuff that uses a user if they are blocked.
+
+# make sure to make constraints true for doning stuff that uses a user if they are blocked.
 
 su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
-print("Created superuser", dir(su), allUsers[0]);
+loadUsers()

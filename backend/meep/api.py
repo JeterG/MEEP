@@ -33,6 +33,18 @@ def post():
         data = {'message' : 'registration failed'}
         return jsonify(data), 403
 
+@app.route('/api/home', methods=["GET"])
+def home():
+    returnDocs = []
+    username = request.args.get('name')
+    # Map object properties to a Python dictionary for JSON conversion
+    readDocs = editedDoc(username)
+    for doc in reversed(readDocs):
+        docData = createDocFromObj(doc)
+        returnDocs.append(docData)
+    # print(returnDocs)
+    return jsonify(returnDocs);
+
 @app.route('/api/users', methods=["GET"])
 def users():
     returnUsers = []
