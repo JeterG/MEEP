@@ -179,7 +179,7 @@ def searchOwnedDocuments(User, word):  # user is a user object that exists, word
 def blocked(User):  # Blocked function to check whether a user can do anything or if they have to fix a document
     if (User._blocked == True):
         print("Update document before you continue")
-        return True
+        return ("Update Document before you continue")
     else:
         return False
 
@@ -271,6 +271,7 @@ class SuperUser:
             self._id = allUsers[-1]._id + 1
         self._password = password
         self._complaints = []
+        self._reasonBlocked = []
         allUsers.append(self)
         saveUsers()
         return
@@ -376,6 +377,7 @@ class SuperUser:
                 dc.append((word.upper(),name))
             for word1,name1 in dc:
                 if word1.upper() in [x.upper() for x in tabooList]:
+                    globals()[name1]._reasonBlocked=[(document._documentName,dc.index((word1,name1)))]
                     document._documentBody[dc.index((word1,name1))] = ("UNK",name1)
                     globals()[name1]._blocked=True
         saveDocuments()
@@ -423,6 +425,7 @@ class GuestUser:
         else:
             self._id = allUsers[-1]._id + 1
         self._application = []
+        self._reasonBlocked = []
         allUsers.append(self)
         saveUsers()
         return
@@ -455,6 +458,7 @@ class OrdinaryUser:
             self._id = allUsers[-1]._id + 1
         self._password = password
         self._complaints = []
+        self._reasonBlocked = []
         allUsers.append(self)
         saveUsers()
         return
@@ -603,6 +607,7 @@ def Print(user):
             print("\t\t_firstName = ", user._firstName)
             print("\t\t_lastName = ", user._lastName)
             print("\t\t_blocked = ", user._blocked)
+            print("\t\t_reasonBlocked = ", user._reasonBlocked)
             print("\t\t_interest = ", user._interests)
             print("\t\t_requestPromotion  = ", user._requestPromotion)
             print("\t\t_userDocumentRequests = ", user._userDocumentRequests)
@@ -619,6 +624,7 @@ def Print(user):
             print("\t\t_username = ", user._username)
             print("\t\t_membership = ", user._membership)
             print("\t\t_blocked = ", user._blocked)
+            print("\t\t_reasonBlocked = ", user._reasonBlocked)
             print("\t\t_requestPromotion  = ", user._requestPromotion)
             print("\t\t_id = ", user._id)
             print("\t\t_application  = ", user._application, "\n")
@@ -630,6 +636,7 @@ def Print(user):
             print("\t\t_firstName = ", user._firstName)
             print("\t\tlastName = ", user._lastName)
             print("\t\t_blocked = ", user._blocked)
+            print("\t\t_reasonBlocked = ",user._reasonBlocked)
             print("\t\t_interests = ", user._interests)
             print("\t\t_requestPromotion  = ", user._requestPromotion)
             print("\t\t_userDocumentRequests = ", user._userDocumentRequests)
@@ -695,8 +702,8 @@ def printDocumentVersionHistory(document):
 # make sure to make constraints true for doning stuff that uses a user if they are blocked.
 # loadUsers()
 # make sure to make constraints true for doning stuff that uses a user if they are blocked.
-# su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
-# ou = OrdinaryUser("ou", ["Ordinary", "User"], "password", ["Studying", "Writing", "Acting"])
+su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
+ou = OrdinaryUser("ou", ["Ordinary", "User"], "password", ["Studying", "Writing", "Acting"])
 # open0 = Document("open0", su)
 # open1 = Document("open1", ou)
 # rest0 = Document("rest0", su)
