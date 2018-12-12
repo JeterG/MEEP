@@ -52,14 +52,14 @@ class Taboos extends React.Component {
         <Header />
           <div>
             <h3>Taboo Words</h3>
-              <ul className="collection">
-                <li className="collection-item avatar">
-                  <i className="material-icons circle">close</i>
-                    <span className="title">
-                      <div id="tabooList">{ tabooList }</div>
-                    </span>
-                </li>
-              </ul> 
+            <ul className="collection">
+              <li className="collection-item avatar">
+                <i className="material-icons circle">close</i>
+                <span className="title">
+                  <div id="tabooList">{ tabooList }</div>
+                </span>
+              </li>
+            </ul>
           </div>
         <div>
           <h3>Suggest Taboo</h3>

@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { API_BASE_URL } from '../Config';
 import axios from 'axios';
-
 import Header from './Header';
 
-class DocumentDirectory extends React.Component {
+class SearchDocument extends React.Component {
   state = {
     docs: null
   }
@@ -17,7 +16,7 @@ class DocumentDirectory extends React.Component {
     var userData = getLocal("user")
     var {name, type} = userData;
 
-    axios.get(API_BASE_URL + "/docs", {
+    axios.get(API_BASE_URL + "/searchDocument", {
       params: {
         name: name,
         type: type
@@ -30,6 +29,14 @@ class DocumentDirectory extends React.Component {
     })
   }
 
+  handleSubmit = (e) => {
+    e.preventDefault(); // prevent default behavior
+
+    // create a get request
+    // redirect page to results
+
+  }
+// guest users can ONLY search available documents. THAT IS IT!!
   render() {
     var { docs } = this.state;
     var items = docs ? docs.map(doc => {
@@ -53,15 +60,29 @@ class DocumentDirectory extends React.Component {
 
     return (
       <div>
-      <Header/>
-      <hr />
-      <h3>
-          <div className="col s6">Doc Directory</div>
-          </h3>
-          <div className="col s12">{items}</div>
+        <Header/>
+        <hr />
+        <h3>
+          <div className="col s6">Search Documents</div>
+        </h3>
+        <div className="search-container">
+          <form onSubmit={ this.handleSubmit }>
+            <div className="row">
+              <div className="input-field col s12">
+                <i className="material-icons prefix">search</i>
+                <input id="search" type="text" className="validate" />
+                <label htmlFor="search">Search...</label>
+              </div>
+            </div>
+            <button className="btn waves-effect waves-light" type="submit" name="action">Submit
+              <i className="material-icons right">search</i>
+            </button>
+          </form>
+        </div>
+        <div className="col s12">{items}</div>
       </div>
     )
   }
 }
 
-export default DocumentDirectory;
+export default SearchDocument;

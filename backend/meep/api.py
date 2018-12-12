@@ -56,6 +56,20 @@ def users():
     return jsonify(returnUsers)
 
 @app.route('/api/docs', methods=["GET"])
+def my_documents():
+    returnDocs = []
+    username = request.args.get('name')
+    membership = request.args.get('type')
+
+    # Map object properties to a Python dictionary for JSON conversion
+    readDocs = viewableDoc(username, membership)
+    for doc in readDocs:
+        docData = createDocFromObj(doc)
+        returnDocs.append(docData)
+    return jsonify(returnDocs);
+    return jsonify("null")
+
+@app.route('/api/searchDocument', methods=["GET"])
 def documents():
     returnDocs = []
     username = request.args.get('name')

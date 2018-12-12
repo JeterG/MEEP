@@ -51,7 +51,8 @@ class Header extends React.Component {
                 {displayNewDoc}
                 <li><Link to="/docs">My Documents</Link></li>
                 <li><Link to="/taboos">Taboo List</Link></li>
-                <li><Link to="/search">Search</Link></li>
+                <li><Link to="/searchUsers">Users</Link></li>
+                <li><Link to="/searchDocument">Documents</Link></li>
                 <li><a className="waves-effect waves-light btn" onClick={this.logOut}>Log Out
                   <i className="material-icons right">forward</i></a>
                 </li>
