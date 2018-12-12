@@ -110,6 +110,15 @@ def get_doc(doc_id):
     else:
         return jsonify({"message" : "Invalid document ID"}), 403
 
+@app.route('/api/docs/<int:doc_id>/vhistory', methods=["GET"])
+def get_vhistory(doc_id):
+    docObj = getDocFromID(doc_id)
+    if docObj:
+        return jsonify(docObj._versionHistory);
+    else:
+        # print(allDocuments[0]._id);
+        return jsonify({"message" : "doc_id not found"}), 403
+
 @app.route('/api/docs/<doc_id>', methods=["POST"])
 def post_doc(doc_id):
     # Save a specific document to the server

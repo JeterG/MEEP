@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import EditorHeader from './EditorHeader';
 import EditorLine from './EditorLine';
+import VersionHistory from './VersionHistory';
 
 import {API_BASE_URL} from '../../Config.js';
 import axios from 'axios';
@@ -354,6 +355,8 @@ class Editor extends React.Component {
           <button className="btn waves-effect waves-light">
             <i className="material-icons left">priority_high</i>Complain</button>
         </div>
+
+        <VersionHistory doc_id={this.props.doc.doc_id} />
       </div>
     )
   }
