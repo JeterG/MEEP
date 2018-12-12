@@ -28,11 +28,19 @@ class Applications extends React.Component {
         // another array. 
         return (
           <div key={app[0].id}>
-            <div><b>{app[0].name}</b> wants to be promoted to Ordinary User.</div>
-            <div>Their name is {app[1][0][0] + " " + app[1][0][1]}</div>
-            <div>Their interests are {app[1][1]}</div>
-            <button>Approve</button>
-            <button>Reject</button>
+            <div style={{fontSize: 20}}><b>{app[0].name}</b> wants to be promoted to Ordinary User.</div>
+            <div style={{fontSize: 20}}>Their name is {app[1][0][0] + " " + app[1][0][1]}</div>
+            <div style={{fontSize: 20}}>Their interests are {app[1][1]}</div>
+            <button className="btn waves-effect waves-light">
+              <i className="material-icons left">thumb_up</i>
+              Approve
+            </button>
+            <button className="btn waves-effect waves-light">
+              <i className="material-icons left">thumb_down</i>
+              Reject
+            </button>
+{/*             <button>Approve</button>
+            <button>Reject</button> */}
           </div>
         )
       }) : null;
