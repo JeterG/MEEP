@@ -19,7 +19,8 @@ class SearchDocument extends React.Component {
     axios.get(API_BASE_URL + "/searchDocument", {
       params: {
         name: name,
-        type: type
+        type: type,
+        funct: "all"
       }
     })
     .then(response => {
@@ -32,14 +33,25 @@ class SearchDocument extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault(); // prevent default behavior
 
-    // create a get request
-    // redirect page to results
-
+    var userData = getLocal("user");
+    axios.get(API_BASE_URL + "/searchDocument", {
+      params: {
+        name: userData.name,
+        type: userData.type,
+        funct: "some",
+        search : e.target[0].value
+      }
+    })
+    .then(response => {
+      console.log(response.data);
+      if (response.data.length)
+        this.setState({docs: response.data});
+    })
   }
 // guest users can ONLY search available documents. THAT IS IT!!
   render() {
-    var { docs } = this.state;
-    var items = docs ? docs.map(doc => {
+    var items = this.state.docs ?
+    this.state.docs.map(doc => {
       return (
       <div className="collection" key={doc.doc_id}>
         <div className="collection-item avatar">
@@ -54,7 +66,7 @@ class SearchDocument extends React.Component {
       </div>
       );
     })
-    : <h3>No documents found</h3>;
+    : <p>No results found.</p>;
 
     return (
       <div>

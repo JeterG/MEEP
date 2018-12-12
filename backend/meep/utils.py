@@ -140,6 +140,14 @@ def contributorDoc(username):
             returnDocs.append(docs)
     return returnDocs
 
+def searchViewableDoc(username, membership, search):
+    returnDocs = []
+    readDocs = viewableDoc(username, membership)
+    for doc in readDocs:
+        if doc._documentName == search:
+            returnDocs.append(doc)
+    return returnDocs
+
 def mydocs(username, membership):
     '''Return documents that user owns and shared'''
     ownedDocs = globals()[username]._ownedDocuments

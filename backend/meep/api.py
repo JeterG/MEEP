@@ -74,12 +74,18 @@ def documents():
     returnDocs = []
     username = request.args.get('name')
     membership = request.args.get('type')
-
-     # Map object properties to a Python dictionary for JSON conversion
-    readDocs = viewableDoc(username, membership)
-    for doc in readDocs:
-        docData = createDocFromObj(doc)
-        returnDocs.append(docData)
+    if request.args.get('funct') == "all":
+        # Map object properties to a Python dictionary for JSON conversion
+        readDocs = viewableDoc(username, membership)
+        for doc in readDocs:
+            docData = createDocFromObj(doc)
+            returnDocs.append(docData)
+    else:
+        search = request.args.get('search')
+        readDocs = searchViewableDoc(username, membership, search)
+        for doc in readDocs:
+            docData = createDocFromObj(doc)
+            returnDocs.append(docData)
     return jsonify(returnDocs);
 
 @app.route('/api/searchUser', methods=["GET"])
