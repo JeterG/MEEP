@@ -12,11 +12,16 @@ class Document extends React.Component {
 
   componentDidMount() {
     var { doc_id } = this.props.match.params;
+    var { v_id } = this.props.match.params;
     var user = getLocal('user');
 
     if (Number.isInteger(Number(doc_id))) {
       // GET doc from API request
-      this.getDoc(doc_id);
+      if (v_id) {
+        this.getOldDoc(doc_id, v_id);
+      } else {
+        this.getDoc(doc_id);
+      }
     } else if (doc_id == "new") {
       // Create new doc and get its ID
       var payload = {
@@ -35,6 +40,17 @@ class Document extends React.Component {
     })
     .catch( error => {
       console.error("Document error: ", error, error.response.data);
+    })
+  }
+
+  getOldDoc = (d_id, v_id) => {
+    axios.get(API_BASE_URL + "/docs/" + d_id + "/v/" + v_id)
+    .then( response => {
+      console.log("got old doc, ", response.data)
+      this.setState({document: response.data})
+    })
+    .catch( error => {
+      console.error("get old doc error, ", error, error.response.data);
     })
   }
 

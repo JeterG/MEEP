@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { API_BASE_URL } from '../../Config.js';
+import { withRouter } from 'react-router-dom';
+import axios from 'axios';
 
 class EditorButtons extends React.Component {
   state = {
@@ -8,13 +11,14 @@ class EditorButtons extends React.Component {
   }
 
   componentDidMount() {
+    console.log("BUTTONS PROPS", this.props);
     var user = getLocal("user");
     var doc = this.props.doc;
-
     // FIGURE THIS OUT
     // should find out if logged in user has been given
     // access to this doc
     var userIsAccepted = true;
+    var isOldVersion = this.props.match.params.v_id;
 
     var initialState = {
       has_access: null,
@@ -24,9 +28,9 @@ class EditorButtons extends React.Component {
 
     var hasFullAccess = (user.name == doc.owner) || (user.type == "super") || userIsAccepted
 
-    if (hasFullAccess && !this.props.oldVersion) {
+    if (hasFullAccess && !isOldVersion) {
       initialState.has_access = true;
-    } else if (hasFullAccess && this.props.oldVersion) {
+    } else if (hasFullAccess && isOldVersion) {
       initialState.historical = true;
     } else {
       initialState.needs_access = true;
@@ -40,7 +44,20 @@ class EditorButtons extends React.Component {
   }
 
   revertHere = (e) => {
-
+    var user = getLocal("user");
+    var submitData = {
+      "user_id" : user.id
+    }
+    var d_id = this.props.doc.doc_id;
+    var v_id = this.props.match.params.v_id;
+    axios.post(API_BASE_URL + "/docs/" + d_id + "/revert/" + v_id, submitData)
+    .then( response => {
+      console.log("Reverted document", response.data.message);
+      window.location.href = "/docs/" + d_id;
+    })
+    .catch( error => {
+      console.error("revert error", error, error.response.data);
+    })
   }
 
   render() {
@@ -48,11 +65,9 @@ class EditorButtons extends React.Component {
     if (this.state.has_access) {
       buttons = (
         <div className="editor-buttons">
-          <button className="btn waves-effect waves-light" onClick={this.props.handleSave}>
-            <i className="material-icons left">save</i>Save</button>
           <button id="lock-btn" className="btn waves-effect waves-light" onClick={this.props.handleLock}>
-            <i className="material-icons left">lock</i>
-              { this.props.locked ? "Unlock" : "Lock" }</button>
+            <i className="material-icons left">{ this.props.locked ? "save" : "lock"}</i>
+              { this.props.locked ? "Save" : "Lock" }</button>
           <button className="btn waves-effect waves-light" onClick={this.props.lodgeComplaint}>
           <i className="material-icons left">priority_high</i>Complain</button>
         </div>
@@ -89,4 +104,4 @@ class EditorButtons extends React.Component {
   }
 }
 
-export default EditorButtons;
+export default withRouter(EditorButtons);

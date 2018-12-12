@@ -116,6 +116,16 @@ def get_doc(doc_id):
     else:
         return jsonify({"message" : "Invalid document ID"}), 403
 
+@app.route('/api/docs/<int:doc_id>/v/<int:v_id>', methods=["GET"])
+def get_old_doc(doc_id, v_id):
+    # Retrieve a specific document from the server
+    doc = getDocFromID(int(doc_id))
+    print(doc, doc_id, int(doc_id))
+    if doc:
+        return jsonify(createOldDocFromObj(doc, v_id))
+    else:
+        return jsonify({"message" : "Invalid document ID"}), 403
+
 @app.route('/api/docs/<int:doc_id>/vhistory', methods=["GET"])
 def get_vhistory(doc_id):
     docObj = getDocFromID(doc_id)
@@ -160,6 +170,7 @@ def post_doc(doc_id):
                 return jsonify({"message" : "Invalid ID"}), 403
     else:
         return jsonify({"message" : "Insufficient permissions"}), 401
+
 
 @app.route('/api/docs/<int:doc_id>/unlock', methods=["POST"])
 def unlockDoc(doc_id):
@@ -256,6 +267,20 @@ def rename_doc(doc_id):
     if docObj:
         docObj._documentName = newTitle
         return jsonify({"message" : "Successful rename"})
+    else:
+        # print(allDocuments[0]._id);
+        return jsonify({"message" : "doc_id not found"}), 403
+
+@app.route('/api/docs/<int:doc_id>/revert/<int:v_id>', methods=["POST"])
+def revert_doc(doc_id, v_id):
+    docObj = getDocFromID(doc_id)
+    user_id = int(request.json.get("user_id"))
+
+    user = getUserFromID(user_id)
+
+    if docObj:
+        docObj.revert(user, v_id);
+        return jsonify({"message" : "Successful revert"})
     else:
         # print(allDocuments[0]._id);
         return jsonify({"message" : "doc_id not found"}), 403
