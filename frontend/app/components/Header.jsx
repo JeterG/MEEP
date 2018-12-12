@@ -56,6 +56,7 @@ class Header extends React.Component {
                 <li><Link to="/taboos">Taboo List</Link></li>
                 {displaySearchUser}
                 <li><Link to="/searchDocument">Documents</Link></li>
+                <li><Link to="/notifs">Notifications</Link></li>
                 <li><a className="waves-effect waves-light btn" onClick={this.logOut}>Log Out
                   <i className="material-icons right">forward</i></a>
                 </li>
