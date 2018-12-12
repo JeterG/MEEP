@@ -17,40 +17,41 @@ class SearchUser extends React.Component{
   }
   getAllUsers = () => {
     var userData = getLocal("user");
-    axios.get(API_BASE_URL + "/searchUser")
+    axios.get(API_BASE_URL + "/searchUser", {
+      params: {
+        searchType: this.state.searchType,
+        username: userData.name,
+        funct: "all"
+      }
+    })
     .then(response => {
       console.log(response.data);
       if (response.data.length)
         this.setState({data: response.data});
     })
   }
-  // change = (e) => {
-  //   this.setState({searchType: e.target.value});
-  //   this.getData();
-  // }
-  // getData = () => {
-  //   var userData = getLocal("user");
-  //   axios.get(API_BASE_URL + "/searchUser", {
-  //     params: {
-  //       searchType: this.state.searchType,
-  //       username: userData.name
-  //     }
-  //   })
-  //   .then(response => {
-  //     console.log(response.data);
-  //     if (response.data.length)
-  //       this.setState({data: response.data});
-  //   })
-  // }
 
+  change = (e) => {
+    this.setState({searchType: e.target.value});
+  }
 
   handleSubmit = (e) => {
     e.preventDefault(); // prevent default behavior
 
-    let submitData = {  // pass data to server
-      search : e.target[0].value
-    }
-    //filter
+    var userData = getLocal("user");
+    axios.get(API_BASE_URL + "/searchUser", {
+      params: {
+        searchType: this.state.searchType,
+        username: userData.name,
+        funct: "some",
+        search : e.target[0].value
+      }
+    })
+    .then(response => {
+      console.log(response.data);
+      if (response.data.length)
+        this.setState({data: response.data});
+    })
   }
 
   render() {
@@ -60,12 +61,12 @@ class SearchUser extends React.Component{
         user.interests.map( interest => {
           return <p key={interest}>{interest}</p>
         })
-        : null
-
+        : null;
+      var name = (user.first && user.last) ? <p key={user.first, user.last}>{user.first} {user.last}</p> : null;
       return (
         <div key={user.id}>
           <Link to={"/user/" + user.id}> {user.name}</Link> <br />
-          {interests} <br />
+          {name} {interests} <br />
         </div>
       );
     })

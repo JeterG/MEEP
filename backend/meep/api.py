@@ -85,21 +85,20 @@ def documents():
 @app.route('/api/searchUser', methods=["GET"])
 def get_all_users():
     returnUsers = []
-    readUsers = allUsers
-    for user in readUsers:
-        userData = createUserFromObj(user)
-        returnUsers.append(userData)
+    if request.args.get('funct') == "all":
+        readUsers = allUsers
+        for user in readUsers:
+            userData = createUserFromObj(user)
+            returnUsers.append(userData)
+    else:
+        searchType = request.args.get('searchType')
+        username = request.args.get('username')
+        search = request.args.get('search')
+        readUsers = getUsers(username, searchType, search)
+        for user in readUsers:
+            userData = createUserFromObj(user)
+            returnUsers.append(userData)
     return jsonify(returnUsers)
-# def get_users():
-#     searchType = request.args.get('searchType')
-#     username = request.args.get('username')
-#     returnUsers = []
-#
-#     readUsers = getUsers(username, searchType)
-#     for user in readUsers:
-#         userData = createUserFromObj(user)
-#         returnUsers.append(userData)
-#     return jsonify(returnUsers)
 
 @app.route('/api/docs/<int:doc_id>', methods=["GET"])
 def get_doc(doc_id):

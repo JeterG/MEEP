@@ -6,6 +6,8 @@ def createUserFromObj(userObj):
     return {
         'id': userObj._id,
         'name': userObj._username,
+        'first': userObj._firstName,
+        'last': userObj._lastName,
         'type': str.lower(userObj._membership),
         'interests': userObj._interests,
         'pic': "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
@@ -14,7 +16,7 @@ def createUserFromObj(userObj):
 def createDocFromObj(doc):
     # extract words only from doc body
     words = list(map(lambda x: x[0], doc._documentBody));
-    
+
     return {
         "doc_id" : doc._id,
         "title" : doc._documentName,
