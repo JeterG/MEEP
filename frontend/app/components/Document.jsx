@@ -170,6 +170,7 @@ class Document extends React.Component {
     return (
       <div className="document">
         <Header/>
+        <hr/>
         { display }
       </div>
     )
