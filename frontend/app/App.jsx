@@ -9,7 +9,7 @@ import Taboos from './components/Taboos';
 import UserDirectory from './components/UserDirectory';
 import Document from './components/Document';
 import DocumentDirectory from './components/DocumentDirectory';
-import SearchUsers from './components/SearchUsers';
+import SearchUser from './components/SearchUser';
 import SearchDocument from './components/SearchDocument';
 
 class App extends React.Component {
@@ -25,7 +25,7 @@ class App extends React.Component {
           <Route path="/users" component={UserDirectory} />            {/* Return directory of all public users */}
           <Route path="/users/:u_id" component={DocumentDirectory} />  {/* Display the profile for a given user */}
           <Route path="/taboos" component={Taboos} />       {/* Display the taboo list + suggestion form */}
-          <Route path="/searchUsers" component={SearchUsers} />       {/* Allow users to Search users, documents */}
+          <Route path="/searchUser" component={SearchUser} />       {/* Allow users to Search users, documents */}
           <Route path="/searchDocument" component={SearchDocument} />       {/* Allow users to Search users, documents */}
 
         </div>

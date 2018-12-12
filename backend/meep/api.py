@@ -82,6 +82,25 @@ def documents():
         returnDocs.append(docData)
     return jsonify(returnDocs);
 
+@app.route('/api/searchUser', methods=["GET"])
+def get_all_users():
+    returnUsers = []
+    readUsers = allUsers
+    for user in readUsers:
+        userData = createUserFromObj(user)
+        returnUsers.append(userData)
+    return jsonify(returnUsers)
+# def get_users():
+#     searchType = request.args.get('searchType')
+#     username = request.args.get('username')
+#     returnUsers = []
+#
+#     readUsers = getUsers(username, searchType)
+#     for user in readUsers:
+#         userData = createUserFromObj(user)
+#         returnUsers.append(userData)
+#     return jsonify(returnUsers)
+
 @app.route('/api/docs/<int:doc_id>', methods=["GET"])
 def get_doc(doc_id):
     # Retrieve a specific document from the server
