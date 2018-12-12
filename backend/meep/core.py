@@ -23,14 +23,13 @@ def dispalySharedDocuments(user):
         return available
 
 
-
-
 # Suggested Usage searchByName(globlas()[username],name)
 def searchByName(user, name):  # user is a user object, name is a string
     available = []
     if user._membership != "GUEST":
         for x in allUsers:
-            if ((name.upper() == x._firstName.upper()) or (name.upper() == x._lastName.upper()) or (name.upper()== x._username.upper())):
+            if ((name.upper() == x._firstName.upper()) or (name.upper() == x._lastName.upper()) or (
+                    name.upper() == x._username.upper())):
                 available.append(x)
         return (available)
     return (available)
@@ -212,7 +211,8 @@ def suggestTaboo(User, word):
             savePending()
         #    Add the possible taboo word to a place where the super user add it
 
-#suggested usage searchDocumentByPrivacy(globals()[username],privacy)
+
+# suggested usage searchDocumentByPrivacy(globals()[username],privacy)
 def searchDocumentByPrivacy(User, privacy):  # returns a list of documents that have specific privacy
     available = []
     if blocked(User) == False:
@@ -258,13 +258,15 @@ def approveComplaintDocuments(user, complaint):
     if blocked(user) == False:
         if complaint._complaintAbout._username in complaint._Document._users:
             if complaint._complaintAbout._username != complaint._Document._owner:
-                complaint._Document._complaintHistory.append((complaint, "APPROVED" ,timeStamp()))
+                complaint._Document._complaintHistory.append((complaint, "APPROVED", timeStamp()))
                 saveDocuments()
 
-def ignoreComplaintUsers(user,complaint):
+
+def ignoreComplaintUsers(user, complaint):
     if blocked(user) == False:
         complaint._Document._complaintHistory.append((complaint, "IGNORED", timeStamp()))
         saveDocuments()
+
 
 class SuperUser:
     _complaintsUsers = []
@@ -290,7 +292,7 @@ class SuperUser:
             self._id = allUsers[-1]._id + 1
         self._password = password
         self._complaints = []
-        self._reasonBlocked = ()
+        self._reasonBlocked = []
         allUsers.append(self)
         saveUsers()
         return
@@ -312,7 +314,7 @@ class SuperUser:
             user._lastName = user._application[0][1]
             user._membership = "ORDINARY"
             user._interests = [x.upper() for x in user._application[1]]
-            del user._application [:]
+            del user._application[:]
             user._ownedDocuments = []
             user._complaints = []
             user.__class__ = OrdinaryUser
@@ -363,7 +365,8 @@ class SuperUser:
                 self.demote(User)
             else:
                 return
-    def ignoreTaboo(self,word):
+
+    def ignoreTaboo(self, word):
         if word in pending:
             pending.remove(word)
 
@@ -394,6 +397,7 @@ class SuperUser:
                 return
             else:
                 return pending[0]
+
     # helper function to apply taboolist to all documents
     def applyTabooList(
             self):  # update all the taboo words from all existing documents and block users who added the word
@@ -403,9 +407,11 @@ class SuperUser:
                 dc.append((word.upper(), name))
             for word1, name1 in dc:
                 if word1.upper() in [x.upper() for x in tabooList]:
-                    globals()[name1]._reasonBlocked = (document._documentName, dc.index((word1, name1)))
-                    document._documentBody[dc.index((word1, name1))] = ("UNK", name1)
-                    globals()[name1]._blocked = True
+                    for user in allUsers:
+                        if user._username==name1:
+                            user._reasonBlocked=(document._documentName, dc.index((word1, name1)))
+                            document._documentBody[dc.index((word1, name1))] = ("UNK", name1)
+                            user._blocked = True
         saveDocuments()
         return
 
@@ -447,7 +453,9 @@ class GuestUser:
         self._blocked = False
         self._requestPromotion = 0
         self._interests = []
-        self._userDocumentRequests = []# list of tuples
+        self._firstName = ""
+        self._lastName = ""
+        self._userDocumentRequests = []  # list of tuples
         if len(allUsers) == 0:
             self._id = 0
         else:
@@ -536,16 +544,15 @@ class Document:
             self._unlockedBy = User._username
             self._lockedBy = ""
         else:
-            if self._lock == True:  # unlock the document if you are the owner
-                if self._owner == User._username:
+            if (self._lock == True) and (self._owner == User._username):  # unlock the document if you are the owner
+                self._lock = False
+                self._unlockedBy = User._username
+                self._lockedBy = ""
+            else:
+                if self._lockedBy == User._username:  # if you are not the owner then unlock the document if you locked it initially
                     self._lock = False
                     self._unlockedBy = User._username
                     self._lockedBy = ""
-                else:
-                    if self._lockedBy == User._username:  # if you are not the owner then unlock the document if you locked it initially
-                        self._lock = False
-                        self._unlockedBy = User._username
-                        self._lockedBy = ""
         saveDocuments()
 
     # Suggested usage globals()[documentname].lockDocument(globals()[username])
@@ -557,6 +564,11 @@ class Document:
                 self._unlockedBy = ""
                 saveDocuments()
             else:
+                if (self._owner == User._username):
+                    self._lock = True
+                    self._lockedBy = User._username
+                    self._unlockedBy = ""
+                    saveDocuments()
                 return
         else:
             if self._documentName == User._reasonBlocked[0]:
@@ -585,7 +597,8 @@ class Document:
             SuperUser.applyTabooList(SuperUser)
             self._versionHistory.append(
                 (
-                len(self._versionHistory), "ADD " + str(index), self._documentBody.copy(), User._username, timeStamp()))
+                    len(self._versionHistory), "ADD " + str(index), self._documentBody.copy(), User._username,
+                    timeStamp()))
             saveDocuments()
             return
 
@@ -594,9 +607,9 @@ class Document:
     def delete(self, index, User):
         if blocked(User) == False:
             if len(self._documentBody) >= index:
-                if self._documentBody[index][0]== "UNK":
-                    print("this is the test",self._documentBody[index][0])
-                    globals()[self._documentBody[0][1]]._blocked=False
+                if self._documentBody[index][0] == "UNK":
+                    print("this is the test", self._documentBody[index][0])
+                    globals()[self._documentBody[0][1]]._blocked = False
                 del self._documentBody[index]
                 self._versionHistory.append(
                     (len(self._versionHistory), "DELETE " + str(index), self._documentBody.copy(), User._username,
@@ -608,8 +621,8 @@ class Document:
     def update(self, User, index, word):
         if blocked(User) == False:
             if len(self._documentBody) >= index:
-                if self._documentBody[index][0]== "UNK":
-                    globals()[self._documentBody[0][1]]._blocked=False
+                if self._documentBody[index][0] == "UNK":
+                    globals()[self._documentBody[0][1]]._blocked = False
                     Print(globals()[self._documentBody[0][1]])
                 self._documentBody[index] = (word, User._username)
                 SuperUser.applyTabooList(SuperUser)
@@ -619,7 +632,7 @@ class Document:
                 saveDocuments()
         else:
             if len(self._documentBody) >= index:
-               if self._documentBody[index] == ("UNK",User._username):
+                if self._documentBody[index] == ("UNK", User._username):
                     self._documentBody[index] = (word, User._username)
                     User._blocked = False
                     SuperUser.applyTabooList(SuperUser)
@@ -661,13 +674,16 @@ class Document:
             except:
                 return
 
-    def revert(self,user,version):
-        if (user._username== self._owner) or (self._privacy==self.privacies[0]) or (user._membership == "SUPER") or ((self._privacy == self.privacies[1]) and user._membership == "ORDINARY" ) or ((self.privacy == self.privacies[2]) and (user._username in self._users)):
+    def revert(self, user, version):
+        if (user._username == self._owner) or (self._privacy == self.privacies[0]) or (user._membership == "SUPER") or (
+                (self._privacy == self.privacies[1]) and user._membership == "ORDINARY") or (
+                (self.privacy == self.privacies[2]) and (user._username in self._users)):
             if blocked(user) == False:
-                if len(self._versionHistory)>= version:
+                if len(self._versionHistory) >= version:
                     self._documentBody = self._versionHistory[version][2].copy()
-                    self._versionHistory.append((len(self._versionHistory), "REVERT  V" + str(version), self._documentBody.copy(), user._username,
-                         timeStamp()))
+                    self._versionHistory.append((len(self._versionHistory), "REVERT  V" + str(version),
+                                                 self._documentBody.copy(), user._username,
+                                                 timeStamp()))
                     print(self._versionHistory[version])
 
 
