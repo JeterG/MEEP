@@ -129,7 +129,14 @@ class Notifications extends React.Component {
     return (
       <div>
         <Header />
-        {notifs}
+
+        <Blocks />
+        <Invites />
+        <ComplaintsDocuments />
+        <ComplaintsUsers />
+        <TabooSuggestions />
+        <Applications />
+        {/* notifs */}
       </div>
     )
   }

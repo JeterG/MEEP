@@ -29,6 +29,7 @@ def createDocFromObj(doc):
 
 def createComplaintDocFromObj(complaint):
     return {
+        "c_id" : complaint._id,
         "doc_id" : complaint._Document._id,
         "complaintBy" : complaint._complaintBy._username,
         "complaintAbout" : complaint._complaintAbout,
@@ -37,6 +38,7 @@ def createComplaintDocFromObj(complaint):
 
 def createComplaintUserFromObj(complaint):
     return {
+        "c_id" : complaint._id,
         "complaintBy" : complaint._complaintBy,
         "complaintAbout" : complaint._complaintAbout,
         "problem" : complaint._problem
