@@ -47,7 +47,7 @@ class Taboos extends React.Component {
   render() {
     var tabooList = this.state.taboos.map(taboos => {
       return(
-       <li key={taboos}>{taboos}</li>)
+       <div key={taboos}>{taboos}</div>)
     });
 
     return (
