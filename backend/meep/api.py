@@ -106,6 +106,14 @@ def get_all_users():
             returnUsers.append(userData)
     return jsonify(returnUsers)
 
+@app.route('/api/user/<int:user_id>', methods=["GET"])
+def get_user(user_id):
+    # Save a specific document to the server
+    userObj = getUserFromID(user_id)
+    user = createUserFromObj(userObj)
+    username = request.args.get("username")
+    return jsonify(user)
+
 @app.route('/api/docs/<int:doc_id>', methods=["GET"])
 def get_doc(doc_id):
     # Retrieve a specific document from the server

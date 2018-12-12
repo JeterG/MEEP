@@ -11,6 +11,7 @@ import Taboos from './components/Taboos';
 import SearchUser from './components/SearchUser';
 import SearchDocument from './components/SearchDocument';
 import Notifications from './components/Notifications/Notifications';
+import Users from './components/Users';
 
 class App extends React.Component {
   render() {
@@ -24,7 +25,7 @@ class App extends React.Component {
           <Route exact path="/docs/:doc_id" component={Document} />            {/* Display the editor for a given document */}
           <Route exact path="/docs/:doc_id/v/:v_id" component={Document} />
           <Route path="/users" component={UserDirectory} />            {/* Return directory of all public users */}
-          <Route path="/users/:u_id" component={DocumentDirectory} />  {/* Display the profile for a given user */}
+          <Route path="/user/:u_id" component={Users} />  {/* Display the profile for a given user */}
           <Route path="/taboos" component={Taboos} />       {/* Display the taboo list + suggestion form */}
           <Route path="/searchUser" component={SearchUser} />       {/* Allow users to Search users, documents */}
           <Route path="/searchDocument" component={SearchDocument} />       {/* Allow users to Search users, documents */}
