@@ -12,6 +12,19 @@ allUsers = []
 allComplaints = []
 
 
+def dispalySharedDocuments(user):
+    available = []
+    if blocked() == False:
+        for document in allDocuments:
+            if document._privacy == document.privacies[2]:
+                if document._owner != user._username:
+                    if user._username in document._users:
+                        available.append(document)
+        return available
+
+
+
+
 # Suggested Usage searchByName(globlas()[username],name)
 def searchByName(user, name):  # user is a user object, name is a string
     available = []
@@ -593,11 +606,11 @@ class Document:
             if len(self._documentBody) >= index:
                if self._documentBody[index] == ("UNK",User._username):
                     self._documentBody[index] = (word, User._username)
+                    User._blocked = False
                     SuperUser.applyTabooList(SuperUser)
                     self._versionHistory.append(
                         (len(self._versionHistory), "UPDATE " + str(index), self._documentBody.copy(), User._username,
                          timeStamp()))
-                    User._blocked == False
                     saveUsers()
                     saveDocuments()
         return
@@ -737,10 +750,12 @@ def printDocumentVersionHistory(document):
         print(tuple[2])
     return
 
+
+# make sure to make constraints true for doning stuff that uses a user if they are blocked.
 # loadUsers()
 # make sure to make constraints true for doning stuff that uses a user if they are blocked.
-# su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
-# ou = OrdinaryUser("ou", ["Ordinary", "User"], "password", ["Studying", "Writing", "Acting"])
+su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
+ou = OrdinaryUser("ou", ["Ordinary", "User"], "password", ["Studying", "Writing", "Acting"])
 # open0 = Document("open0", su)
 # open1 = Document("open1", ou)
 # rest0 = Document("rest0", su)
@@ -758,4 +773,4 @@ def printDocumentVersionHistory(document):
 # private0.setPrivacy(su, 3) #private
 # private1.setPrivacy(ou, 3)
 # saveInformation()
-loadInformation()
+# loadInformation()
