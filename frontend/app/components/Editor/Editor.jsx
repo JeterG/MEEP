@@ -314,14 +314,6 @@ class Editor extends React.Component {
     document.getElementById("lock-btn").blur();
   }
 
-  handleSave = (e) => {
-    var { doc_id, words } = this.state.doc;
-    var { editingLine } = this.state;
-
-    console.log("The handle save is", doc_id);
-    this.props.updateLine(doc_id, editingLine, words[editingLine].content);
-  }
-
   lodgeComplaint = (e) => {
     var problem;
     var theprompt = prompt("Enter your complaint:", "");
@@ -375,7 +367,6 @@ class Editor extends React.Component {
           doc={this.props.doc}
           oldVersion={false /* make this not hardcoded */}
           locked={locked}
-          handleSave={this.handleSave}
           handleLock={this.handleLock}
           lodgeComplaint={this.lodgeComplaint}
         />

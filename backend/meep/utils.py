@@ -27,6 +27,20 @@ def createDocFromObj(doc):
         "words" : words
     }
 
+def createOldDocFromObj(doc, vid):
+    # extract words only from doc body
+    words = list(map(lambda x: x[0], doc._versionHistory[vid][2]));
+
+    return {
+        "doc_id" : doc._id,
+        "title" : doc._documentName,
+        "owner" : doc._owner,
+        "locked": doc._lock,
+        "lockedBy": doc._lockedBy,
+        "privacy": doc._privacy,
+        "words" : words
+    }
+
 def createComplaintDocFromObj(complaint):
     return {
         "c_id" : complaint._id,

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { API_BASE_URL } from '../../Config.js';
 import axios from 'axios';
 
@@ -18,7 +19,6 @@ class VersionHistory extends React.Component {
     })
   }
 
-
   render() {
     var listHistory = this.state.history ?
       this.state.history.slice(0).reverse().map( hist => {
@@ -27,6 +27,11 @@ class VersionHistory extends React.Component {
           <tr key={hist[0]}>
             <td>{hist[0]}</td>
             <td>{hist[1]}</td>
+            <td>
+              <Link to={"/docs/" + this.props.doc_id + "/v/" + hist[0]} onClick={window.location.reload}>
+                {"/docs/" + this.props.doc_id + "/v/" + hist[0]}
+              </Link>
+            </td>
             <td>{hist[3]}</td>
             <td>{hist[4]}</td>
           </tr>
@@ -42,6 +47,7 @@ class VersionHistory extends React.Component {
           <tr>
             <th>Version #</th>
             <th>Operation</th>
+            <th>Read Version</th>
             <th>Author</th>
             <th>Time</th>
           </tr>

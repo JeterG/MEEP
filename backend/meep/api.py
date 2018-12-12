@@ -106,6 +106,14 @@ def get_all_users():
             returnUsers.append(userData)
     return jsonify(returnUsers)
 
+@app.route('/api/user/<int:user_id>', methods=["GET"])
+def get_user(user_id):
+    # Save a specific document to the server
+    userObj = getUserFromID(user_id)
+    user = createUserFromObj(userObj)
+    username = request.args.get("username")
+    return jsonify(user)
+
 @app.route('/api/docs/<int:doc_id>', methods=["GET"])
 def get_doc(doc_id):
     # Retrieve a specific document from the server
@@ -116,13 +124,32 @@ def get_doc(doc_id):
     else:
         return jsonify({"message" : "Invalid document ID"}), 403
 
+@app.route('/api/docs/<int:doc_id>/v/<int:v_id>', methods=["GET"])
+def get_old_doc(doc_id, v_id):
+    # Retrieve a specific document from the server
+    doc = getDocFromID(int(doc_id))
+    print(doc, doc_id, int(doc_id))
+    if doc:
+        return jsonify(createOldDocFromObj(doc, v_id))
+    else:
+        return jsonify({"message" : "Invalid document ID"}), 403
+
 @app.route('/api/docs/<int:doc_id>/vhistory', methods=["GET"])
 def get_vhistory(doc_id):
     docObj = getDocFromID(doc_id)
     if docObj:
-        return jsonify(docObj._versionHistory);
+        returnDoc = docObj._versionHistory
+        # returnDoc = docObj._versionHistory
+        # x=[]
+        # for a,b,c,d,e in docObj._versionHistory:
+        #     for index in c:
+        #         print(index[0])
+        #         x.append(index[0])
+        #     returnDoc[a]=(a,b,x.copy(),c,d,e)
+        #     print(returnDoc[a])
+        #     del x[:]
+        return jsonify(returnDoc);
     else:
-        # print(allDocuments[0]._id);
         return jsonify({"message" : "doc_id not found"}), 403
 
 @app.route('/api/docs/<doc_id>', methods=["POST"])
@@ -151,6 +178,7 @@ def post_doc(doc_id):
                 return jsonify({"message" : "Invalid ID"}), 403
     else:
         return jsonify({"message" : "Insufficient permissions"}), 401
+
 
 @app.route('/api/docs/<int:doc_id>/unlock', methods=["POST"])
 def unlockDoc(doc_id):
@@ -247,6 +275,20 @@ def rename_doc(doc_id):
     if docObj:
         docObj._documentName = newTitle
         return jsonify({"message" : "Successful rename"})
+    else:
+        # print(allDocuments[0]._id);
+        return jsonify({"message" : "doc_id not found"}), 403
+
+@app.route('/api/docs/<int:doc_id>/revert/<int:v_id>', methods=["POST"])
+def revert_doc(doc_id, v_id):
+    docObj = getDocFromID(doc_id)
+    user_id = int(request.json.get("user_id"))
+
+    user = getUserFromID(user_id)
+
+    if docObj:
+        docObj.revert(user, v_id);
+        return jsonify({"message" : "Successful revert"})
     else:
         # print(allDocuments[0]._id);
         return jsonify({"message" : "doc_id not found"}), 403
