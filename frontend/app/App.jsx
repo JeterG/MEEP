@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 
 import Landing from './components/Landing';
-import LogIn from './components/LogIn';
 import Register from './components/Register';
 import OUapply from './components/OUapply';
-import Taboos from './components/Taboos';
-import UserDirectory from './components/UserDirectory';
-import Document from './components/Document';
 import DocumentDirectory from './components/DocumentDirectory';
+import Document from './components/Document';
+import UserDirectory from './components/UserDirectory';
+import Taboos from './components/Taboos';
 import SearchUsers from './components/SearchUsers';
 import SearchDocument from './components/SearchDocument';
+import Notifications from './components/Notifications/Notifications';
 
 class App extends React.Component {
   render() {
@@ -27,7 +27,7 @@ class App extends React.Component {
           <Route path="/taboos" component={Taboos} />       {/* Display the taboo list + suggestion form */}
           <Route path="/searchUsers" component={SearchUsers} />       {/* Allow users to Search users, documents */}
           <Route path="/searchDocument" component={SearchDocument} />       {/* Allow users to Search users, documents */}
-
+          <Route path="/notifs" component={Notifications} />
         </div>
       </BrowserRouter>
     )
