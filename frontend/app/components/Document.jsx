@@ -166,7 +166,7 @@ class Document extends React.Component {
         />
       </div>
     )
-    : <h3>Invalid Document ID</h3>;
+    : <h2>Invalid Document ID</h2>;
 
     return (
       <div className="document">
