@@ -35,6 +35,8 @@ class Header extends React.Component {
       ( <li><Link to="/apply">Become a Member</Link></li> ) : null;
     var displayNewDoc = (type == "guest") ? null :
       ( <li><Link to="/docs/new" onClick={window.location.reload}>New Document</Link></li> );
+    var displayMyDoc = (type == "guest") ? null :
+      ( <li><Link to="/docs" onClick={window.location.reload}>My Documents</Link></li> );
 
 
     return (
@@ -49,7 +51,7 @@ class Header extends React.Component {
               <ul id="nav-mobile" className="right hide-on-med-and-down">
                 {displayOUapply}
                 {displayNewDoc}
-                <li><Link to="/docs">My Documents</Link></li>
+                {displayMyDoc}
                 <li><Link to="/taboos">Taboo List</Link></li>
                 <li><Link to="/searchUsers">Users</Link></li>
                 <li><Link to="/searchDocument">Documents</Link></li>

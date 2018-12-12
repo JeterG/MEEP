@@ -62,7 +62,7 @@ def my_documents():
     membership = request.args.get('type')
 
     # Map object properties to a Python dictionary for JSON conversion
-    readDocs = viewableDoc(username, membership)
+    readDocs = mydocs(username, membership)
     for doc in readDocs:
         docData = createDocFromObj(doc)
         returnDocs.append(docData)

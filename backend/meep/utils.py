@@ -87,15 +87,15 @@ def viewableDoc(username, membership):
     # restricted: guests view, ordinary & superuser edit
     # shared: view and edit by ppl w/ access & superuser
     # private: view and only by owner and superuser
-    openDocs = searchDocumentByPrivacy(0)
-    restrictedDocs = searchDocumentByPrivacy(1)
+    openDocs = searchDocumentByPrivacy(globals()[username],0)
+    restrictedDocs = searchDocumentByPrivacy(globals()[username],1)
     # Return list of viewable documents
     returnDocs = [y for x in [openDocs, restrictedDocs] for y in x]
     if membership == "guest":
         return returnDocs
     elif membership == "super":
-        sharedDocs = searchDocumentByPrivacy(2)
-        privateDocs = searchDocumentByPrivacy(3)
+        sharedDocs = searchDocumentByPrivacy(globals()[username],2)
+        privateDocs = searchDocumentByPrivacy(globals()[username],3)
         returnDocs = [y for x in [returnDocs, sharedDocs] for y in x]
         returnDocs = [y for x in [returnDocs, privateDocs] for y in x]
         return returnDocs
@@ -107,12 +107,17 @@ def viewableDoc(username, membership):
 
 def contributorDoc(username):
     returnDocs = []
-    for docs in searchDocumentByPrivacy(2):
+    for docs in searchDocumentByPrivacy(globals()[username],2):
         if username in docs._users:
             returnDocs.append(docs)
-    for docs in searchDocumentByPrivacy(3):
+    for docs in searchDocumentByPrivacy(globals()[username],3):
         if username in docs._users:
             returnDocs.append(docs)
+    return returnDocs
+
+def mydocs(username, membership):
+    '''Return documents that user owns and shared'''
+    returnDocs = globals()[username]._ownedDocuments
     return returnDocs
 
 def suggestTaboos(suggestedTaboo):
