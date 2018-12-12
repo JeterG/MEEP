@@ -14,7 +14,7 @@ allComplaints = []
 
 def dispalySharedDocuments(user):
     available = []
-    if blocked() == False:
+    if blocked(user) == False:
         for document in allDocuments:
             if document._privacy == document.privacies[2]:
                 if document._owner != user._username:
@@ -30,11 +30,8 @@ def searchByName(user, name):  # user is a user object, name is a string
     available = []
     if user._membership != "GUEST":
         for x in allUsers:
-            if ((name.upper() == x._firstName.upper()) or (name.upper() == x._lastName.upper())):
+            if ((name.upper() == x._firstName.upper()) or (name.upper() == x._lastName.upper()) or (name.upper()== x._username.upper())):
                 available.append(x)
-                print(x._firstName)
-                print(x._username)
-                print(name.upper())
         return (available)
     return (available)
 
@@ -585,6 +582,9 @@ class Document:
     def delete(self, index, User):
         if blocked(User) == False:
             if len(self._documentBody) >= index:
+                if self._documentBody[index][0]== "UNK":
+                    print("this is the test",self._documentBody[index][0])
+                    globals()[self._documentBody[0][1]]._blocked=False
                 del self._documentBody[index]
                 self._versionHistory.append(
                     (len(self._versionHistory), "DELETE " + str(index), self._documentBody.copy(), User._username,
@@ -596,6 +596,10 @@ class Document:
     def update(self, User, index, word):
         if blocked(User) == False:
             if len(self._documentBody) >= index:
+                if self._documentBody[index][0]== "UNK":
+                    print("this is the test",self._documentBody[index][0])
+                    globals()[self._documentBody[0][1]]._blocked=False
+                    Print(globals()[self._documentBody[0][1]])
                 self._documentBody[index] = (word, User._username)
                 SuperUser.applyTabooList(SuperUser)
                 self._versionHistory.append(
@@ -754,9 +758,8 @@ def printDocumentVersionHistory(document):
 # make sure to make constraints true for doning stuff that uses a user if they are blocked.
 # loadUsers()
 # make sure to make constraints true for doning stuff that uses a user if they are blocked.
-su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
-ou = OrdinaryUser("ou", ["Ordinary", "User"], "password", ["Studying", "Writing", "Acting"])
-su._blocked = False
+# su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
+# ou = OrdinaryUser("ou", ["Ordinary", "User"], "password", ["Studying", "Writing", "Acting"])
 # open0 = Document("open0", su)
 # open1 = Document("open1", ou)
 # rest0 = Document("rest0", su)
@@ -774,4 +777,4 @@ su._blocked = False
 # private0.setPrivacy(su, 3) #private
 # private1.setPrivacy(ou, 3)
 # saveInformation()
-# loadInformation()
+loadInformation()
