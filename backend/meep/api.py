@@ -337,8 +337,19 @@ def OUapp():
     username = submitData.get("username")
     result = requestpromotion(username, firstName, lastName, interests)
     if result:
-        data = {message : 'Request Submitted'}
+        data = {'message' : 'Request Submitted'}
         return jsonify(data), 200
     else:
-        data = {message : 'Complete the Form'}
+        data = {'message' : 'Complete the Form'}
         return jsonify(data), 403
+
+@app.route('/api/pending/apps', methods=['GET'])
+def get_pending_apps():
+    userApps = []
+    for user in allUsers:
+        if user._requestPromotion:
+            if user._membership == "GUEST":
+                userApps.append((createUserFromObj(user), user._application))
+            elif user._membership == "ORDINARY":
+                userApps.append((createUserFromObj(user), "Ordinary wants promotion"))
+    return jsonify(userApps)

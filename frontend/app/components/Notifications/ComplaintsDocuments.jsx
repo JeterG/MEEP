@@ -33,7 +33,7 @@ class ComplaintsDocuments extends React.Component {
           <div key={c.c_id}>
             <div><Link to={"/docs/" + c.doc_id}>{"/docs/" + c.doc_id}</Link></div>
             <div>Complaint By: <b>{c.complaintBy}</b></div>
-            <div>Complaint About: <b>{c.complaintAbout}</b></div>
+            <div>Document Owner: <b>{c.complaintAbout}</b></div>
             <div className="red-text">{c.problem}</div>
             <button onClick={this.processComplaint}>Process</button>
           </div>
