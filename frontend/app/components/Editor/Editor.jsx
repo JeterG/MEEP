@@ -137,6 +137,10 @@ class Editor extends React.Component {
       // This is tricky because we only want to addLine if the previous word is a
       // new word. The first time this is done, the previous word will be one that is
       // already there.
+
+      // Solution to the above problem:
+      // Insert or call "addLine" on the empty string that gets inserted. 
+      // Then, just use "updated" to update that line.
       console.log("Inserting in middle of document", editingLine)
     }
   }
