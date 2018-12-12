@@ -31,11 +31,15 @@ class ComplaintsDocuments extends React.Component {
       this.state.complaints.map( c => {
         return (
           <div key={c.c_id}>
-            <div><Link to={"/docs/" + c.doc_id}>{"/docs/" + c.doc_id}</Link></div>
-            <div>Complaint By: <b>{c.complaintBy}</b></div>
-            <div>Document Owner: <b>{c.complaintAbout}</b></div>
-            <div className="red-text">{c.problem}</div>
-            <button onClick={this.processComplaint}>Process</button>
+            <div style={{fontSize: 20}}><Link to={"/docs/" + c.doc_id}>{"/docs/" + c.doc_id}</Link></div>
+            <div style={{fontSize: 20}}>Complaint By: <b>{c.complaintBy}</b></div>
+            <div style={{fontSize: 20}}>Document Owner: <b>{c.complaintAbout}</b></div>
+            <div className="red-text" style={{fontSize: 20}}>{c.problem}</div>
+{/*             <button onClick={this.processComplaint}>Process</button>
+ */}            <button className="btn waves-effect waves-light" onClick={this.processComplaint}>
+              <i className="material-icons right">keyboard_arrow_right</i>
+              Process
+            </button>
           </div>
         )
       }) : null;
