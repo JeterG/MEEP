@@ -33,16 +33,24 @@ class TabooSuggestions extends React.Component {
         return (
           <div key={idx}>
             <div>{p}</div>
-            <button onClick={this.acceptWord}>Accept</button>
-            <button onClick={this.rejectWord}>Reject</button>
+{/*             <button onClick={this.acceptWord}>Accept</button>
+            <button onClick={this.rejectWord}>Reject</button> */}
+            <button className="btn waves-effect waves-light" onClick={this.acceptWord}>
+              <i className="material-icons left">thumb_up</i>
+              Accept
+            </button>
+            <button className="btn waves-effect waves-light" onClick={this.rejecctWord}>
+              <i className="material-icons left">thumb_down</i>
+              Reject
+            </button>
           </div>
         )
       }) : null;
 
     return(
       <div>
-        <h1>Taboo Suggestions</h1>
-        {pendingList}
+        <h1 >Taboo Suggestions</h1>
+        <div style={{fontSize: 20}}>{pendingList}</div>
       </div>
     );
   }
