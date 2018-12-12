@@ -279,6 +279,19 @@ def rename_doc(doc_id):
         # print(allDocuments[0]._id);
         return jsonify({"message" : "doc_id not found"}), 403
 
+@app.route('/api/docs/<int:doc_id>/requestAccess', methods=["POST"])
+def request_access(doc_id):
+    user_id = int(request.json.get("user_id"));
+    user = getUserFromID(user_id)
+    docObj = getDocFromID(doc_id)
+    if docObj:
+        ownerObj = globals()[docObj._owner]
+        docObj.requestPermission(ownerObj, user)
+        return jsonify({"message" : "Successful permission request"})
+    else:
+        # print(allDocuments[0]._id);
+        return jsonify({"message" : "doc_id not found"}), 403
+
 @app.route('/api/docs/<int:doc_id>/revert/<int:v_id>', methods=["POST"])
 def revert_doc(doc_id, v_id):
     docObj = getDocFromID(doc_id)
@@ -328,6 +341,15 @@ def get_user_complaints():
         if c.__class__ == ComplaintUsers:
             returnComplaints.append(createComplaintUserFromObj(c))
     return jsonify(returnComplaints);
+
+@app.route('/api/users/<int:user_id>/allowed/<int:doc_id>', methods=["GET"])
+def get_user_allowed_in_doc(user_id, doc_id):
+    user = getUserFromID(user_id)
+    doc = getDocFromID(doc_id)
+    for userdoc in doc._users:
+        if userdoc == user._username:
+            return jsonify(True)
+    return jsonify(False)
 
 @app.route('/api/users/<int:user_id>/blocked', methods=["GET"])
 def get_if_blocked(user_id):

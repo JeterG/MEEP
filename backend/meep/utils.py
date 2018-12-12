@@ -59,8 +59,9 @@ def createComplaintUserFromObj(complaint):
     }
 
 def getUserFromID(id):
-    print("getuser", allUsers);
+    print("getuser", allUsers, id);
     for user in allUsers:
+        print("iterating getUser...", user._id);
         if user._id == id:
             return user
     return False

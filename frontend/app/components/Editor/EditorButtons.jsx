@@ -14,33 +14,50 @@ class EditorButtons extends React.Component {
     console.log("BUTTONS PROPS", this.props);
     var user = getLocal("user");
     var doc = this.props.doc;
-    // FIGURE THIS OUT
-    // should find out if logged in user has been given
-    // access to this doc
-    var userIsAccepted = true;
-    var isOldVersion = this.props.match.params.v_id;
 
-    var initialState = {
-      has_access: null,
-      needs_access: null,
-      historical: null
-    };
+    axios.get(API_BASE_URL + "/users/" + user.id + "/allowed/" + doc.doc_id)
+    .then( response => {
+      console.log("get allowance", response.data, doc.privacy);
+      var userIsAccepted = response.data;
+      var isOldVersion = this.props.match.params.v_id;
 
-    var hasFullAccess = (user.name == doc.owner) || (user.type == "super") || userIsAccepted
+      var initialState = {
+        has_access: null,
+        needs_access: null,
+        historical: null
+      };
 
-    if (hasFullAccess && !isOldVersion) {
-      initialState.has_access = true;
-    } else if (hasFullAccess && isOldVersion) {
-      initialState.historical = true;
-    } else {
-      initialState.needs_access = true;
-    }
+      var hasFullAccess = (user.name == doc.owner) || (user.type == "super") || userIsAccepted
 
-    this.setState({...initialState})
+      if (hasFullAccess && !isOldVersion) {
+        initialState.has_access = true;
+      } else if (hasFullAccess && isOldVersion) {
+        initialState.historical = true;
+      } else {
+        initialState.needs_access = true;
+      }
+
+      this.setState({...initialState})
+    })
+    .catch( error => {
+      console.error("fetch allowance error", error, error.response.data);
+    });
   }
 
   requestAccess = (e) => {
+    var user = getLocal("user");
+    var payload = {
+      "user_id" : user.id
+    }
 
+    var d_id = this.props.doc.doc_id;
+    axios.post(API_BASE_URL + "/docs/" + d_id + "/requestAccess", payload)
+    .then( response => {
+      console.log("requesting access", response.data.message);
+    })
+    .catch( error => {
+      console.error("request error", error, error.response.data);
+    })
   }
 
   revertHere = (e) => {

@@ -442,6 +442,8 @@ class GuestUser:
         self._membership = str.upper("GUEST")
         self._username = username
         self._password = password
+        self._firstName = ""
+        self._lastName = ""
         self._blocked = False
         self._requestPromotion = 0
         self._interests = []
@@ -795,4 +797,5 @@ def printDocumentVersionHistory(document):
 # shared1.setPrivacy(ou, 2)
 # private0.setPrivacy(su, 3) #private
 # private1.setPrivacy(ou, 3)
+su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
 loadInformation()
