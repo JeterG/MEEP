@@ -264,12 +264,21 @@ def set_privacy(doc_id):
         return jsonify({"message" : "Insufficient permissions"}), 401
 
 @app.route('/api/docs/complaints', methods=["GET"])
-def get_complaints():
+def get_doc_complaints():
     print("look at complaints", allComplaints);
     returnComplaints = []
     for c in allComplaints:
         if c.__class__ == ComplaintDocuments:
             returnComplaints.append(createComplaintDocFromObj(c))
+    return jsonify(returnComplaints);
+
+@app.route('/api/users/complaints', methods=["GET"])
+def get_user_complaints():
+    print("look at complaints", allComplaints);
+    returnComplaints = []
+    for c in allComplaints:
+        if c.__class__ == ComplaintUsers:
+            returnComplaints.append(createComplaintUserFromObj(c))
     return jsonify(returnComplaints);
 
 @app.route('/api/complaints', methods=["POST"])

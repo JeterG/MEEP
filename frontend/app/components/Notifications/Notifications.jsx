@@ -11,64 +11,12 @@ import Applications from './Applications';
 
 class Notifications extends React.Component {
   state = {
-    blocks: [],
-    invites: [],
-    doc_complaints: [],
-    user_complaints: [],
-    taboo_suggestions: [],
-    applications: []
-  }
-
-  ntypeToComponent = (id, ntype) => {
-    switch(ntype) {
-      case "blocks":
-        return (<Blocks key={id} updater={this.getBlocks} />);
-        break;
-
-      case "invites":
-        return (<Invites key={id} />);
-        break;
-
-      case "doc_complaints":
-        return (<ComplaintsDocuments key={id} updater={this.getComplaintsDocuments} />);
-        break;
-
-      case "user_complaints":
-        return (<ComplaintsUsers key={id} updater={this.getComplaintsUsers} />);
-        break;
-
-      case "taboo_suggestions":
-        return (<TabooSuggestions key={id} updater={this.getTabooSuggestions} />);
-        break;
-
-      case "applications":
-        return (<Applications key={id} updater={this.getApplications} />);
-        break;
-    }
-  }
-
-  getBlocks = () => {
-    this.setState({ blocks: [] })
-  }
-
-  getInvites = () => {
-    this.setState({ invites: [] })
-  }
-
-  getComplaintsDocuments = (complaints) => {
-    this.setState({ doc_complaints: complaints })
-  }
-
-  getComplaintsUsers = () => {
-    this.setState({ user_complaints: [] })
-  }
-
-  getTabooSuggestions = () => {
-    this.setState({ taboo_suggestions: [] })
-  }
-
-  getApplications = () => {
-    this.setState({ applications: [] })
+    // blocks: [],
+    // invites: [],
+    // doc_complaints: [],
+    // user_complaints: [],
+    // taboo_suggestions: [],
+    // applications: []
   }
 
   componentDidMount() {
@@ -91,52 +39,34 @@ class Notifications extends React.Component {
 
     // Guests
     //  * Blocked
-    switch(userType) {
-      case "guest":
-      case "ordinary":
-      case "super":
-        this.getBlocks();
-
-      case "ordinary":
-      case "super":
-        this.getInvites();
-        this.getComplaintsDocuments();
-
-      case "super":
-        this.getComplaintsUsers();
-        this.getTabooSuggestions();
-        this.getApplications();
-    }
-  }
-
-  displayNotifs(array, ntype) {
-    if (this.state[ntype]) {
-      if (true) {
-        console.log("pushed", ntype)
-        array.push(
-          this.ntypeToComponent(array.length, ntype)
-        )
-      }
-    }
   }
 
   render() {
     var notifs = [];
-    for (var ntype in this.state) {
-      this.displayNotifs(notifs, ntype);
+    var currentUser = getLocal("user");
+    var userType = currentUser.type;
+
+    switch(userType) {
+      case "super":
+        notifs.push(<Applications key={notifs.length}/>)
+        notifs.push(<TabooSuggestions key={notifs.length}/>)
+        notifs.push(<ComplaintsUsers key={notifs.length}/>)
+
+      case "ordinary":
+      case "super":
+        notifs.push(<ComplaintsDocuments key={notifs.length}/>)
+        notifs.push(<Invites key={notifs.length}/>)
+
+      case "guest":
+      case "ordinary":
+      case "super":
+        notifs.push(<Blocks key={notifs.length}/>)
     }
 
     return (
       <div>
         <Header />
-
-        <Blocks />
-        <Invites />
-        <ComplaintsDocuments />
-        <ComplaintsUsers />
-        <TabooSuggestions />
-        <Applications />
-        {/* notifs */}
+        { notifs }
       </div>
     )
   }

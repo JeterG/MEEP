@@ -1,5 +1,6 @@
 // For supers and owners of docs
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { API_BASE_URL } from '../../Config';
 import axios from 'axios';
 
@@ -20,24 +21,28 @@ class ComplaintsDocuments extends React.Component {
     })
   }
 
+  processComplaint = (e) => {
+    // Call API to use core.py processComplaintDocuments() function
+    // It accepts a User object, so send the current user's id as submit data
+  }
+
   render() {
-    console.log("rendered", this.state);
-
-    var title = this.state.complaints ?
-      (
-        <h1>Complaints (about Documents)</h1>
-      ) : null;
-
     var complainList = this.state.complaints ?
       this.state.complaints.map( c => {
         return (
-          <div key={c.c_id}>{c.problem}</div>
+          <div key={c.c_id}>
+            <div><Link to={"/docs/" + c.doc_id}>{"/docs/" + c.doc_id}</Link></div>
+            <div>Complaint By: <b>{c.complaintBy}</b></div>
+            <div>Complaint About: <b>{c.complaintAbout}</b></div>
+            <div className="red-text">{c.problem}</div>
+            <button onClick={this.processComplaint}>Process</button>
+          </div>
         )
       }) : null;
 
     return (
       <div>
-        {title}
+        <h1>Complaints (about Documents)</h1>
         {complainList}
       </div>
     );
