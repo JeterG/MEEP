@@ -281,6 +281,30 @@ def get_user_complaints():
             returnComplaints.append(createComplaintUserFromObj(c))
     return jsonify(returnComplaints);
 
+@app.route('/api/users/<int:user_id>/blocked', methods=["GET"])
+def get_if_blocked(user_id):
+    user = getUserFromID(user_id)
+    reasonBlocked = blocked(user)
+    print("is blocked", blocked(user), user._blocked, user._reasonBlocked)
+    if reasonBlocked:
+        print(reasonBlocked)
+
+        client = {
+            "blocked" : True,
+            "doc_id" : globals()[reasonBlocked[1][0]]._id,
+            "doc_name" : reasonBlocked[1][0],
+            "reason" : reasonBlocked[1][1]
+        }
+        return jsonify(client)
+    else:
+        return jsonify({"blocked" : False, "doc_id": None, "doc_name": None, "reason" : None})
+
+    returnComplaints = []
+    for c in allComplaints:
+        if c.__class__ == ComplaintUsers:
+            returnComplaints.append(createComplaintUserFromObj(c))
+    return jsonify(returnComplaints);
+
 @app.route('/api/complaints', methods=["POST"])
 def post_complaints():
     doc_id = int(request.json.get("doc_id"))
