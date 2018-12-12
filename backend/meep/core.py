@@ -312,7 +312,7 @@ class SuperUser:
             user._lastName = user._application[0][1]
             user._membership = "ORDINARY"
             user._interests = [x.upper() for x in user._application[1]]
-            del user._application
+            del user._application [:]
             user._ownedDocuments = []
             user._complaints = []
             user.__class__ = OrdinaryUser
