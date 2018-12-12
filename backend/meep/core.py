@@ -371,10 +371,13 @@ class SuperUser:
     def applyTabooList(
             self):  # update all the taboo words from all existing documents and block users who added the word
         for document in allDocuments:
-            dc = [word.upper() for word in document._documentBody]
-            for word in dc:
-                if word.upper() in [x.upper() for x in tabooList]:
-                    document._documentBody[dc.index(word)] = "UNK"
+            dc = []
+            for word,name in document._documentBody:
+                dc.append((word.upper(),name))
+            for word1,name1 in dc:
+                if word1.upper() in [x.upper() for x in tabooList]:
+                    document._documentBody[dc.index((word1,name1))] = ("UNK",name1)
+                    globals()[name1]._blocked=True
         saveDocuments()
         return
 
@@ -477,7 +480,6 @@ class Document:
         self._unlockedBy = ""
         self._users = [User._username]
         self._documentBody = []  # DocumentBody will always be the current version
-        self._documentContribution=[]# will always have the username of who added a specific word
         if len(allDocuments) == 0:
             self._id = 0
         else:
@@ -534,8 +536,7 @@ class Document:
 #suggested usage globals()[documentname].add(word,globals()[username])
     #word is a string and the user is the user who is editing
     def add(self,index, Word, User):
-        self._documentBody.insert(index,Word)
-        self._documentContribution.insert(index,User._username)
+        self._documentBody.insert(index,(Word,User._username))
         SuperUser.applyTabooList(SuperUser)
         self._versionHistory.append(
             (len(self._versionHistory), "ADD", self._documentBody.copy(), User._username, timeStamp()))
@@ -547,7 +548,6 @@ class Document:
     def delete(self, index, User):
         if len(self._documentBody) >= index:
             del self._documentBody[index]
-            del self._documentContribution[index]
             self._versionHistory.append(
                 (len(self._versionHistory), "DELETE", self._documentBody.copy(), User._username, timeStamp()))
         saveDocuments()
@@ -556,8 +556,7 @@ class Document:
     #Suggested usage, globals()[documentname].update(globals()[globals()[documentname]._owner],index,word)
     def update(self, User, index, word):
         if len(self._documentBody) >= index:
-            self._documentBody[index] = word
-            self._documentContribution[index]= User._username
+            self._documentBody[index] = (word,User._username)
             SuperUser.applyTabooList(SuperUser)
             self._versionHistory.append(
                 (len(self._versionHistory), "UPDATE", self._documentBody.copy(), User._username, timeStamp()))
@@ -650,7 +649,6 @@ def Print(user):
         print("\t\t_unlockedBy = ", user._unlockedBy)
         print("\t\t_users = ", user._users)
         print("\t\t_documentBody  = ", user._documentBody)
-        print("\t\t_documentContribution = ", user._documentContribution)
         print("\t\t_versionHistory = ")
         printDocumentVersionHistory(user)
         print("\t\t_privacy = ", user._privacy)
@@ -716,4 +714,4 @@ def printDocumentVersionHistory(document):
 # private0.setPrivacy(su, 3) #private
 # private1.setPrivacy(ou, 3)
 # saveInformation()
-loadInformation()
+# loadInformation()
