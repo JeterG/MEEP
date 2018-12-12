@@ -144,11 +144,13 @@ def inviteUser(doc_id):
 def addLine(doc_id):
     user_id = int(request.json["user_id"])
     word = request.json["content"]
+    index = int(request.json["index"])
+
     if userHasPerms(user_id):
         user = getUserFromID(user_id)
         doc = getDocFromID(doc_id)
         if doc:
-            doc.add(word, user)
+            doc.add(index, word, user)
             print("ADD LINE", doc._documentBody)
             return jsonify({"message" : "Successful add to doc"})
         else:

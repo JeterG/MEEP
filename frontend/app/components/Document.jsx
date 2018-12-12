@@ -51,11 +51,12 @@ class Document extends React.Component {
     })
   }
 
-  addLine = (id, content) => {
+  addLine = (id, index, content) => {
     var user = getLocal('user')
     let payload = {
       "user_id" : user.id,
-      "content" : content
+      "content" : content,
+      "index" : index
     };
 
     axios.post(API_BASE_URL + "/docs/" + id + "/addLine", payload)
