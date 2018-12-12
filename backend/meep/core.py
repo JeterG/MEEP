@@ -363,6 +363,9 @@ class SuperUser:
                 self.demote(User)
             else:
                 return
+    def ignoreTaboo(self,word):
+        if word in pending:
+            pending.remove(word)
 
     # helper function
     def updateTabooList(self, word):  # Check if the word is already in the taboo list,
@@ -371,9 +374,16 @@ class SuperUser:
         if blocked(self) == False:
             if word.upper() in [x.upper() for x in tabooList]:
                 return
+
             else:
+
                 tabooList.append(word.upper())
+                if word in pending:
+                    pending.remove(word)
+                if len(pending) == 0:
+                    self._suggestions = -1
                 saveTabooList()
+                savePending()
                 self.applyTabooList()
 
     # Suggested usage SuperUser.resolveSuggestions(SuperUser) or globals()[username].resolveSuggestions(globals()[username])
@@ -383,14 +393,7 @@ class SuperUser:
             if self._suggestions == -1:
                 return
             else:
-                for word in pending:
-                    self.updateTabooList(word)
-                del pending[:]
-                self._suggestions = -1
-                self.applyTabooList()
-                savePending()
-                saveUsers()
-
+                return pending[0]
     # helper function to apply taboolist to all documents
     def applyTabooList(
             self):  # update all the taboo words from all existing documents and block users who added the word
@@ -792,5 +795,5 @@ def printDocumentVersionHistory(document):
 # shared1.setPrivacy(ou, 2)
 # private0.setPrivacy(su, 3) #private
 # private1.setPrivacy(ou, 3)
-# saveInformation()
-loadInformation()
+saveInformation()
+# loadInformation()
