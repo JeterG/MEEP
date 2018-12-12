@@ -83,10 +83,12 @@ def editedDoc(username):
 # sorted(list of tuples, key=lambda x: x[1])
 
 def viewableDoc(username, membership):
+    '''
     # open: for everyone to view, for everyone to edit
     # restricted: guests view, ordinary & superuser edit
     # shared: view and edit by ppl w/ access & superuser
     # private: view and only by owner and superuser
+    '''
     openDocs = searchDocumentByPrivacy(globals()[username],0)
     restrictedDocs = searchDocumentByPrivacy(globals()[username],1)
     # Return list of viewable documents
@@ -117,7 +119,9 @@ def contributorDoc(username):
 
 def mydocs(username, membership):
     '''Return documents that user owns and shared'''
-    returnDocs = globals()[username]._ownedDocuments
+    ownedDocs = globals()[username]._ownedDocuments
+    sharedDocs = dispalySharedDocuments(globals()[username])
+    returnDocs = [y for x in [ownedDocs, sharedDocs] for y in x]
     return returnDocs
 
 def suggestTaboos(username, suggestedTaboo):

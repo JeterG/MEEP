@@ -14,7 +14,7 @@ allComplaints = []
 
 def dispalySharedDocuments(user):
     available = []
-    if blocked() == False:
+    if blocked(user) == False:
         for document in allDocuments:
             if document._privacy == document.privacies[2]:
                 if document._owner != user._username:
@@ -754,13 +754,16 @@ def printDocumentVersionHistory(document):
 # make sure to make constraints true for doning stuff that uses a user if they are blocked.
 # loadUsers()
 # make sure to make constraints true for doning stuff that uses a user if they are blocked.
-su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
-ou = OrdinaryUser("ou", ["Ordinary", "User"], "password", ["Studying", "Writing", "Acting"])
+# saveInformation()
+# su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
+# ou = OrdinaryUser("ou", ["Ordinary", "User"], "password", ["Studying", "Writing", "Acting"])
 # open0 = Document("open0", su)
 # open1 = Document("open1", ou)
 # rest0 = Document("rest0", su)
 # rest1 = Document("rest1", ou)
 # shared0 = Document("shared0", su)
+# shared0.requestPermission(su, ou)
+# shared0.acceptInvitation(su, ou)
 # shared1 = Document("shared1", ou)
 # private0 = Document("private0", su)
 # private1 = Document("private1", ou)
@@ -773,4 +776,4 @@ ou = OrdinaryUser("ou", ["Ordinary", "User"], "password", ["Studying", "Writing"
 # private0.setPrivacy(su, 3) #private
 # private1.setPrivacy(ou, 3)
 # saveInformation()
-# loadInformation()
+loadInformation()
