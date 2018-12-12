@@ -323,6 +323,11 @@ def get_taboo():
     data = requestTaboos()
     return jsonify(data)
 
+@app.route('/api/pending/taboos', methods=['GET'])
+def get_pending_taboo():
+    data = pending;
+    return jsonify(data)
+
 @app.route('/api/apply', methods=['POST'])
 def OUapp():
     submitData = request.json;
