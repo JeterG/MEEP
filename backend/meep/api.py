@@ -265,7 +265,35 @@ def set_privacy(doc_id):
 
 @app.route('/api/complaints', methods=["GET"])
 def get_complaints():
-    return jsonify(allComplaints);
+    print("look at complaints", allComplaints);
+    returnComplaints = []
+    for c in allComplaints:
+        returnComplaints.append(createComplaintDocFromObj(c))
+    return jsonify(returnComplaints);
+
+@app.route('/api/complaints', methods=["POST"])
+def post_complaints():
+    doc_id = int(request.json.get("doc_id"))
+    complainer_id = int(request.json.get("complainer"))
+    user_id = request.json.get("user")
+    problem = request.json.get("problem")
+
+    complainer = getUserFromID(complainer_id);
+
+    if (doc_id):
+        doc = getDocFromID(doc_id)
+        targetUser = doc._owner;
+        fileComplaintDocument(doc, complainer, targetUser, problem)
+
+
+        return jsonify({"message" : "successful complain " + problem})
+    else:
+        targetUser = getUserFromID(int(user_id));
+        fileComplaintUser(complainer, targetUser, problem)
+
+        return jsonify({"message" : "successful complain " + problem})
+
+    return jsonify("not good"), 403;
 
 @app.route('/api/taboos', methods=["POST"])
 def suggest_taboo():

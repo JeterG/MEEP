@@ -321,6 +321,30 @@ class Editor extends React.Component {
     this.props.updateLine(doc_id, editingLine, words[editingLine].content);
   }
 
+  lodgeComplaint = (e) => {
+    var problem;
+    var theprompt = prompt("Enter your complaint:", "");
+    if (theprompt == null || theprompt == "") {
+      problem = "Default, user just didn't like the document";
+    } else {
+      problem = theprompt
+    }
+
+    var payload = {
+      doc_id : this.state.doc.doc_id,
+      complainer : this.state.user.id,
+      problem : problem
+    };
+
+    axios.post(API_BASE_URL + "/complaints", payload)
+    .then( response => {
+      console.log(response.data);
+    })
+    .catch( error => {
+      console.error("complaint error", error, error.response.data);
+    })
+  }
+
   render() {
     if (this.state.doc) {
       var { title, owner, locked, lockedBy, privacy, words } = this.state.doc;
@@ -352,7 +376,7 @@ class Editor extends React.Component {
           <button id="lock-btn" className="btn waves-effect waves-light" onClick={this.handleLock}>
             <i className="material-icons left">lock</i>
             { locked ? "Unlock" : "Lock" }</button>
-          <button className="btn waves-effect waves-light">
+          <button className="btn waves-effect waves-light" onClick={this.lodgeComplaint}>
             <i className="material-icons left">priority_high</i>Complain</button>
         </div>
 

@@ -27,6 +27,21 @@ def createDocFromObj(doc):
         "words" : words
     }
 
+def createComplaintDocFromObj(complaint):
+    return {
+        "doc_id" : complaint._Document._id,
+        "complaintBy" : complaint._complaintBy._username,
+        "complaintAbout" : complaint._complaintAbout,
+        "problem" : complaint._problem
+    }
+
+def createComplaintUserFromObj(complaint):
+    return {
+        "complaintBy" : complaint._complaintBy,
+        "complaintAbout" : complaint._complaintAbout,
+        "problem" : complaint._problem
+    }
+
 def getUserFromID(id):
     print("getuser", allUsers);
     for user in allUsers:
