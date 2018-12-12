@@ -32,7 +32,7 @@ def searchByName(user, name):  # user is a user object, name is a string
         for x in allUsers:
             if ((name.upper() == x._firstName.upper()) or (name.upper() == x._lastName.upper()) or (name.upper()== x._username.upper())):
                 available.append(x)
-        return (available)
+        # return (available)
     return (available)
 
 
@@ -43,7 +43,7 @@ def searchByInterest(user, interest):  # user is a user object, interest is a st
         for x in allUsers:
             if interest.upper() in [y.upper() for y in x._interests]:
                 available.append(x)
-        return (available)
+        # return (available)
     return (available)
 
 
@@ -432,7 +432,10 @@ class GuestUser:
     def __init__(self, username, password):  # username is a string, password is a string
         self._membership = str.upper("GUEST")
         self._username = username
+        self._firstName = ""
+        self._lastName = ""
         self._password = password
+        self._interests = []
         self._blocked = False
         self._requestPromotion = 0
         self._userDocumentRequests = []# list of tuples
@@ -758,6 +761,7 @@ def printDocumentVersionHistory(document):
 # make sure to make constraints true for doning stuff that uses a user if they are blocked.
 # loadUsers()
 # make sure to make constraints true for doning stuff that uses a user if they are blocked.
+# saveInformation()
 # su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
 # ou = OrdinaryUser("ou", ["Ordinary", "User"], "password", ["Studying", "Writing", "Acting"])
 # open0 = Document("open0", su)

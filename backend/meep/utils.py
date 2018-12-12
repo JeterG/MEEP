@@ -6,14 +6,17 @@ def createUserFromObj(userObj):
     return {
         'id': userObj._id,
         'name': userObj._username,
+        'first': userObj._firstName,
+        'last': userObj._lastName,
         'type': str.lower(userObj._membership),
+        'interests': userObj._interests,
         'pic': "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
     }
 
 def createDocFromObj(doc):
     # extract words only from doc body
     words = list(map(lambda x: x[0], doc._documentBody));
-    
+
     return {
         "doc_id" : doc._id,
         "title" : doc._documentName,
@@ -126,6 +129,19 @@ def mydocs(username, membership):
     sharedDocs = dispalySharedDocuments(globals()[username])
     returnDocs = [y for x in [ownedDocs, sharedDocs] for y in x]
     return returnDocs
+
+def getUsers(username, searchType, search):
+    '''Return list of userobjects based on the search criteria'''
+    returnUsers = []
+    if searchType == "Username":
+        for user in allUsers:
+            if (user._username).upper() == (search).upper():
+                returnUsers.append(user)
+    elif searchType == "Name":
+        returnUsers = searchByName(globals()[username], search)
+    else: #Interests
+        returnUsers = searchByInterest(globals()[username], search)
+    return returnUsers
 
 def suggestTaboos(username, suggestedTaboo):
     if not suggestedTaboo:
