@@ -42,10 +42,17 @@ class Search extends React.Component{
 
         <a className='dropdown-trigger btn' href='#' data-target='dropdown1'>Select...</a>
         <ul id='dropdown1' className='dropdown-content'>
-          <li><a href="#!" value="Document">Document</a></li>
-          <li><a href="#!" value="Username">Username</a></li>
-          <li><a href="#!" value="Name">Name</a></li>
-          <li><a href="#!" value="Interest">Interest</a></li>
+          <li><a href="#!" value="Document">
+            <i className="material-icons">description</i>Document</a></li>
+          <li className="divider" tabindex="-1"></li>
+          <li><a href="#!" value="Username">
+            <i className="material-icons">account_circle</i>Username</a></li>
+          <li className="divider" tabindex="-1"></li>
+          <li><a href="#!" value="Name">
+            <i className="material-icons">wc</i>Name</a></li>
+          <li className="divider" tabindex="-1"></li>
+          <li><a href="#!" value="Interest">
+            <i className="material-icons">lightbulb_outline</i>Interest</a></li>
         </ul>
 
         <div className="search-container">

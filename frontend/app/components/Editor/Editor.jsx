@@ -342,11 +342,13 @@ class Editor extends React.Component {
         </div>
 
         <div className="editor-buttons">
-          <button onClick={ this.handleSave }>Save</button>
-          <button id="lock-btn" onClick={ this.handleLock }>
-          { locked ? "Unlock" : "Lock" }
-          </button>
-          <button>Complain</button>
+          <button className="btn waves-effect waves-light" onClick={this.handleSave}>
+            <i className="material-icons left">save</i>Save</button>
+          <button className="btn waves-effect waves-light" onClick={this.handleLock}>
+            <i className="material-icons left">lock</i>
+            { locked ? "Unlock" : "Lock" }</button>
+          <button className="btn waves-effect waves-light">
+            <i className="material-icons left">priority_high</i>Complain</button>
         </div>
       </div>
     )
