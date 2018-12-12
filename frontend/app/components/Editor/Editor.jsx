@@ -137,7 +137,12 @@ class Editor extends React.Component {
       // This is tricky because we only want to addLine if the previous word is a
       // new word. The first time this is done, the previous word will be one that is
       // already there.
+
+      // Solution to the above problem:
+      // Insert or call "addLine" on the empty string that gets inserted.
+      // Then, just use "updated" to update that line.
       console.log("Inserting in middle of document", editingLine)
+      this.props.addLine(doc_id, editingLine + 1, currentWords[editingLine + 1].content);
     }
   }
 
@@ -232,7 +237,7 @@ class Editor extends React.Component {
     })
 
     // Call server to update
-    // this.props.updateLine(doc_id, currentLine, currentWords[currentLine].content);
+    this.props.updateLine(doc_id, currentLine, currentWords[currentLine].content);
   }
 
   moveCursorDown = (doc_id, currentWords, editingLine) => {
@@ -254,13 +259,14 @@ class Editor extends React.Component {
     });
 
     // Call server to update
-    // this.props.updateLine(doc_id, currentLine, currentWords[currentLine].content);
+    this.props.updateLine(doc_id, currentLine, currentWords[currentLine].content);
   }
 
   handleLock = (e) => {
     var { doc_id, words, locked } = this.state.doc;
     var doc = {...this.state.doc};
     var { id, name } = this.state.user;
+    var {editingLine} = this.state;
     console.log("handle locked", name, locked)
 
     if (!locked) {
@@ -288,6 +294,9 @@ class Editor extends React.Component {
       doc.locked = false;
       doc.lockedBy = null;
 
+      // Save the line
+      this.props.updateLine(doc_id, editingLine, words[editingLine].content);
+
       axios.post(API_BASE_URL + "/docs/" + doc_id + "/unlock", {
         "user_id" : id
       }).then( response => {
@@ -305,15 +314,10 @@ class Editor extends React.Component {
 
   handleSave = (e) => {
     var { doc_id, words } = this.state.doc;
-    var body = words.map(word => {
-      return word.content;
-    });
+    var { editingLine } = this.state;
 
-    console.log("The handle save is", doc_id, body);
-    this.props.saveDoc(doc_id, {
-      user_id: this.state.user.id,
-      body: body
-    });
+    console.log("The handle save is", doc_id);
+    this.props.updateLine(doc_id, editingLine, words[editingLine].content);
   }
 
   render() {
@@ -344,7 +348,7 @@ class Editor extends React.Component {
         <div className="editor-buttons">
           <button className="btn waves-effect waves-light" onClick={this.handleSave}>
             <i className="material-icons left">save</i>Save</button>
-          <button className="btn waves-effect waves-light" onClick={this.handleLock}>
+          <button id="lock-btn" className="btn waves-effect waves-light" onClick={this.handleLock}>
             <i className="material-icons left">lock</i>
             { locked ? "Unlock" : "Lock" }</button>
           <button className="btn waves-effect waves-light">

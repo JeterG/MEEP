@@ -12,6 +12,9 @@ def createUserFromObj(userObj):
     }
 
 def createDocFromObj(doc):
+    # extract words only from doc body
+    words = list(map(lambda x: x[0], doc._documentBody));
+    
     return {
         "doc_id" : doc._id,
         "title" : doc._documentName,
@@ -19,7 +22,7 @@ def createDocFromObj(doc):
         "locked": doc._lock,
         "lockedBy": doc._lockedBy,
         "privacy": doc._privacy,
-        "words" : doc._documentBody
+        "words" : words
     }
 
 def getUserFromID(id):

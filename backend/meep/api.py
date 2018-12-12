@@ -182,6 +182,7 @@ def addLine(doc_id):
     if userHasPerms(user_id):
         user = getUserFromID(user_id)
         doc = getDocFromID(doc_id)
+        print("THE USER BLOCKED", user._blocked);
         if doc:
             doc.add(index, word, user)
             print("ADD LINE", doc._documentBody)

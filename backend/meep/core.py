@@ -757,7 +757,12 @@ def printDocumentVersionHistory(document):
 
 
 # make sure to make constraints true for doning stuff that uses a user if they are blocked.
+<<<<<<< HEAD
 # saveInformation()
+=======
+# loadUsers()
+# make sure to make constraints true for doning stuff that uses a user if they are blocked.
+>>>>>>> ca47a6aeabdb2e5a2a63eca4ab15263ca3604e68
 # su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
 # ou = OrdinaryUser("ou", ["Ordinary", "User"], "password", ["Studying", "Writing", "Acting"])
 # open0 = Document("open0", su)

@@ -9,9 +9,11 @@ class Home extends React.Component {
   state = {
     docs: null
   }
+
   componentDidMount(){
     this.getEdited()
   }
+
   getEdited = () => { //get list of docs edited or owned by the user
     var userData = getLocal("user")
     var {name, type} = userData;
@@ -32,7 +34,7 @@ class Home extends React.Component {
   render() {
     var docList = this.state.docs ? this.state.docs.map(doc => {
       return (
-      <ul className="collection">
+      <ul className="collection" key={doc.doc_id}>
         <li className="collection-item avatar">
           <i className="material-icons circle">description</i>
           <span className="title">
