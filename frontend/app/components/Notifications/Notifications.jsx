@@ -11,18 +11,18 @@ import Applications from './Applications';
 
 class Notifications extends React.Component {
   state = {
-    // blocks: [],
-    // invites: [],
-    // doc_complaints: [],
-    // user_complaints: [],
-    // taboo_suggestions: [],
-    // applications: []
+    blocks: [],
+    invites: [],
+    doc_complaints: [],
+    user_complaints: [],
+    taboo_suggestions: [],
+    applications: []
   }
 
   ntypeToComponent = (id, ntype) => {
     switch(ntype) {
       case "blocks":
-        return (<Blocks key={id} />);
+        return (<Blocks key={id} updater={this.getBlocks} />);
         break;
 
       case "invites":
@@ -30,19 +30,19 @@ class Notifications extends React.Component {
         break;
 
       case "doc_complaints":
-        return (<ComplaintsDocuments key={id} />);
+        return (<ComplaintsDocuments key={id} updater={this.getComplaintsDocuments} />);
         break;
 
       case "user_complaints":
-        return (<ComplaintsUsers key={id} />);
+        return (<ComplaintsUsers key={id} updater={this.getComplaintsUsers} />);
         break;
 
       case "taboo_suggestions":
-        return (<TabooSuggestions key={id} />);
+        return (<TabooSuggestions key={id} updater={this.getTabooSuggestions} />);
         break;
 
       case "applications":
-        return (<Applications key={id} />);
+        return (<Applications key={id} updater={this.getApplications} />);
         break;
     }
   }
@@ -55,8 +55,8 @@ class Notifications extends React.Component {
     this.setState({ invites: [] })
   }
 
-  getComplaintsDocuments = () => {
-    this.setState({ doc_complaints: [] })
+  getComplaintsDocuments = (complaints) => {
+    this.setState({ doc_complaints: complaints })
   }
 
   getComplaintsUsers = () => {
@@ -111,7 +111,7 @@ class Notifications extends React.Component {
 
   displayNotifs(array, ntype) {
     if (this.state[ntype]) {
-      if (this.state[ntype].length > 0) {
+      if (true) {
         console.log("pushed", ntype)
         array.push(
           this.ntypeToComponent(array.length, ntype)

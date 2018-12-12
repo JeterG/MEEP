@@ -263,6 +263,10 @@ def set_privacy(doc_id):
     else:
         return jsonify({"message" : "Insufficient permissions"}), 401
 
+@app.route('/api/complaints', methods=["GET"])
+def get_complaints():
+    return jsonify(allComplaints);
+
 @app.route('/api/taboos', methods=["POST"])
 def suggest_taboo():
     submitData = request.json;
