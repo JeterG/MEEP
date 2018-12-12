@@ -607,7 +607,6 @@ class Document:
         if blocked(User) == False:
             if len(self._documentBody) >= index:
                 if self._documentBody[index][0]== "UNK":
-                    print("this is the test",self._documentBody[index][0])
                     globals()[self._documentBody[0][1]]._blocked=False
                     Print(globals()[self._documentBody[0][1]])
                 self._documentBody[index] = (word, User._username)
@@ -774,6 +773,7 @@ def printDocumentVersionHistory(document):
     return
 
 
+# saveInformation()
 # make sure to make constraints true for doning stuff that uses a user if they are blocked.
 # loadUsers()
 # make sure to make constraints true for doning stuff that uses a user if they are blocked.
@@ -795,5 +795,4 @@ def printDocumentVersionHistory(document):
 # shared1.setPrivacy(ou, 2)
 # private0.setPrivacy(su, 3) #private
 # private1.setPrivacy(ou, 3)
-saveInformation()
-# loadInformation()
+loadInformation()
