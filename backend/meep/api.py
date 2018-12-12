@@ -120,9 +120,18 @@ def get_doc(doc_id):
 def get_vhistory(doc_id):
     docObj = getDocFromID(doc_id)
     if docObj:
-        return jsonify(docObj._versionHistory);
+        returnDoc = docObj._versionHistory
+        # returnDoc = docObj._versionHistory
+        # x=[]
+        # for a,b,c,d,e in docObj._versionHistory:
+        #     for index in c:
+        #         print(index[0])
+        #         x.append(index[0])
+        #     returnDoc[a]=(a,b,x.copy(),c,d,e)
+        #     print(returnDoc[a])
+        #     del x[:]
+        return jsonify(returnDoc);
     else:
-        # print(allDocuments[0]._id);
         return jsonify({"message" : "doc_id not found"}), 403
 
 @app.route('/api/docs/<doc_id>', methods=["POST"])
