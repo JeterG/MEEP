@@ -4,6 +4,7 @@ import React, {Component} from 'react';
 import Header from '../Header';
 import Blocks from './Blocks';
 import Invites from './Invites';
+import EditRequests from './EditRequests';
 import ComplaintsDocuments from './ComplaintsDocuments';
 import ComplaintsUsers from './ComplaintsUsers';
 import TabooSuggestions from './TabooSuggestions';
@@ -29,12 +30,14 @@ class Notifications extends React.Component {
     //  * TabooSuggestions
     //  * ComplaintsUsers
     //  * ComplaintsDocuments (as su and owner)
-    //  * Invites
+    //  * Requests to edit documents
+    //  * Invites to documents
     //  * Blocked
 
     // Ordinary Users:
     //  * ComplaintsDocuments (as owner)
-    //  * Invites
+    //  * Requests to edit documents (as owner)
+    //  * Invites to document
     //  * Blocked
 
     // Guests
@@ -48,19 +51,20 @@ class Notifications extends React.Component {
 
     switch(userType) {
       case "super":
-        notifs.push(<Applications key={notifs.length}/>)
-        notifs.push(<TabooSuggestions key={notifs.length}/>)
-        notifs.push(<ComplaintsUsers key={notifs.length}/>)
+        notifs.push(<Applications key={notifs.length} />)
+        notifs.push(<TabooSuggestions key={notifs.length} />)
+        notifs.push(<ComplaintsUsers key={notifs.length} />)
 
       case "ordinary":
       case "super":
         notifs.push(<ComplaintsDocuments key={notifs.length}/>)
-        notifs.push(<Invites key={notifs.length}/>)
+        notifs.push(<EditRequests key={notifs.length} />)
+        notifs.push(<Invites key={notifs.length} />)
 
       case "guest":
       case "ordinary":
       case "super":
-        notifs.push(<Blocks key={notifs.length}/>)
+        notifs.push(<Blocks key={notifs.length} />)
     }
 
     return (

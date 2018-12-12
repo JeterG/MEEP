@@ -4,14 +4,14 @@ import { Link } from 'react-router-dom';
 import { API_BASE_URL } from '../../Config';
 import axios from 'axios';
 
-class Blocks extends React.Component {
+class EditRequests extends React.Component {
   render() {
     return(
       <div>
-        <h1>Blocks</h1>
+        <h1>Requests for Document Access</h1>
       </div>
     );
   }
 }
 
-export default Blocks;
+export default EditRequests;
