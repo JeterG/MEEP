@@ -43,23 +43,38 @@ class Taboos extends React.Component {
 
   render() {
     var tabooList = this.state.taboos.map(taboos => {
-      return <li key={taboos}>{taboos}< /li>
+      return(
+       <li key={taboos}>{taboos}</li>)
     });
 
     return (
       <div className="taboo-page">
         <Header />
+          <div>
+            <h3>Taboo Words</h3>
+              <ul className="collection">
+                <li className="collection-item avatar">
+                  <i className="material-icons circle">close</i>
+                    <span className="title">
+                      <div id="tabooList">{ tabooList }</div>
+                    </span>
+                </li>
+              </ul> 
+          </div>
         <div>
-          <h2>Taboo Words</h2>
-          <div id="tabooList">{ tabooList }</div>
-        </div>
-        <div>
-          <h2>Suggest Taboo</h2>
+          <h3>Suggest Taboo</h3>
           <div>{ this.state.message }</div>
           <form onSubmit={ this.handleSubmit }>
-            <label htmlFor="suggestedTaboo">Taboo Suggestions</label><br />
-            <input type="text" name="suggestedTaboo" /><br />
-            <button type="submit">Submit</button>
+            <div className="row">
+              <div className="input-field col s12">
+                <i className="material-icons prefix">create</i>
+                <input id="suggestedTaboo" type="text" className="validate" />
+                <label htmlFor="suggestedTaboo">Suggest a Taboo Word</label>
+              </div>
+            </div>
+            <button className="btn waves-effect waves-light" type="submit" name="action">Submit
+              <i className="material-icons right">send</i>
+            </button>
           </form>
         </div>
       </div>

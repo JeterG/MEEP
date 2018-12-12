@@ -47,10 +47,10 @@ class Header extends React.Component {
                 <img id="logo" src="/images/logo.png" onClick={this.setRedirect}/>
               </a>
               <ul id="nav-mobile" className="right hide-on-med-and-down">
+                {displayOUapply}
                 {displayNewDoc}
                 <li><Link to="/docs">My Documents</Link></li>
                 <li><Link to="/taboos">Taboo List</Link></li>
-                  {displayOUapply}
                 <li><Link to="/search">Search</Link></li>
                 <li><a className="waves-effect waves-light btn" onClick={this.logOut}>Log Out
                   <i className="material-icons right">forward</i></a>
