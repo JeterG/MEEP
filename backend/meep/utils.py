@@ -135,7 +135,7 @@ def getUsers(username, searchType, search):
     returnUsers = []
     if searchType == "Username":
         for user in allUsers:
-            if user._username == username:
+            if (user._username).upper() == (search).upper():
                 returnUsers.append(user)
     elif searchType == "Name":
         returnUsers = searchByName(globals()[username], search)

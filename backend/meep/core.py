@@ -32,7 +32,7 @@ def searchByName(user, name):  # user is a user object, name is a string
         for x in allUsers:
             if ((name.upper() == x._firstName.upper()) or (name.upper() == x._lastName.upper()) or (name.upper()== x._username.upper())):
                 available.append(x)
-        return (available)
+        # return (available)
     return (available)
 
 
@@ -43,7 +43,7 @@ def searchByInterest(user, interest):  # user is a user object, interest is a st
         for x in allUsers:
             if interest.upper() in [y.upper() for y in x._interests]:
                 available.append(x)
-        return (available)
+        # return (available)
     return (available)
 
 
