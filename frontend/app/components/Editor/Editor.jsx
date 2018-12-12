@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import EditorHeader from './EditorHeader';
+import EditorButtons from './EditorButtons';
 import EditorLine from './EditorLine';
 import VersionHistory from './VersionHistory';
 
@@ -360,8 +361,8 @@ class Editor extends React.Component {
           title={this.props.doc.title}
           setTitle={this.props.setTitle}
           setPrivacy={this.props.setPrivacy}
-          owner={owner}
-          selected={privacy}
+          owner={this.props.doc.owner}
+          selected={this.props.doc.privacy}
           locked={locked}
           lockedBy={lockedBy}
         />
@@ -370,15 +371,14 @@ class Editor extends React.Component {
         { wordList }
         </div>
 
-        <div className="editor-buttons">
-          <button className="btn waves-effect waves-light" onClick={this.handleSave}>
-            <i className="material-icons left">save</i>Save</button>
-          <button id="lock-btn" className="btn waves-effect waves-light" onClick={this.handleLock}>
-            <i className="material-icons left">lock</i>
-            { locked ? "Unlock" : "Lock" }</button>
-          <button className="btn waves-effect waves-light" onClick={this.lodgeComplaint}>
-            <i className="material-icons left">priority_high</i>Complain</button>
-        </div>
+        <EditorButtons
+          doc={this.props.doc}
+          oldVersion={false /* make this not hardcoded */}
+          locked={locked}
+          handleSave={this.handleSave}
+          handleLock={this.handleLock}
+          lodgeComplaint={this.lodgeComplaint}
+        />
 
         <VersionHistory doc_id={this.props.doc.doc_id} />
       </div>

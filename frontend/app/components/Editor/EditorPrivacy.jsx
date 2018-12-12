@@ -8,7 +8,9 @@ class EditorPrivacy extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({ selected: privacies[this.props.selected] })
+    this.setState({
+      selected: privacies[this.props.selected]
+    })
   }
 
   changeSelect = (e) => {

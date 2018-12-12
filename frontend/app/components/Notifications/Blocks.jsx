@@ -35,7 +35,7 @@ class Blocks extends React.Component {
           </div>
         ): null;
 
-    return(
+    return (
       <div>
         <h1>Blocks</h1>
         {blocked}

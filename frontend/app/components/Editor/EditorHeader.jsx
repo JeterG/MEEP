@@ -9,8 +9,11 @@ class EditorHeader extends React.Component {
     return (
       <div className="doc-header">
         <EditorTitle title={title} setTitle={setTitle} locked={locked} />
+
         <h2>{ owner }</h2>
+
         <EditorPrivacy locked={locked} setPrivacy={setPrivacy} selected={selected} />
+        
         <p>Status: { locked ? "Locked by " + lockedBy : "Unlocked" }</p>
       </div>
     )
