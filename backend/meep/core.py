@@ -32,7 +32,7 @@ def searchByName(user, name):  # user is a user object, name is a string
         for x in allUsers:
             if ((name.upper() == x._firstName.upper()) or (name.upper() == x._lastName.upper()) or (name.upper()== x._username.upper())):
                 available.append(x)
-        # return (available)
+        return (available)
     return (available)
 
 
@@ -43,7 +43,7 @@ def searchByInterest(user, interest):  # user is a user object, interest is a st
         for x in allUsers:
             if interest.upper() in [y.upper() for y in x._interests]:
                 available.append(x)
-        # return (available)
+        return (available)
     return (available)
 
 
@@ -250,15 +250,21 @@ def fileComplaintUser(victim, target,
 def processComplaintDocuments(user):
     if blocked(user) == False:
         if user.__class__ != "<class 'core.GuestUser'>":
-            for complaint in user._complaints:
-                if complaint._complaintAbout._username in complaint._Document._users:
-                    if complaint._complaintAbout._username != complaint._Document._owner:
-                        complaint._Document._users.remove(complaint._complaintAbout._username)
-                        complaint._Document._complaintHistory.append((complaint, timeStamp()))
-            del user._complaints[:]
             saveUsers()
-            saveDocuments()
+            return user._complaints.pop(0)
 
+
+def approveComplaintDocuments(user, complaint):
+    if blocked(user) == False:
+        if complaint._complaintAbout._username in complaint._Document._users:
+            if complaint._complaintAbout._username != complaint._Document._owner:
+                complaint._Document._complaintHistory.append((complaint, "APPROVED" ,timeStamp()))
+                saveDocuments()
+
+def ignoreComplaintUsers(user,complaint):
+    if blocked(user) == False:
+        complaint._Document._complaintHistory.append((complaint, "IGNORED", timeStamp()))
+        saveDocuments()
 
 class SuperUser:
     _complaintsUsers = []
@@ -432,12 +438,10 @@ class GuestUser:
     def __init__(self, username, password):  # username is a string, password is a string
         self._membership = str.upper("GUEST")
         self._username = username
-        self._firstName = ""
-        self._lastName = ""
         self._password = password
-        self._interests = []
         self._blocked = False
         self._requestPromotion = 0
+        self._interests = []
         self._userDocumentRequests = []# list of tuples
         if len(allUsers) == 0:
             self._id = 0
@@ -653,6 +657,15 @@ class Document:
             except:
                 return
 
+    def revert(self,user,version):
+        if (user._username== self._owner) or (self._privacy==self.privacies[0]) or (user._membership == "SUPER") or ((self._privacy == self.privacies[1]) and user._membership == "ORDINARY" ) or ((self.privacy == self.privacies[2]) and (user._username in self._users)):
+            if blocked(user) == False:
+                if len(self._versionHistory)>= version:
+                    self._documentBody = self._versionHistory[version][2].copy()
+                    self._versionHistory.append((len(self._versionHistory), "REVERT  V" + str(version), self._documentBody.copy(), user._username,
+                         timeStamp()))
+                    print(self._versionHistory[version])
+
 
 def Print(user):
     thetype = str(type(user))
@@ -761,7 +774,6 @@ def printDocumentVersionHistory(document):
 # make sure to make constraints true for doning stuff that uses a user if they are blocked.
 # loadUsers()
 # make sure to make constraints true for doning stuff that uses a user if they are blocked.
-# saveInformation()
 # su = SuperUser("su", ["Super", "User"], "root", ["Algorithms", "Minecraft", "Pokemon"])
 # ou = OrdinaryUser("ou", ["Ordinary", "User"], "password", ["Studying", "Writing", "Acting"])
 # open0 = Document("open0", su)
