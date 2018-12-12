@@ -120,11 +120,11 @@ def mydocs(username, membership):
     returnDocs = globals()[username]._ownedDocuments
     return returnDocs
 
-def suggestTaboos(suggestedTaboo):
+def suggestTaboos(username, suggestedTaboo):
     if not suggestedTaboo:
         return False
     else:
-        suggestTaboo(suggestedTaboo)
+        suggestTaboo(globals()[username], suggestedTaboo)
         return True
 
 def requestTaboos():

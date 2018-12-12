@@ -11,9 +11,12 @@ class Taboos extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    var userData = getLocal("user");
+    var {name} = userData;
 
     let submitData = {
       suggestedTaboo: e.target[0].value,
+      username: name
     }
 
     axios.post(API_BASE_URL + '/taboos', submitData)

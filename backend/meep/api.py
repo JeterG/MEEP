@@ -239,7 +239,8 @@ def set_privacy(doc_id):
 def suggest_taboo():
     submitData = request.json;
     suggestedTaboo = submitData.get("suggestedTaboo")
-    result = suggestTaboos(suggestedTaboo)
+    username = submitData.get("username")
+    result = suggestTaboos(username, suggestedTaboo)
     if result:
         data = {'message' : 'Request Submitted'}
         return jsonify(data), 200
