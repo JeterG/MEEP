@@ -80,25 +80,27 @@ def saveComplaints():
 
 # used in loadInformation()
 def loadComplaints():
-    global allComplaints
     directory = cwd + "/meep/system/complaints.p"
-    file_complaints = open(directory, 'rb')
-    allComplaints = pickle.load(file_complaints)
-    for complaint in allComplaints:
-        globals()["Complaint_" + str(complaint._id)] = complaint
-    file_complaints.close()
+    if (os.path.exists(directory)):
+        global allComplaints
+        file_complaints = open(directory, 'rb')
+        allComplaints = pickle.load(file_complaints)
+        for complaint in allComplaints:
+            globals()["Complaint_" + str(complaint._id)] = complaint
+        file_complaints.close()
     return
 
 
 # used in loadInformation
 def loadUsers():
-    global allUsers
     directory = cwd + "/meep/system/users.p"
-    file_users = open(directory, 'rb')
-    allUsers = pickle.load(file_users)
-    for user in allUsers:
-        globals()[user._username] = user
-    file_users.close()
+    if (os.path.exists(directory)):
+        global allUsers
+        file_users = open(directory, 'rb')
+        allUsers = pickle.load(file_users)
+        for user in allUsers:
+            globals()[user._username] = user
+        file_users.close()
     return
 
 
@@ -117,11 +119,12 @@ def loadDocuments():
 
 # used in loadInformation
 def loadTabooList():
-    global tabooList
     directory = cwd + "/meep/system/taboo.p"
-    file_taboo_list = open(directory, 'rb')
-    tabooList = pickle.load(file_taboo_list)
-    file_taboo_list.close()
+    if (os.path.exists(directory)):
+        global tabooList
+        file_taboo_list = open(directory, 'rb')
+        tabooList = pickle.load(file_taboo_list)
+        file_taboo_list.close()
     return
 
 
@@ -137,10 +140,11 @@ def savePending():
 
 # used in loadInformation
 def loadPending():
-    global pending
     directory = cwd + "/meep/system/pending.p"
-    file_pending = open(directory, "rb")
-    pending = pickle.load(file_pending)
+    if (os.path.exists(directory)):
+        global pending
+        file_pending = open(directory, "rb")
+        pending = pickle.load(file_pending)
 
 
 # called automatically by mutation functions
@@ -192,6 +196,7 @@ def suggestTaboo(word):
     else:
         SuperUser._suggestions = 0
         pending.append(word)
+        savePending()
         #    Add the possible taboo word to a place where the super user add it
 
 
@@ -199,7 +204,6 @@ def searchDocumentByPrivacy(privacy):  # returns a list of documents that have s
     available = []
     for document in allDocuments:
         if document._privacy == document.privacies[privacy]:
-
             available.append(document)
     return available
 
@@ -268,12 +272,14 @@ class SuperUser:
         self._password = password
         self._complaints = []
         allUsers.append(self)
+        saveUsers()
         return
 
     # helper function
     def addComplaint(self, complaint):
         if complaint.__class__ == ComplaintDocuments:
             self._complaints.append(complaint)
+            saveUsers()
         else:
             self._complaintsUsers.append(complaint)
             saveUsers()
@@ -308,11 +314,13 @@ class SuperUser:
             User._membership = "GUEST"
             User.__class__ = GuestUser
             User._requestPromotion = 0
+            saveUsers()
             return
         elif str.upper(User._membership) == "SUPER":
             User._membership = "ORDINARY"
             User.__class__ = OrdinaryUser
             User._requestPromotion = 0
+            saveUsers()
             return
         else:
             return
@@ -341,12 +349,13 @@ class SuperUser:
             return
         else:
             tabooList.append(word.upper())
-        self.applyTabooList()
+            saveTabooList()
+            self.applyTabooList()
 
 #Suggested usage SuperUser.resolveSuggestions(SuperUser) or globals()[username].resolveSuggestions(globals()[username])
     def resolveSuggestions(self):  # add suggested taboo words to the taboo list
         global pending
-        if self._suggestions is -1:
+        if self._suggestions == -1:
             return
         else:
             for word in pending:
@@ -366,6 +375,7 @@ class SuperUser:
             for word in dc:
                 if word.upper() in [x.upper() for x in tabooList]:
                     document._documentBody[dc.index(word)] = "UNK"
+        saveDocuments()
         return
 
 
@@ -383,6 +393,7 @@ class ComplaintDocuments:  # Complaints about documents to the owner
         self._Document = Document
         self._problem = Problem
         allComplaints.append(self)
+        saveComplaints()
 
 #helper class
 class ComplaintUsers:  # complaints handlded by SU's about other users
@@ -392,6 +403,7 @@ class ComplaintUsers:  # complaints handlded by SU's about other users
         self._complaintAbout = Target._username
         self._problem = Problem
         allComplaints.append(self)
+        saveComplaints()
 
 
 class GuestUser:
@@ -417,6 +429,7 @@ class GuestUser:
                                                 # interests is a list of string elements
         self._application = [name, interests]
         self._requestPromotion = 1
+        saveUsers()
         return
 
 
@@ -440,6 +453,7 @@ class OrdinaryUser:
         self._password = password
         self._complaints = []
         allUsers.append(self)
+        saveUsers()
         return
 
 #helper functions
@@ -463,6 +477,7 @@ class Document:
         self._unlockedBy = ""
         self._users = [User._username]
         self._documentBody = []  # DocumentBody will always be the current version
+        self._documentContribution=[]# will always have the username of who added a specific word
         if len(allDocuments) == 0:
             self._id = 0
         else:
@@ -473,6 +488,7 @@ class Document:
         # self._versionHistory[-1] is also the current versoin/latest
         User._ownedDocuments.append(self)
         allDocuments.append(self)
+        saveDocuments()
         return
 
 #Suggested Usage globals()[documentname].unlockDocument(globals()[username])
@@ -494,10 +510,7 @@ class Document:
                         self._lock = False
                         self._unlockedBy = User._username
                         self._lockedBy = ""
-                    else:
-                        return
-            else:  # Document isn't locked
-                return
+        saveDocuments()
 
 #Suggested usage globals()[documentname].lockDocument(globals()[username])
     def lockDocument(self, User):  # lock the document that can be done by anyone
@@ -505,6 +518,7 @@ class Document:
             self._lock = True
             self._lockedBy = User._username
             self._unlockedBy = ""
+            saveDocuments()
         else:
             return
 
@@ -519,8 +533,9 @@ class Document:
             return
 #suggested usage globals()[documentname].add(word,globals()[username])
     #word is a string and the user is the user who is editing
-    def add(self, index, Word, User):
+    def add(self,index, Word, User):
         self._documentBody.insert(index,Word)
+        self._documentContribution.insert(index,User._username)
         SuperUser.applyTabooList(SuperUser)
         self._versionHistory.append(
             (len(self._versionHistory), "ADD", self._documentBody.copy(), User._username, timeStamp()))
@@ -532,6 +547,7 @@ class Document:
     def delete(self, index, User):
         if len(self._documentBody) >= index:
             del self._documentBody[index]
+            del self._documentContribution[index]
             self._versionHistory.append(
                 (len(self._versionHistory), "DELETE", self._documentBody.copy(), User._username, timeStamp()))
         saveDocuments()
@@ -541,6 +557,7 @@ class Document:
     def update(self, User, index, word):
         if len(self._documentBody) >= index:
             self._documentBody[index] = word
+            self._documentContribution[index]= User._username
             SuperUser.applyTabooList(SuperUser)
             self._versionHistory.append(
                 (len(self._versionHistory), "UPDATE", self._documentBody.copy(), User._username, timeStamp()))
@@ -558,9 +575,11 @@ class Document:
     #Suggested usage globals()[documentname].acceptInvitation(globals()[globals()[documentname]._owner],globals()[username])
     def acceptInvitation(self, Owner, User):
         if (self._documentName, User._username) in Owner._userDocumentRequests:
-            del Owner._userDocumentRequests[(Owner._userDocumentRequests.index((self._documentName, User._username)))]
+            Owner._userDocumentRequests.remove((self._documentName, User._username))
             self._users.append(User._username)
             self._privacy = self.privacies[2]
+            saveUsers()
+            saveDocuments()
         return
 
     def setPrivacy(self, user, index):
@@ -631,6 +650,7 @@ def Print(user):
         print("\t\t_unlockedBy = ", user._unlockedBy)
         print("\t\t_users = ", user._users)
         print("\t\t_documentBody  = ", user._documentBody)
+        print("\t\t_documentContribution = ", user._documentContribution)
         print("\t\t_versionHistory = ")
         printDocumentVersionHistory(user)
         print("\t\t_privacy = ", user._privacy)
