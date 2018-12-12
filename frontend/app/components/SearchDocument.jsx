@@ -41,16 +41,14 @@ class SearchDocument extends React.Component {
     var { docs } = this.state;
     var items = docs ? docs.map(doc => {
       return (
-      <div className="collection">
+      <div className="collection" key={doc.doc_id}>
         <div className="collection-item avatar">
           <h2 className="material-icons circle">description</h2>
           <div className="title">
-            <li key={doc.doc_id}>
             <Link to={"/docs/" + doc.doc_id}>
               <b>{doc.title}</b><br />
             </Link>
             <em>{doc.owner}</em>
-            </li>
           </div>
         </div>
       </div>
