@@ -34,12 +34,19 @@ class DocumentDirectory extends React.Component {
     var { docs } = this.state;
     var items = docs ? docs.map(doc => {
       return (
-        <li key={doc.doc_id}>
-          <Link to={"/docs/" + doc.doc_id }>
-            <b>{doc.title}</b><br />
-          </Link>
-          <em>{doc.owner}</em>
+        <ul className="collection">
+        <li className="collection-item avatar">
+          <i className="material-icons circle">description</i>
+          <span className="title">
+            <li key={doc.doc_id}>
+            <Link to={"/docs/" + doc.doc_id}>
+              <b>{doc.title}</b><br />
+            </Link>
+            <em>{doc.owner}</em>
+            </li>
+          </span>
         </li>
+      </ul> 
       );
     })
     : <h3>No documents found</h3>;
@@ -47,10 +54,11 @@ class DocumentDirectory extends React.Component {
     return (
       <div>
       <Header/>
-        <h1>Doc Directory</h1>
-        <ul>
-        { items }
-        </ul>
+      <hr />
+      <h3>
+          <div className="col s6">Doc Directory</div>
+          </h3>
+          <div className="col s12">{items}</div>
       </div>
     )
   }
